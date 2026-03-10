@@ -1,3 +1,7 @@
 "Hello Git" 
+<<<<<<< HEAD
 "Login validation added" 
 
+=======
+"Feature UI change" 
+>>>>>>> feature-ui
