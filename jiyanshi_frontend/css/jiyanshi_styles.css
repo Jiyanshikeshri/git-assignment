@@ -94,3 +94,23 @@ section h2 {
     font-size: 28px;
     color: #222;
 }
+
+/* ===== Skills Section Styling ===== */
+
+#skills {
+    line-height: 1.8; /* improves readability of inline skills text */
+}
+
+#skills ul {
+    list-style: none; /* remove default list bullets */
+    padding-left: 0;
+}
+
+#skills ul ul {
+    display: inline; /* sub skills inline */
+}
+
+#skills ul ul li {
+    display: inline; /* sub skills inline items */
+    font-weight: normal;
+}
