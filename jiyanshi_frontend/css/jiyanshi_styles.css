@@ -205,7 +205,7 @@ section h2 {
 }
 
 /* ===== Footer Styling ===== */
-
+/* pushed it with prev styling because when i tried pushing this, i got to know thw previous styles has not been pushed */
 footer {
     text-align: center; /* puts footer content to centre */
     background-color: #e8e3d9;
