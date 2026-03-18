@@ -1,0 +1,38 @@
+/* Global Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* overall font and background */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Common spacing for main content sections */
+section {
+    padding: 20px;
+    margin: 20px;
+}
+
+/* Header spacing */
+header {
+    padding: 20px;
+    margin: 20px;
+}
+
+/* Footer spacing */
+footer {
+    padding: 20px;
+    margin: 20px;
+}
+
+/* Nav spacing */
+nav{
+    padding: 20px;
+    margin: 20px;
+}
