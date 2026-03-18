@@ -8,8 +8,8 @@
 /* overall font and background */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    color: #333;
+    background-color: #f4f1ea;;
+    color: #2b2b2b;
     line-height: 1.5;
 }
 
@@ -19,11 +19,40 @@ section {
     margin: 20px;
 }
 
+/* Header Styling */
+
 /* Header spacing */
 header {
-    padding: 20px;
-    margin: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e8e3d9;
+    padding: 60px;
 }
+
+/* Left text */
+.header-text {
+    max-width: 60%;
+    text-align: left; 
+}
+
+/* name styling */
+header h1 {
+    font-size: 48px;
+}
+
+/* paragraph styling inside header */
+header p {
+    font-size: 20px;
+}
+
+/* Image */
+header img {
+    width: 220px;
+    height: 220px;      
+    border-radius: 50%; 
+}
+
 
 /* Footer spacing */
 footer {
@@ -35,4 +64,12 @@ footer {
 nav{
     padding: 20px;
     margin: 20px;
+}
+
+/* Profile image styling */
+header img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;   /* makes image circular */
+    margin-top: 15px;
 }
