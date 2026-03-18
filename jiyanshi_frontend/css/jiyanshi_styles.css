@@ -140,3 +140,20 @@ section h2 {
 #education tr:nth-child(even) {
     background-color: #f7f5f0; /* Alternate row colouring */
 }
+
+/* ===== Projects Section Styling ===== */
+
+#projects p {
+    margin-bottom: 15px; /* adds vertical spacing between projects */
+}
+
+#projects a {
+    color: rgb(77, 77, 237); /* default project link color */
+    text-decoration: none; /* remove underline from the link*/
+    font-weight: bold;
+    transition: color 0.3s ease; /* smooth transition on hover */
+}
+
+#projects a:hover {
+    color: #8b6f47; /* highlight color on hover */
+}
