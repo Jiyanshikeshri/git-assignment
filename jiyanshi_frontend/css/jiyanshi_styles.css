@@ -61,8 +61,24 @@ footer {
     margin: 20px;
 }
 
-/* Nav spacing */
-nav{
-    padding: 20px;
-    margin: 20px;
+/* ===== Navigation Styling ===== */
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 30px 0;
+    gap: 50px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #2b2b2b;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    color: #8b6f47;
 }
