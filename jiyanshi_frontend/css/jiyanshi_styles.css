@@ -114,3 +114,29 @@ section h2 {
     display: inline; /* sub skills inline items */
     font-weight: normal;
 }
+
+/* ===== Education Table Styling ===== */
+
+#education table {
+    width: 80%; /* maintains consistent table width */
+    margin: 20px auto; /* center table */
+    border-collapse: collapse; /* merge borders of the table */
+}
+
+/* Table borders */
+#education th, 
+#education td {
+    border: 1px solid #999; /* border styling */
+    padding: 10px; /* inner spacing */
+    text-align: left;
+}
+
+#education th {
+    text-align: center; /* Center the table headers */
+    background-color: #e8e3d9;
+    font-weight: bold;
+}
+
+#education tr:nth-child(even) {
+    background-color: #f7f5f0; /* Alternate row colouring */
+}
