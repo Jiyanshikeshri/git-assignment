@@ -13,19 +13,13 @@ body {
     line-height: 1.5;
 }
 
-/* Common spacing for main content sections */
-section {
-    padding: 20px;
-    margin: 20px;
-}
-
 /* Header Styling */
 
-/* Header spacing */
+/* Create flex layout for header to align text on left and image on right */
 header {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: space-between; /* space between image and text */
+    align-items: center; /* aligns the content on vertically centre */
     background: #e8e3d9;
     padding: 60px;
 }
@@ -33,7 +27,7 @@ header {
 /* Left text */
 .header-text {
     max-width: 60%;
-    text-align: left; 
+    text-align: left; /* alligns text to the left */
 }
 
 /* name styling */
@@ -50,7 +44,7 @@ header p {
 header img {
     width: 150px;
     height: 150px;      
-    border-radius: 50%; 
+    border-radius: 50%; /* make the image appears round */
     margin-top: 15px;
 }
 
@@ -65,15 +59,15 @@ footer {
 
 nav ul {
     display: flex;
-    justify-content: center;
-    list-style: none;
+    justify-content: center; /* it makes the items appears in centre */
+    list-style: none; /* removes default html table bullet points */
     padding: 0;
     margin: 30px 0;
     gap: 50px;
 }
 
 nav a {
-    text-decoration: none;
+    text-decoration: none; /* removes the underline from the link */
     color: #2b2b2b;
     font-size: 18px;
     font-weight: bold;
@@ -81,4 +75,22 @@ nav a {
 
 nav a:hover {
     color: #8b6f47;
+}
+
+/* ===== Section Card Styling ===== */
+
+section {
+    background: white;
+    margin: 40px auto;  /* to provide spacing between the sections */
+    padding: 30px;      /* it will provide inner spacing inside the card layout */
+    width: 80%;   /* It will provide consistent layout */
+    border-radius: 10px;  /* it curve the edges */
+    border: 1px solid #e0e0e0; /* border styling */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05); /* provides shadow around the card layout */
+}
+
+section h2 {
+    margin-bottom: 20px; /* adds space below heading to seperate it from content */
+    font-size: 28px;
+    color: #222;
 }
