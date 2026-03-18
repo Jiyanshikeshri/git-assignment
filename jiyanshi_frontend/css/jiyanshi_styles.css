@@ -48,13 +48,6 @@ header img {
     margin-top: 15px;
 }
 
-
-/* Footer spacing */
-footer {
-    padding: 20px;
-    margin: 20px;
-}
-
 /* ===== Navigation Styling ===== */
 
 nav ul {
@@ -156,4 +149,67 @@ section h2 {
 
 #projects a:hover {
     color: #8b6f47; /* highlight color on hover */
+}
+
+/* ===== Contact Form Styling ===== */
+
+#contact label {
+    display: block;  
+    margin-top: 12px;
+    font-weight: bold;
+}
+
+#contact input,
+#contact select,
+#contact textarea {
+    width: 300px;       
+    padding: 6px;       
+    border-radius: 4px;
+    border: 1px solid #999;
+} /*provides uniform input styling */
+
+/*provides spacing for radio & checkbox groups */
+#contact input[type="radio"],
+#contact input[type="checkbox"] {
+    width: auto;
+}
+
+/* keep radio & checkbox label inline */
+#contact input[type="radio"],
+#contact input[type="checkbox"] {
+    display: inline;
+    margin-right: 5px;
+}
+
+/* keep option labels inline */
+#contact input[type="radio"] + label,
+#contact input[type="checkbox"] + label {
+    display: inline;
+    margin-right: 15px;
+    font-weight: normal;
+}
+
+/* used to add spacing before buttons */
+#contact button {
+    margin-top: 15px;
+    padding: 8px 14px;
+    border-radius: 5px;
+    border: none;
+    background-color: #8b6f47;
+    color: white;
+    cursor: pointer; /* when we hover cursor appears as pointer */
+}
+
+#contact button:hover {
+    background-color: #2f1d05; /* changes colour on hovering over button */
+}
+
+/* ===== Footer Styling ===== */
+
+footer {
+    text-align: center; /* puts footer content to centre */
+    background-color: #e8e3d9;
+    font-size: 14px; /* smaller text size as compared to others */
+    padding: 15px; /* spacing inside footer */
+    margin-top: 40px; /* space above footer */
 }
