@@ -213,3 +213,52 @@ footer {
     padding: 15px; /* spacing inside footer */
     margin-top: 40px; /* space above footer */
 }
+
+/* ===== Responsive Design ===== */
+
+@media (max-width: 768px) {
+
+    /* Header becomes vertical, image appears below name */
+    header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .header-text {
+        max-width: 100%;
+    }
+
+    header img {
+        margin-top: 20px;
+    }
+
+    /* Navigation becomes vertical in a single column */
+    nav ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    /* Sections spacing adjust */
+    section {
+        margin: 10px;
+        padding: 15px;
+    }
+
+    /* Skills column remove, appears as single column on mobile screen */
+    #skills ul {
+        column-count: 1;
+    }
+
+    /* Form takes full width */
+    #contact input,
+    #contact select,
+    #contact textarea {
+        width: 100%;
+    }
+
+    /* Buttons full width */
+    #contact button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}
