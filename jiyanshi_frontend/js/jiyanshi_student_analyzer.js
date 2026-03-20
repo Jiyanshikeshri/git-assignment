@@ -130,3 +130,24 @@ subjects.forEach(function(sub) {
 
   console.log("Highest in " + sub + ": " + topperName + " = " + highestScore);
 });
+
+// Calculating Subject-wise Average Score (list of subjects has already been declared)
+subjects.forEach(function(sub) {
+  let total = 0;
+
+  students.forEach(function(student) {
+    student.marks.forEach(function(mark) {
+
+      // checking if subject matches
+      if (mark.subject === sub) {
+        total += mark.score;
+      }
+
+    });
+  });
+
+  // calculating average
+  let avg = total / students.length;
+
+  console.log("Average " + sub + " Score: " + avg);
+});
