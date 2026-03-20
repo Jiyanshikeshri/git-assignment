@@ -151,3 +151,24 @@ subjects.forEach(function(sub) {
 
   console.log("Average " + sub + " Score: " + avg);
 });
+
+// Overall class topper calculation
+let highestMarks = 0;
+let topperName = "";
+
+for (let i = 0; i < students.length; i++) {
+  let total = 0;
+
+  // calculate total marks of student
+  for (let j = 0; j < students[i].marks.length; j++) {
+    total += students[i].marks[j].score;
+  }
+
+  // check if this student has highest marks
+  if (total > highestMarks) {
+    highestMarks = total;
+    topperName = students[i].name;
+  }
+}
+
+console.log("Class Topper: " + topperName + " with " + highestMarks + " marks");
