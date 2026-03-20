@@ -64,3 +64,17 @@ console.log("Lalit Total Marks:", getTotalMarks(students[0]));
 console.log("Rahul Total Marks:", getTotalMarks(students[1]));
 console.log("Riya Total Marks:", getTotalMarks(students[2]));
 console.log("Latika Total Marks:", getTotalMarks(students[3]));
+
+// calculating average marks using total marks
+function averageMarks(student) {
+  const total = getTotalMarks(student); // reusing previous function
+  const avg = total / student.marks.length;
+  return avg;
+}
+
+// Average marks for each student:- 
+console.log("\n Average marks for each student : ");
+for(let i = 0; i < students.length; i++){
+    const average = averageMarks(students[i]);
+    console.log(`${students[i].name} Average : ${average.toFixed(2)}`);
+}
