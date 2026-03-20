@@ -107,3 +107,26 @@ console.log("\nStudent Grades:");
 for (let i = 0; i < students.length; i++) {
   console.log(students[i].name + " Grade: " + gradeForStudents(students[i]));
 }
+
+// finding highest score for a given subject by checking all students
+// list of all the subjects
+let subjects = ["Math", "English", "Science", "History", "Computer"];
+
+subjects.forEach(function(sub) {
+  let highestScore = 0;
+  let topperName = "";
+
+  students.forEach(function(student) {
+    student.marks.forEach(function(mark) {
+
+      // check if subject is matching and score is highest
+      if (mark.subject === sub && mark.score > highestScore) {
+        highestScore = mark.score;
+        topperName = student.name;
+      }
+
+    });
+  });
+
+  console.log("Highest in " + sub + ": " + topperName + " = " + highestScore);
+});
