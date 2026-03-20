@@ -48,3 +48,19 @@ const students = [
 ];
 
 console.log("Student data loaded:", students);
+
+// calculating total marks for a student by adding all subject scores
+function getTotalMarks(students) {
+  let total = 0;
+  students.marks.forEach(function(mark) {
+    total += mark.score;
+  });
+
+  return total;
+}
+
+// testing the function for students
+console.log("Lalit Total Marks:", getTotalMarks(students[0]));
+console.log("Rahul Total Marks:", getTotalMarks(students[1]));
+console.log("Riya Total Marks:", getTotalMarks(students[2]));
+console.log("Latika Total Marks:", getTotalMarks(students[3]));
