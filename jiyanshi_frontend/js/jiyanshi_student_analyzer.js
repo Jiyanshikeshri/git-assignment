@@ -78,3 +78,32 @@ for(let i = 0; i < students.length; i++){
     const average = averageMarks(students[i]);
     console.log(`${students[i].name} Average : ${average.toFixed(2)}`);
 }
+
+// deciding grade based on average + fail conditions
+function gradeForStudents(students) {
+  const avg = averageMarks(students);
+
+  // fail if attendance is less than 75
+  if (students.attendance < 75) {
+    return "Fail due to low attendance";
+  }
+
+  // fail if any subject has marks <= 40
+  for (let i = 0; i < students.marks.length; i++) {
+    if (students.marks[i].score <= 40) {
+      return "Fail (Failed in " + students.marks[i].subject + ")";
+    }
+  }
+
+  // grade based on average
+  if (avg >= 85) return "A";
+  if (avg >= 70) return "B";
+  if (avg >= 50) return "C";
+
+  return "Fail";
+}
+
+console.log("\nStudent Grades:");
+for (let i = 0; i < students.length; i++) {
+  console.log(students[i].name + " Grade: " + gradeForStudents(students[i]));
+}
