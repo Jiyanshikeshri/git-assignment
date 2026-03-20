@@ -80,6 +80,7 @@ for(let i = 0; i < students.length; i++){
 }
 
 // deciding grade based on average + fail conditions
+// added grade logic before because Grade depends on Average
 function gradeForStudents(students) {
   const avg = averageMarks(students);
 
