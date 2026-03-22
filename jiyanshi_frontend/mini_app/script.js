@@ -68,7 +68,7 @@ function renderProducts(productList) {
             <p>Category: ${product.category}</p>
             <p>Price: ₹${product.price}</p>
             <p>Stock: ${product.stock}</p>
-            <button>Delete</button>
+            <button onclick="deleteProduct(${product.id})">Delete</button>
         `;
         productGrid.appendChild(card);
     });
@@ -262,3 +262,19 @@ addBtn.addEventListener("click", function () {
     stockInput.value = "";
     categoryInput.value = "";
 });
+
+// Delete Product Feature
+
+function deleteProduct(id) {
+
+    // using filter to remove product
+    products = products.filter(function (product) {
+        return product.id !== id;
+    });
+
+    // updating localStorage as well
+    localStorage.setItem("products", JSON.stringify(products));
+
+    // UI update (filters + dashboard)
+    applyFilters();
+}
