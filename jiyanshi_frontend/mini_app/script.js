@@ -48,7 +48,7 @@ function renderProducts(productList) {
             <p>Category: ${product.category}</p>
             <p>Price: ₹${product.price}</p>
             <p>Stock: ${product.stock}</p>
-            <button onclick="deleteProduct(${product.id})">Delete</button>
+            <button>Delete</button>
         `;
         productGrid.appendChild(card);
     });
@@ -64,25 +64,57 @@ window.onload = function () {
     // then fake API call
     fetchProducts().then(function (data) {
         loadingText.style.display = "none"; //this will remove loading text
+        loadCategories(); // dropdown fill karega
         renderProducts(data); //render products on screen
     });
 };
 
-//Search feature
-
-// selecting seeachInput from html
-const searchInput = document.getElementById("searchInput");
-
-// whenever user will type input this function will run
-searchInput.addEventListener("input", function () {
-    let searchValue = searchInput.value.toLowerCase();
-
-    // this function is filtering the products
-    let filteredProducts = products.filter(function (product) {
-        let productName = product.name.toLowerCase();
-        return productName.includes(searchValue);
+// Load categories function....when selecting categories
+function loadCategories() {
+    let categorySet = new Set();
+    products.forEach(function (product) {
+        categorySet.add(product.category);
     });
 
-    // returning filtered result
-    renderProducts(filteredProducts);
-});
+    const categoryDropdown = document.getElementById("categoryFilter");
+
+    // reset dropdown
+    categoryDropdown.innerHTML = '<option value="all">All Categories</option>';
+    categorySet.forEach(function (category) {
+        const option = document.createElement("option");
+        option.value = category;
+        option.textContent = category;
+        categoryDropdown.appendChild(option);
+    });
+}
+
+// selecting search Input from html
+const searchInput = document.getElementById("searchInput");
+// Category filter
+const categoryFilter = document.getElementById("categoryFilter");
+
+// Applying filter function, this function will execute all filters at once
+function applyFilters() {
+    let filtered = products;
+
+    // SEARCH FILTER
+    let searchValue = searchInput.value.toLowerCase();
+    filtered = filtered.filter(function (product) {
+        return product.name.toLowerCase().includes(searchValue);
+    });
+    
+    // CATEGORY FILTER
+    let selectedCategory = categoryFilter.value;
+    if (selectedCategory !== "all") {
+        filtered = filtered.filter(function (product) {
+            return product.category === selectedCategory;
+        });
+    }
+    renderProducts(filtered);
+}
+
+// this will apply filters when search input will change
+searchInput.addEventListener("input", applyFilters);
+
+// this will apply filters when category will change
+categoryFilter.addEventListener("change", applyFilters);    
