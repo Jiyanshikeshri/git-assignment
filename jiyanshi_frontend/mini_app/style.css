@@ -62,9 +62,24 @@ header {
 /* ===== LOADING TEXT ===== */
 
 /* to show loading text in center  */
-#loading {
+/* #loading {
     text-align: center;
     margin-top: 20px;
+} */
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 5px solid #ccc;
+    border-top: 5px solid #4f46e5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
 /* ===== PRODUCT GRID ===== */
