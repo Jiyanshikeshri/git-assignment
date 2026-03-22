@@ -94,6 +94,8 @@ const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 // stock filter 
 const stockFilter = document.getElementById("stockFilter");
+// sorting filter
+const sortOption = document.getElementById("sortOption");
 
 // Applying filter function, this function will execute all filters at once
 function applyFilters() {
@@ -120,6 +122,37 @@ function applyFilters() {
             return product.stock < 5;
         });
     }
+
+    // SORTING FILTER
+    let sortValue = sortOption.value;
+
+    // Price Low → High
+    if (sortValue === "lowHigh") {
+        filtered.sort(function (a, b) {
+            return a.price - b.price;
+        });
+    }
+
+    // Price High → Low
+    if (sortValue === "highLow") {
+        filtered.sort(function (a, b) {
+            return b.price - a.price;
+        });
+    }
+
+    // A → Z
+    if (sortValue === "az") {
+        filtered.sort(function (a, b) {
+            return a.name.localeCompare(b.name);
+        });
+    }
+
+    // Z → A
+    if (sortValue === "za") {
+        filtered.sort(function (a, b) {
+            return b.name.localeCompare(a.name);
+        });
+    }
     renderProducts(filtered);
 }
 
@@ -131,3 +164,6 @@ categoryFilter.addEventListener("change", applyFilters);
 
 // this will apply filters when stock value will change
 stockFilter.addEventListener("change", applyFilters);
+
+//this will apply filters when we sort using options
+sortOption.addEventListener("change", applyFilters);
