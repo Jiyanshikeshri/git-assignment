@@ -1,0 +1,132 @@
+/* ===== BASIC PAGE STYLING ===== */
+
+/* backgraound styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background-color: #0f172a; /* dark blue */
+    color: white;
+}
+
+/* ===== HEADER ===== */
+
+/* to highlight the header */
+header {
+    background-color: #020617;
+    padding: 20px;
+    text-align: center;
+}
+
+/* ===== CONTROLS SECTION ===== */
+
+/* search and filters are shown in the box */
+#controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    padding: 15px;
+    background-color: #1e293b;
+    margin: 20px;
+    border-radius: 10px;
+}
+
+/* to make inputs clean and redeable */
+#controls input,
+#controls select {
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+}
+
+/* ===== ANALYTICS SECTION ===== */
+
+/* analytics are shown using horizontal cards */
+#analytics {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    gap: 20px;
+}
+
+/* each analytics box */
+#analytics div {
+    background-color: white;
+    color: black;
+    padding: 20px;
+    border-radius: 10px;
+    width: 220px;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* ===== LOADING TEXT ===== */
+
+/* to show loading text in center  */
+#loading {
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* ===== PRODUCT GRID ===== */
+
+/* to show products in grid format */
+#productGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    padding: 20px;
+}
+
+/* ===== PRODUCT CARD ===== */
+
+/* for each product card */
+.card {
+    background-color: #334155;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid #475569;
+}
+
+/* ===== BUTTONS ===== */
+
+/* general button */
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    color: white;
+}
+
+/* add product button */
+#addBtn {
+    background-color: #22c55e; /* green */
+}
+
+/* delete button */
+.card button {
+    background-color: #ef4444; /* red */
+    margin-top: 10px;
+}
+
+/* ===== FORM SECTION ===== */
+
+/* form is shown as different sections*/
+#formSection {
+    padding: 20px;
+    background-color: #020617;
+    margin-top: 20px;
+    text-align: center;
+}
+
+/* form inputs */
+#formSection input,
+#formSection select {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    width: 200px;
+    border-radius: 5px;
+    border: none;
+}
