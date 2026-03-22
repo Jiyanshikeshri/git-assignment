@@ -67,3 +67,22 @@ window.onload = function () {
         renderProducts(data); //render products on screen
     });
 };
+
+//Search feature
+
+// selecting seeachInput from html
+const searchInput = document.getElementById("searchInput");
+
+// whenever user will type input this function will run
+searchInput.addEventListener("input", function () {
+    let searchValue = searchInput.value.toLowerCase();
+
+    // this function is filtering the products
+    let filteredProducts = products.filter(function (product) {
+        let productName = product.name.toLowerCase();
+        return productName.includes(searchValue);
+    });
+
+    // returning filtered result
+    renderProducts(filteredProducts);
+});
