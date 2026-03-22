@@ -15,7 +15,10 @@ The project simulates real-world behavior like API loading and data persistence 
 
 This shows the main UI of the application before and after products are rendered.
 
+Dahsboard before rendering Products.
 ![Dashboard](screenshots/Dashboard%20before%20product%20rendering.jpg)
+
+Dashboard after rendering Products.
 ![Dashboard](screenshots/Dashboard%20after%20Product%20rendering.jpg)
 
 ---
@@ -55,9 +58,16 @@ Users can sort products using:
 * A → Z
 * Z → A
 
+* Price Low → High
 ![Sorting Feature](screenshots/Sort%20price%20low%20to%20high.jpg)
+
+* Price High → Low
 ![Sorting Feature](screenshots/Sort%20price%20high%20to%20low.jpg)
+
+* A → Z
 ![Sorting Feature](screenshots/Sort%20alphabatically%20A%20to%20Z.jpg)
+
+* Z → A
 ![Sorting Feature](screenshots/Sort%20alphabatically%20Z%20to%20A.jpg)
 
 ---
@@ -79,9 +89,16 @@ Displays important inventory data:
 Users can add new products using the form.
 The new product is instantly added to the UI and stored in localStorage.
 
+//Adding product shows validations.
 ![Add Product](screenshots/Add%20product%20validations.jpg)
+
+//Add product form
 ![Add Product](screenshots/Add%20Product%20form.jpg)
+
+//Add Product Analytics Updated
 ![Add Product](screenshots/Add%20product%20form%20Dashboard%20updated.jpg)
+
+//product has been added in card layout
 ![Add Product](screenshots/Add%20product%20form%20Dashboard%20updated%202.jpg)
 
 ---
@@ -91,10 +108,19 @@ The new product is instantly added to the UI and stored in localStorage.
 Each product card has a delete button.
 Clicking it removes the product from UI and localStorage.
 
+Before deleting product
 ![Delete Product](screenshots/Delete%20product%201.jpg)
+
+After deleting product
 ![Delete Product](screenshots/Delete%20Product%202.jpg)
+
+Before deleting the Analytics
 ![Delete Product](screenshots/before%20deleting%20product.jpg)
+
+After deleting the Analytics updated
 ![Delete Product](screenshots/After%20deleting%20Product.jpg)
+
+After deleting product, it has been removed from local Storage too.
 ![Delete Product](screenshots/Deleted%20Product%20removed%20from%20local%20Storage%20too.jpg)
 
 ---
@@ -129,7 +155,10 @@ Users can edit product details using a simple prompt-based interface.
 All product data is stored in browser localStorage.
 Even after refreshing the page, the data remains saved.
 
+Data before adding to local Storage
 ![Local Storage](screenshots/loacal%20Storage%201.jpg)
+
+Data after adding to local Storage
 ![Local Storage](screenshots/loacal%20Storage%202.jpg)
 
 ---
