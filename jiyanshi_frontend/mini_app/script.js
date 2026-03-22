@@ -92,6 +92,8 @@ function loadCategories() {
 const searchInput = document.getElementById("searchInput");
 // Category filter
 const categoryFilter = document.getElementById("categoryFilter");
+// stock filter 
+const stockFilter = document.getElementById("stockFilter");
 
 // Applying filter function, this function will execute all filters at once
 function applyFilters() {
@@ -110,11 +112,22 @@ function applyFilters() {
             return product.category === selectedCategory;
         });
     }
+
+    // STOCK FILTER
+    let stockValue = stockFilter.value;
+    if (stockValue === "low") {
+        filtered = filtered.filter(function (product) {
+            return product.stock < 5;
+        });
+    }
     renderProducts(filtered);
 }
 
-// this will apply filters when search input will change
+//this will apply filters when search input will change
 searchInput.addEventListener("input", applyFilters);
 
 // this will apply filters when category will change
-categoryFilter.addEventListener("change", applyFilters);    
+categoryFilter.addEventListener("change", applyFilters);   
+
+// this will apply filters when stock value will change
+stockFilter.addEventListener("change", applyFilters);
