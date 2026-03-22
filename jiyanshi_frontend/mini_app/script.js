@@ -36,6 +36,7 @@ function renderProducts(productList) {
     productGrid.innerHTML = "";
     if (productList.length === 0) {
         productGrid.innerHTML = "<p>No products found</p>";
+        updateDashboard(productList);
         return;
     }
 
@@ -52,6 +53,7 @@ function renderProducts(productList) {
         `;
         productGrid.appendChild(card);
     });
+    updateDashboard(productList);
 }
 
 // Page load flow
@@ -167,3 +169,32 @@ stockFilter.addEventListener("change", applyFilters);
 
 //this will apply filters when we sort using options
 sortOption.addEventListener("change", applyFilters);
+
+// Dashboard Analytics
+
+const totalProductsEl = document.getElementById("totalProducts");
+const totalValueEl = document.getElementById("totalValue");
+const outOfStockEl = document.getElementById("outOfStock");
+
+function updateDashboard(productList) {
+
+    // total products
+    let totalProducts = productList.length;
+
+    // total value
+    let totalValue = 0;
+
+    productList.forEach(function (product) {
+        totalValue += product.price * product.stock;
+    });
+
+    // out of stock
+    let outOfStock = productList.filter(function (product) {
+        return product.stock === 0;
+    }).length;
+
+    // we are only updating numbers
+    totalProductsEl.textContent = totalProducts;
+    totalValueEl.textContent = totalValue;
+    outOfStockEl.textContent = outOfStock;
+}
