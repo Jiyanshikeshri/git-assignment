@@ -36,7 +36,10 @@ The search is case-insensitive and updates results in real-time while typing.
 
 Products can be filtered based on category such as Electronics, Clothing, Books, etc.
 
+Category filter
 ![Category Filter](screenshots/Category%20filter.jpg)
+
+Category filter + search
 ![Category Filter](screenshots/Category%20filter%20+%20search.jpg)
 
 ---
@@ -89,16 +92,16 @@ Displays important inventory data:
 Users can add new products using the form.
 The new product is instantly added to the UI and stored in localStorage.
 
-//Adding product shows validations.
+Adding product shows validations.
 ![Add Product](screenshots/Add%20product%20validations.jpg)
 
-//Add product form
+Add product form
 ![Add Product](screenshots/Add%20Product%20form.jpg)
 
-//Add Product Analytics Updated
+Add Product Analytics Updated
 ![Add Product](screenshots/Add%20product%20form%20Dashboard%20updated.jpg)
 
-//product has been added in card layout
+product has been added in card layout
 ![Add Product](screenshots/Add%20product%20form%20Dashboard%20updated%202.jpg)
 
 ---
