@@ -75,6 +75,14 @@ function renderProducts(productList) {
     updateDashboard(productList);
 }
 
+// Disable Filters While Loading :- bonus feature
+function toggleFilters(disable) {
+    searchInput.disabled = disable;
+    categoryFilter.disabled = disable;
+    stockFilter.disabled = disable;
+    sortOption.disabled = disable;
+}
+
 // Page load flow
 
 //whenever the page will load this function will run
@@ -85,6 +93,7 @@ window.onload = function () {
     // then fake API call
     fetchProducts().then(function (data) {
         loadingText.style.display = "none"; //this will remove loading text
+        toggleFilters(false); //enable filters
         loadCategories(); // dropdown fill karega
         renderProducts(data); //render products on screen
     });
