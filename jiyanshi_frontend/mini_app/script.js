@@ -15,6 +15,7 @@
 // Load products from localStorage on page load. If localStorage is empty → use the default product list. (doing as per assignment)
 
 let storedProducts = localStorage.getItem("products");
+let products;
 
 if (storedProducts) {
     products = JSON.parse(storedProducts);
@@ -69,6 +70,7 @@ function renderProducts(productList) {
             <p>Price: ₹${product.price}</p>
             <p>Stock: ${product.stock}</p>
             <button onclick="deleteProduct(${product.id})">Delete</button>
+            <button onclick="editProduct(${product.id})">Edit</button>
         `;
         productGrid.appendChild(card);
     });
@@ -285,5 +287,29 @@ function deleteProduct(id) {
     localStorage.setItem("products", JSON.stringify(products));
 
     // UI update (filters + dashboard)
+    applyFilters();
+}
+
+//Edit product = bonus feature
+function editProduct(id) {
+
+    // finding product
+    let product = products.find(function (p) {
+        return p.id === id;
+    });
+
+    let newName = prompt("Enter new name", product.name);
+    let newPrice = prompt("Enter new price", product.price);
+    let newStock = prompt("Enter new stock", product.stock);
+
+    // update values
+    product.name = newName;
+    product.price = Number(newPrice);
+    product.stock = Number(newStock);
+
+    // localStorage update
+    localStorage.setItem("products", JSON.stringify(products));
+
+    // UI update
     applyFilters();
 }

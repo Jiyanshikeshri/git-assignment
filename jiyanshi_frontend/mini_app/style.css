@@ -145,3 +145,17 @@ button {
     border-radius: 5px;
     border: none;
 }
+
+/* Responsive design */
+
+@media (max-width: 768px) {
+
+    #productGrid {
+        grid-template-columns: 1fr;
+    }
+
+    input, select, button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
