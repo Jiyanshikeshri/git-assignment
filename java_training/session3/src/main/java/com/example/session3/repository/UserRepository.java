@@ -21,4 +21,11 @@ public class UserRepository {
         users.add(new User(5, "Rohit", 35, "ADMIN"));
     }
 
+    public List<User> getAllUsers() {
+        return users;
+    }
+
+    public void deleteUser(User user) {
+        users.remove(user);
+    }
 }
