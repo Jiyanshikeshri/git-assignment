@@ -3,6 +3,7 @@ package com.example.session3.service;
 import com.example.session3.model.User;
 import com.example.session3.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import com.example.session3.model.SubmitRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,5 +55,23 @@ public class UserService {
         }
 
         return result;
+    }
+
+    public boolean validateUser(SubmitRequest request) {
+
+    // basic null or empty checks
+    if (request.getName() == null || request.getName().isEmpty()) {
+        return false;
+    }
+
+    if (request.getAge() == null) {
+        return false;
+    }
+
+    if (request.getRole() == null || request.getRole().isEmpty()) {
+        return false;
+    }
+
+    return true;
     }
 }
