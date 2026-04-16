@@ -42,4 +42,13 @@ public class UserController {
 
     return "Data submitted successfully";
     }
+
+    // Delete request by id
+    @DeleteMapping("/{id}")
+    public String deleteUser(
+        @PathVariable int id,
+        @RequestParam(required = false) Boolean confirm
+    ) {
+        return userService.deleteUser(id, confirm);
+    }
 }
