@@ -28,4 +28,14 @@ public class UserRepository {
     public void deleteUser(User user) {
         users.remove(user);
     }
+
+    //for deleting users by their id
+    public User getUserById(int id) {
+    for (User user : users) {
+        if (user.getId() == id) {
+            return user;
+        }
+    }
+    return null;
+    }
 }
