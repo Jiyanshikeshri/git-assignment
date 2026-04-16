@@ -74,4 +74,24 @@ public class UserService {
 
     return true;
     }
+
+
+    // delete with confirmation check
+    public String deleteUser(int id, Boolean confirm) {
+
+    // check confirmation
+    if (confirm == null || !confirm) {
+        return "Confirmation required";
+    }
+
+    User user = userRepository.getUserById(id);
+
+    if (user == null) {
+        return "User not found";
+    }
+
+    userRepository.deleteUser(user);
+
+    return "User deleted successfully";
+    }
 }
