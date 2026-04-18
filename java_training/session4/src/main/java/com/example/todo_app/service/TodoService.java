@@ -32,4 +32,18 @@ public class TodoService {
     return todoRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Todo not found"));
     }
+
+    //Method to update the todos
+    public Todo updateTodo(Long id, Todo updatedTodo) {
+
+    Todo existing = todoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Todo not found"));
+
+    // update fields
+    existing.setTitle(updatedTodo.getTitle());
+    existing.setDescription(updatedTodo.getDescription());
+    existing.setStatus(updatedTodo.getStatus());
+
+    return todoRepository.save(existing);
+    }
 }

@@ -53,4 +53,20 @@ public class TodoController {
 
     return TodoMapper.toDTO(todo);
     }
+
+    //PUT API to update the existing todo
+    @PutMapping("/{id}")
+    public TodoDTO updateTodo(
+        @PathVariable Long id,
+        @Valid @RequestBody TodoDTO dto) {
+
+    // DTO → Entity
+    Todo todo = TodoMapper.toEntity(dto);
+
+    // update
+    Todo updated = todoService.updateTodo(id, todo);
+
+    // Entity → DTO
+    return TodoMapper.toDTO(updated);
+    }
 }
