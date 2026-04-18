@@ -4,6 +4,7 @@ import com.example.todo_app.model.Todo;
 import com.example.todo_app.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.todo_app.exception.ResourceNotFoundException;
 
 import java.util.List;
 
@@ -30,14 +31,14 @@ public class TodoService {
     //Method to get all todos by id
     public Todo getTodoById(Long id) {
     return todoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Todo not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Todo not found with id: " + id));
     }
 
     //Method to update the todos
     public Todo updateTodo(Long id, Todo updatedTodo) {
 
     Todo existing = todoRepository.findById(id)
-            .orElseThrow(() -> new RuntimeException("Todo not found"));
+            .orElseThrow(() -> new ResourceNotFoundException("Todo not found with id: " + id));
 
     // update fields
     existing.setTitle(updatedTodo.getTitle());
@@ -50,7 +51,7 @@ public class TodoService {
     // method to delete todo
     public void deleteTodo(Long id) {
     if (!todoRepository.existsById(id)) {
-        throw new RuntimeException("Todo not found with id: " + id);
+        throw new ResourceNotFoundException("Todo not found with id: " + id);
     }
     todoRepository.deleteById(id);
     }
