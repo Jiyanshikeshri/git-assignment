@@ -60,13 +60,21 @@ public class TodoController {
         @PathVariable Long id,
         @Valid @RequestBody TodoDTO dto) {
 
-    // DTO → Entity
+    // DTO to Entity
     Todo todo = TodoMapper.toEntity(dto);
 
     // update
     Todo updated = todoService.updateTodo(id, todo);
 
-    // Entity → DTO
+    // Entity to DTO
     return TodoMapper.toDTO(updated);
+    }
+
+    // DELETE API to delete todo by id
+    @DeleteMapping("/{id}")
+    public String deleteTodo(@PathVariable Long id) {
+
+    todoService.deleteTodo(id);
+    return "Todo deleted successfully";
     }
 }

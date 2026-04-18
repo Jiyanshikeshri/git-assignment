@@ -46,4 +46,12 @@ public class TodoService {
 
     return todoRepository.save(existing);
     }
+
+    // method to delete todo
+    public void deleteTodo(Long id) {
+    if (!todoRepository.existsById(id)) {
+        throw new RuntimeException("Todo not found with id: " + id);
+    }
+    todoRepository.deleteById(id);
+    }
 }
