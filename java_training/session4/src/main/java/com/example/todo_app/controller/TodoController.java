@@ -1,5 +1,6 @@
 
 package com.example.todo_app.controller;
+import java.util.List;
 
 import com.example.todo_app.dto.TodoDTO;
 import com.example.todo_app.mapper.TodoMapper;
@@ -31,5 +32,16 @@ public class TodoController {
         Todo savedTodo = todoService.createTodo(todo);
         // Entity to DTO
         return TodoMapper.toDTO(savedTodo);
+    }
+
+    //GET API to get all the todo
+    @GetMapping
+    public List<TodoDTO> getAllTodos() {
+
+    List<Todo> todos = todoService.getAllTodos();
+
+    return todos.stream()
+            .map(TodoMapper::toDTO)
+            .toList();
     }
 }
