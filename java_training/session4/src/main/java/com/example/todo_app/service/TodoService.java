@@ -43,7 +43,16 @@ public class TodoService {
     // update fields
     existing.setTitle(updatedTodo.getTitle());
     existing.setDescription(updatedTodo.getDescription());
-    existing.setStatus(updatedTodo.getStatus());
+    // Status Validation Logic
+    if (existing.getStatus() == Status.PENDING && updatedTodo.getStatus() == Status.COMPLETED) {
+        existing.setStatus(Status.COMPLETED);
+    } 
+    else if (existing.getStatus() == Status.COMPLETED && updatedTodo.getStatus() == Status.PENDING) {
+        existing.setStatus(Status.PENDING);
+    } 
+    else if (updatedTodo.getStatus() != existing.getStatus()) {
+        throw new RuntimeException("Invalid status transition");
+    }
 
     return todoRepository.save(existing);
     }
