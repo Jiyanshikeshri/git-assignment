@@ -44,4 +44,13 @@ public class TodoController {
             .map(TodoMapper::toDTO)
             .toList();
     }
+
+    //GET API to get all the todos by id
+    @GetMapping("/{id}")
+    public TodoDTO getTodoById(@PathVariable Long id) {
+
+    Todo todo = todoService.getTodoById(id);
+
+    return TodoMapper.toDTO(todo);
+    }
 }

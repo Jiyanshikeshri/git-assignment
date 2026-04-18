@@ -26,4 +26,10 @@ public class TodoService {
     public List<Todo> getAllTodos() {
         return todoRepository.findAll();
     }
+
+    //Method to get all todos by id
+    public Todo getTodoById(Long id) {
+    return todoRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Todo not found"));
+    }
 }
