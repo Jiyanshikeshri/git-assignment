@@ -1,6 +1,8 @@
 package com.example.todo_app.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 // This is used to take input from user
 public class TodoDTO {
