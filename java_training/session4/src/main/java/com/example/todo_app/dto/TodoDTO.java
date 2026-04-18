@@ -5,8 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 // This is used to take input from user
 public class TodoDTO {
 
-    // Title should not be empty
-    @NotBlank(message = "Title is required")
+    // Title should not be null and must have at least 3 characters
+    @NotNull(message = "Title cannot be null")
+    @Size(min = 3, message = "Title must be at least 3 characters")
     private String title;
 
     // Description should not be empty
