@@ -5,6 +5,7 @@ import com.example.todo_app.repository.TodoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.example.todo_app.exception.ResourceNotFoundException;
+import com.example.todo_app.model.Status;
 
 import java.util.List;
 
