@@ -57,4 +57,41 @@ public class TodoServiceTest {
         verify(notificationServiceClient, times(1))
         .sendNotification(anyString());
     }
+
+    //getTodoById() Test for success
+    @Test
+    void testGetTodoById_Success() {
+
+        Todo todo = new Todo();
+        todo.setTitle("Test Todo");
+
+        when(todoRepository.findById(1L)).thenReturn(java.util.Optional.of(todo));
+
+        Todo result = todoService.getTodoById(1L);
+
+        assertNotNull(result);
+        assertEquals("Test Todo", result.getTitle());
+
+        verify(todoRepository, times(1)).findById(1L);
+    }
+
+    // getTodoById() Test for exception case
+    @Test
+    void testGetTodoById_NotFound() {
+
+        // empty result
+        when(todoRepository.findById(1L)).thenReturn(java.util.Optional.empty());
+
+        // Assert the exception
+        Exception exception = assertThrows(
+                RuntimeException.class,
+                () -> todoService.getTodoById(1L)
+        );
+
+        // Checking message
+        assertTrue(exception.getMessage().contains("Todo not found"));
+
+        // Verify
+        verify(todoRepository, times(1)).findById(1L);
+    }
 }
