@@ -2,6 +2,7 @@ package com.example.todo_app.service;
 
 import com.example.todo_app.model.Todo;
 import com.example.todo_app.repository.TodoRepository;
+import com.example.todo_app.model.Status;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -93,5 +94,66 @@ public class TodoServiceTest {
 
         // Verify
         verify(todoRepository, times(1)).findById(1L);
+    }
+
+    // updateTodo() Test Success case for valid update
+    @Test
+    void testUpdateTodo_Success() {
+
+        // Existing todo from DB
+        Todo existing = new Todo();
+        existing.setTitle("Old Title");
+        existing.setStatus(Status.PENDING);
+
+        // Updated todo from request
+        Todo updated = new Todo();
+        updated.setTitle("New Title");
+        updated.setStatus(Status.COMPLETED);
+
+        // find by id
+        when(todoRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(existing));
+
+        // save
+        when(todoRepository.save(existing)).thenReturn(existing);
+
+        // calling the service
+        Todo result = todoService.updateTodo(1L, updated);
+
+        // Assertions
+        assertEquals("New Title", result.getTitle());
+        assertEquals(Status.COMPLETED, result.getStatus());
+
+        // Verify
+        verify(todoRepository).save(existing);
+    }
+
+    // updateTodo() Test Exception case for invalid update
+    @Test
+    void testUpdateTodo_InvalidStatusTransition() {
+
+        // Existing todo
+        Todo existing = new Todo();
+        existing.setStatus(Status.PENDING);
+
+        // Invalid update
+        Todo updated = new Todo();
+        updated.setStatus(Status.IN_PROGRESS);
+
+        // find by id
+        when(todoRepository.findById(1L))
+                .thenReturn(java.util.Optional.of(existing));
+
+        // Expect exception
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> todoService.updateTodo(1L, updated)
+        );
+
+        // Check message
+        assertTrue(exception.getMessage().contains("Invalid status"));
+
+        // Verify save
+        verify(todoRepository, never()).save(any());
     }
 }
