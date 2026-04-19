@@ -7,6 +7,9 @@ import com.example.todo_app.mapper.TodoMapper;
 import com.example.todo_app.model.Todo;
 import com.example.todo_app.service.TodoService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
+
+    // Logger object (used for printing logs)
+    private static final Logger logger = LoggerFactory.getLogger(TodoController.class);
 
     private final TodoService todoService;
 
@@ -26,10 +32,14 @@ public class TodoController {
     //POST API to create todo
     @PostMapping
     public TodoDTO createTodo(@Valid @RequestBody TodoDTO dto) {
+        logger.info("Received request to create TODO");
         // DTO to Entity
         Todo todo = TodoMapper.toEntity(dto);
         // save to DB
         Todo savedTodo = todoService.createTodo(todo);
+
+        logger.info("TODO created successfully with id: {}", savedTodo.getId());
+        
         // Entity to DTO
         return TodoMapper.toDTO(savedTodo);
     }
