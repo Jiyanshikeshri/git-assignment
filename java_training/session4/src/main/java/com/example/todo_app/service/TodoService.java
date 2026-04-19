@@ -10,6 +10,8 @@ import com.example.todo_app.model.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.example.todo_app.service.NotificationServiceClient;
+
 import java.util.List;
 
 @Service
@@ -19,10 +21,13 @@ public class TodoService {
     private static final Logger logger = LoggerFactory.getLogger(TodoService.class);
 
     private final TodoRepository todoRepository;
+    
+    private final NotificationServiceClient notificationServiceClient;
 
     // constructor injection
-    public TodoService(TodoRepository todoRepository) {
+    public TodoService(TodoRepository todoRepository,NotificationServiceClient notificationServiceClient) {
         this.todoRepository = todoRepository;
+        this.notificationServiceClient = notificationServiceClient;
     }
 
     // Method to save a todo
@@ -30,6 +35,12 @@ public class TodoService {
         logger.info("Saving new TODO in database");
         Todo saved = todoRepository.save(todo);
         logger.info("TODO saved with id: {}", saved.getId());
+
+        // Calling external notification service
+        notificationServiceClient.sendNotification(
+                "New TODO created with id: " + saved.getId()
+        );
+
         return saved;
     }
 
