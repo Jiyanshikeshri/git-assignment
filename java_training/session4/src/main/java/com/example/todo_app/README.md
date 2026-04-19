@@ -107,13 +107,19 @@ com.example.todo_app
   "status": "PENDING"
 }
 ```
+![Create Todo](../../../../../../screenshots/post.jpg)
+
 ### 2. Get All Todos
 
 GET /todos
 
+![Get all Todo](../../../../../../screenshots/get%20all.jpg)
+
 ### 3. Get Todo by ID
 
 GET /todos/1
+
+![Get By Id Todo](../../../../../../screenshots/get%20by%20id.jpg)
 
 ### 4. Update Todo
 
@@ -126,13 +132,19 @@ PUT /todos/1
   "status": "COMPLETED"
 }
 ```
+![Update Todo](../../../../../../screenshots/update.jpg)
+
 ### 5. Delete Todo
 
 DELETE /todos/1
 
+![Delete Todo](../../../../../../screenshots/delete.jpg)
+
 ### 6. Exception Case
 
 GET /todos/999
+
+![Exception](../../../../../../screenshots/exception.jpg)
 
 ### 7. Validation Case
 
@@ -142,6 +154,8 @@ POST /todos
   "title": "ab"
 }
 ```
+![Validation](../../../../../../screenshots/validations.jpg)
+
 ### Validation Rules
 title → required & minimum 3 characters
 description → optional
@@ -175,6 +189,9 @@ Unit tests are implemented using:
 ### Logging
 
 Logging is added in service layer and Controller layer using SLF4J.
+
+![Logging](../../../../../../screenshots/logging1.jpg)
+![Logging](../../../../../../screenshots/logging2.jpg)
 
 ### How to Run
 - Clone repository
