@@ -156,4 +156,42 @@ public class TodoServiceTest {
         // Verify save
         verify(todoRepository, never()).save(any());
     }
+
+    // Delete test for success case
+    @Test
+    void testDeleteTodo_Success() {
+
+        Long id = 1L;
+
+        // check if todo exists
+        when(todoRepository.existsById(id)).thenReturn(true);
+
+        // Calls service
+        todoService.deleteTodo(id);
+
+        // Verify if delete called or not
+        verify(todoRepository, times(1)).deleteById(id);
+    }
+
+    // Delete Test for exception case
+    @Test
+    void testDeleteTodo_NotFound() {
+
+        Long id = 1L;
+
+        // in case if todo does not exist
+        when(todoRepository.existsById(id)).thenReturn(false);
+
+        // Expect exception
+        RuntimeException exception = assertThrows(
+                RuntimeException.class,
+                () -> todoService.deleteTodo(id)
+        );
+
+        // Check message
+        assertTrue(exception.getMessage().contains("Todo not found"));
+
+        // Verify delete not called
+        verify(todoRepository, never()).deleteById(id);
+    }
 }
