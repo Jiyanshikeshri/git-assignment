@@ -1,5 +1,6 @@
 package com.example.restaurant_order_portal.entity;
 
+import com.example.restaurant_order_portal.enums.OrderStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -26,8 +27,9 @@ public class Order {
     private Double totalAmount;
 
     // Order status (PLACED, PENDING, DELIVERED, COMPLETED, CANCELLED)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private OrderStatus status;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;
@@ -42,7 +44,7 @@ public class Order {
 
     }
 
-    public Order(User user, Restaurant restaurant, Double totalAmount, String status) {
+    public Order(User user, Restaurant restaurant, Double totalAmount, OrderStatus status) {
         this.user = user;
         this.restaurant = restaurant;
         this.totalAmount = totalAmount;
@@ -77,11 +79,11 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
-    public String getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
