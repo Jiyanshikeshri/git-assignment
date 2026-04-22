@@ -1,5 +1,6 @@
 package com.example.restaurant_order_portal.entity;
 
+import com.example.restaurant_order_portal.enums.RestaurantStatus;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,8 +15,9 @@ public class Restaurant {
     private String name;
 
     // Restaurant status (open or closed)
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private RestaurantStatus status;
 
     // Many restaurants can belong to one owner, defining ManyToOne relationship
     @ManyToOne
@@ -23,6 +25,7 @@ public class Restaurant {
     private User owner;
 
     public Long getId() {
+
         return id;
     }
 
@@ -34,11 +37,11 @@ public class Restaurant {
         this.name = name;
     }
 
-    public String getStatus() {
+    public RestaurantStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(RestaurantStatus status) {
         this.status = status;
     }
 
@@ -54,7 +57,7 @@ public class Restaurant {
 
     }
 
-    public Restaurant(String name, String status, User owner) {
+    public Restaurant(String name, RestaurantStatus status, User owner) {
         this.name = name;
         this.status = status;
         this.owner = owner;
