@@ -1,10 +1,25 @@
 package com.example.restaurant_order_portal.entity;
 
 import com.example.restaurant_order_portal.enums.Role;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.PrePersist;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+/**
+ * Entity representing a User in the system.
+ *
+ * A user can be either a customer or a restaurant owner.
+ * Stores personal details, role, wallet balance, and creation timestamp.
+ */
 @Entity
 @Table(name = "users")
 public class User {
@@ -27,6 +42,9 @@ public class User {
     @Column(nullable = false)
     private String phoneNumber;
 
+    /**
+     * Role of the user (USER / RESTAURANT_OWNER)
+     */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
@@ -37,6 +55,9 @@ public class User {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    /**
+     * Automatically sets creation time
+     */
     @PrePersist
     public void setCreatedAt() {
         this.createdAt = LocalDateTime.now();
@@ -121,5 +142,25 @@ public class User {
         this.password = password;
         this.phoneNumber = phoneNumber;
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return id != null && id.equals(user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

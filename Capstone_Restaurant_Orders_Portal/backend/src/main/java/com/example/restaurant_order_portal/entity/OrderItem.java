@@ -1,7 +1,22 @@
 package com.example.restaurant_order_portal.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
 
+import java.util.Objects;
+
+/**
+ * Entity representing an item within an order.
+ *
+ * Each order item is linked to an order and a menu item,
+ * and stores quantity and price at the time of ordering.
+ */
 @Entity
 @Table(name = "order_items")
 public class OrderItem {
@@ -10,12 +25,16 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many items can belong to one order, ManyToOne relationship
+    /**
+     * Many items can belong to one order, ManyToOne relationship
+      */
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    // Many order items refer to one menu item
+    /**
+     * Many order items refer to one menu item
+      */
     @ManyToOne
     @JoinColumn(name = "menu_item_id", nullable = false)
     private MenuItem menuItem;
@@ -71,5 +90,25 @@ public class OrderItem {
 
     public void setPrice(Double price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderItem{" +
+                "id=" + id +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof OrderItem)) return false;
+        OrderItem orderItem = (OrderItem) o;
+        return id != null && id.equals(orderItem.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

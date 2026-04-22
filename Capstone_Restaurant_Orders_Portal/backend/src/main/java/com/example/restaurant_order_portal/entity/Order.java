@@ -1,10 +1,27 @@
 package com.example.restaurant_order_portal.entity;
 
 import com.example.restaurant_order_portal.enums.OrderStatus;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.PrePersist;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
+/**
+ * Entity representing an Order placed by a user.
+ *
+ * Each order is associated with a user and a restaurant,
+ * contains total amount, status, and creation timestamp.
+ */
 @Entity
 @Table (name = "orders")
 public class Order {
@@ -13,12 +30,16 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Many orders can belong to a single user therefore, ManyToOne relationship
+    /**
+     * Many orders can belong to a single user therefore, ManyToOne relationship
+      */
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // Many orders can belong to a single restaurant therefore, ManyToOne relationship
+    /**
+     * Many orders can belong to a single restaurant therefore, ManyToOne relationship
+      */
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
@@ -26,7 +47,9 @@ public class Order {
     @Column(nullable = false)
     private Double totalAmount;
 
-    // Order status (PLACED, PENDING, DELIVERED, COMPLETED, CANCELLED)
+    /**
+     *Order status (PLACED, PENDING, DELIVERED, COMPLETED, CANCELLED)
+     */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
@@ -34,7 +57,9 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    // Auto-set time
+    /**
+     * Auto-set time
+      */
     @PrePersist
     public void onCreate() {
         this.createdAt = LocalDateTime.now();
@@ -89,5 +114,25 @@ public class Order {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order)) return false;
+        Order order = (Order) o;
+        return id != null && id.equals(order.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

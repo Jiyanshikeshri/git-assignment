@@ -1,7 +1,22 @@
 package com.example.restaurant_order_portal.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Column;
+import jakarta.persistence.JoinColumn;
 
+import java.util.Objects;
+
+/**
+ * Entity representing a menu item in a restaurant.
+ *
+ * Each menu item belongs to a category and a restaurant,
+ * and has a name and price.
+ */
 @Entity
 @Table(name = "menu_items")
 public class MenuItem {
@@ -16,12 +31,16 @@ public class MenuItem {
     @Column(nullable = false)
     private Double price;
 
-    // Many items can belong to one category therefore, ManyToOne relationship
+    /**
+     * Many items can belong to one category therefore, ManyToOne relationship
+      */
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    // Many items can belong to one restaurant therefore, ManyToOne relationship
+    /**
+     * Many items can belong to one restaurant therefore, ManyToOne relationship
+      */
     @ManyToOne
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
@@ -71,5 +90,25 @@ public class MenuItem {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    @Override
+    public String toString() {
+        return "MenuItem{" +
+                "id=" + id +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MenuItem)) return false;
+        MenuItem menuItem = (MenuItem) o;
+        return id != null && id.equals(menuItem.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
