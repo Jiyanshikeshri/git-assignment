@@ -2,6 +2,7 @@ package com.example.restaurant_order_portal.service.impl;
 
 import com.example.restaurant_order_portal.entity.User;
 import com.example.restaurant_order_portal.repository.UserRepository;
+import com.example.restaurant_order_portal.security.JwtUtil;
 import com.example.restaurant_order_portal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,15 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final JwtUtil jwtUtil;
 
     /**
      * Constructor-based dependency injection.
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
+        this.jwtUtil = jwtUtil;
     }
 
     /**
@@ -47,20 +50,16 @@ public class UserServiceImpl implements UserService {
      * Finds user by email, if not found throws exception else matches password and if mismatch then throws exception
      */
     @Override
-    public User loginUser(String email, String password) {
+    public String loginUser(String email, String password) {
 
-        Optional<User> userOptional = userRepository.findByEmail(email);
-
-        if (userOptional.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
-
-        User user = userOptional.get();
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!user.getPassword().equals(password)) {
             throw new RuntimeException("Invalid password");
         }
 
-        return user;
+        // It generates JWT
+        return jwtUtil.generateToken(user.getEmail());
     }
 }

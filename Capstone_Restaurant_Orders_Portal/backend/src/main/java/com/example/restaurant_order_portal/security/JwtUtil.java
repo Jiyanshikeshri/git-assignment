@@ -4,6 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
  * Utility class for handling JWT operations such as
  * generating token, extracting username, and validating token.
  */
+@Component
 public class JwtUtil {
 
     // Secret key

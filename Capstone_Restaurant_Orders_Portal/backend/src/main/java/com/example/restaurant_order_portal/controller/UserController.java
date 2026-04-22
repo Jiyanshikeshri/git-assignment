@@ -45,7 +45,7 @@ public class UserController {
      * Endpoint: POST /api/users/login
      */
     @PostMapping("/login")
-    public User loginUser(@RequestParam String email,
+    public String loginUser(@RequestParam String email,
                           @RequestParam String password) {
         return userService.loginUser(email, password);
     }
