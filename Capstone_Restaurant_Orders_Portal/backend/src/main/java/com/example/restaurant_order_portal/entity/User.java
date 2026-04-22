@@ -1,5 +1,6 @@
 package com.example.restaurant_order_portal.entity;
 
+import com.example.restaurant_order_portal.enums.Role;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
