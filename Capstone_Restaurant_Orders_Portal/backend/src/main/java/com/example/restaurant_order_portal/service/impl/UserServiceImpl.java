@@ -6,6 +6,7 @@ import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.security.JwtUtil;
 import com.example.restaurant_order_portal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,14 +21,16 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Constructor-based dependency injection.
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, JwtUtil jwtUtil) {
+    public UserServiceImpl(UserRepository userRepository, JwtUtil jwtUtil,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
+        this.passwordEncoder = passwordEncoder;
     }
 
     /**
@@ -43,6 +46,8 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User already exists with this email");
         }
 
+        // It encrypts the password before storing
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
 
@@ -56,7 +61,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        if (!user.getPassword().equals(password)) {
+        // It compares the encrypted password
+        if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
