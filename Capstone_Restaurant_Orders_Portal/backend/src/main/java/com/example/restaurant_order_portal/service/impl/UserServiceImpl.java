@@ -1,5 +1,6 @@
 package com.example.restaurant_order_portal.service.impl;
 
+import com.example.restaurant_order_portal.dto.AuthResponse;
 import com.example.restaurant_order_portal.entity.User;
 import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.security.JwtUtil;
@@ -50,7 +51,7 @@ public class UserServiceImpl implements UserService {
      * Finds user by email, if not found throws exception else matches password and if mismatch then throws exception
      */
     @Override
-    public String loginUser(String email, String password) {
+    public AuthResponse loginUser(String email, String password) {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -60,6 +61,13 @@ public class UserServiceImpl implements UserService {
         }
 
         // It generates JWT
-        return jwtUtil.generateToken(user.getEmail());
+        String token = jwtUtil.generateToken(user.getEmail());
+
+        // return DTO
+        return new AuthResponse(
+                token,
+                user.getEmail(),
+                user.getRole().name()
+        );
     }
 }

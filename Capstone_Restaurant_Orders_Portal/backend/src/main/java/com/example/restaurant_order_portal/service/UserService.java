@@ -1,5 +1,6 @@
 package com.example.restaurant_order_portal.service;
 
+import com.example.restaurant_order_portal.dto.AuthResponse;
 import com.example.restaurant_order_portal.entity.User;
 
 /**
@@ -11,5 +12,5 @@ public interface UserService {
 
     User registerUser(User user);
 
-    String loginUser(String email, String password);
+    AuthResponse loginUser(String email, String password);
 }
