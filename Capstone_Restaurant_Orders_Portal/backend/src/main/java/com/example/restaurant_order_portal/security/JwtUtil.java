@@ -17,10 +17,14 @@ import java.util.Date;
 public class JwtUtil {
 
     // Secret key
-    private final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final String SECRET = "this_is_a_very_secure_secret_key_@_12345";
 
     // Token validity is 1 day
     private final long EXPIRATION_TIME = 1000 * 60 * 60 * 24;
+
+    private Key getSigningKey() {
+        return Keys.hmacShaKeyFor(SECRET.getBytes());
+    }
 
     /**
      * Generate JWT token using email
@@ -30,7 +34,7 @@ public class JwtUtil {
                 .setSubject(email) // store email inside token
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SECRET_KEY)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
@@ -61,7 +65,7 @@ public class JwtUtil {
      */
     private Claims extractClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();

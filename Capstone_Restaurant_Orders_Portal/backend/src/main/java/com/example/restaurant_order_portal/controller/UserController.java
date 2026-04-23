@@ -7,10 +7,7 @@ import com.example.restaurant_order_portal.entity.User;
 import com.example.restaurant_order_portal.enums.Role;
 import com.example.restaurant_order_portal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * REST Controller for User-related APIs.
@@ -66,5 +63,11 @@ public class UserController {
                 request.getEmail(),
                 request.getPassword()
         );
+    }
+
+    //simple api for testing
+    @GetMapping("/test")
+    public String testApi() {
+        return "JWT is working!";
     }
 }
