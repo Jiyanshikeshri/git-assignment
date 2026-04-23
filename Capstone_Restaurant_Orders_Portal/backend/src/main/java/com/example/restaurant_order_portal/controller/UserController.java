@@ -64,10 +64,4 @@ public class UserController {
                 request.getPassword()
         );
     }
-
-    //simple api for testing
-    @GetMapping("/test")
-    public String testApi() {
-        return "JWT is working!";
-    }
 }

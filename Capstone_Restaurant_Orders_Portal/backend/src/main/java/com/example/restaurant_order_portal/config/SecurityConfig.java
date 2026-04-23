@@ -27,6 +27,9 @@ public class SecurityConfig {
                         // Public APIs
                         .requestMatchers("/api/users/register", "/api/users/login").permitAll()
 
+                        .requestMatchers("/api/admin/**").hasRole("RESTAURANT_OWNER")
+                        .requestMatchers("/api/user/**").hasRole("USER")
+
                         // All other APIs require authentication
                         .anyRequest().authenticated()
                 )

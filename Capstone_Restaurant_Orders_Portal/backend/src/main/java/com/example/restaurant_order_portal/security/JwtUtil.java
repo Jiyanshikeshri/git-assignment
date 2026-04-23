@@ -29,9 +29,10 @@ public class JwtUtil {
     /**
      * Generate JWT token using email
      */
-    public String generateToken(String email) {
+    public String generateToken(String email, String role) {
         return Jwts.builder()
                 .setSubject(email) // store email inside token
+                .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -43,6 +44,10 @@ public class JwtUtil {
      */
     public String extractEmail(String token) {
         return extractClaims(token).getSubject();
+    }
+
+    public String extractRole(String token) {
+        return extractClaims(token).get("role", String.class);
     }
 
     /**

@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * This filter runs on every request.
@@ -48,12 +50,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null) {
             String email = jwtUtil.extractEmail(token);
 
+            String role = jwtUtil.extractRole(token);
+
             if (jwtUtil.validateToken(token, email)) {
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 email,
                                 null,
-                                Collections.emptyList() // roles later add karenge
+                                List.of(new SimpleGrantedAuthority("ROLE_" + role))
                         );
                 authentication.setDetails(
                         new WebAuthenticationDetailsSource().buildDetails(request)
