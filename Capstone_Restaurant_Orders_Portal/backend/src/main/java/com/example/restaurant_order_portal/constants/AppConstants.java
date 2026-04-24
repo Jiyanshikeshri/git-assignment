@@ -46,5 +46,16 @@ public class AppConstants {
      */
     public static final String BASE_RESTAURANT_URL = "/api/restaurants";
     public static final String RESTAURANT_ID = "/{id}";
+
+    /**
+     * Category endpoints
+     */
+
+    public static final String BASE_CATEGORY_URL = "/api/categories";
+
+    public static final String CREATE_CATEGORY = "";
+    public static final String GET_BY_RESTAURANT = "/restaurant/{restaurantId}";
+    public static final String UPDATE_CATEGORY = "/{id}";
+    public static final String DELETE_CATEGORY = "/{id}";
 }
 
