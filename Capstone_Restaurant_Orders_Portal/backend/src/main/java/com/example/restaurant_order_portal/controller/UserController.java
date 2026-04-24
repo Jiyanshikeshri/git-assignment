@@ -1,5 +1,6 @@
 package com.example.restaurant_order_portal.controller;
 
+import com.example.restaurant_order_portal.constants.AppConstants;
 import com.example.restaurant_order_portal.dto.AuthResponse;
 import com.example.restaurant_order_portal.dto.UserLoginRequest;
 import com.example.restaurant_order_portal.dto.UserRegisterRequest;
@@ -14,9 +15,8 @@ import org.springframework.web.bind.annotation.*;
  *
  * It handles user registration and login requests.
  */
-
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping(AppConstants.BASE_USER_URL)
 public class UserController {
 
     private final UserService userService;
@@ -34,7 +34,7 @@ public class UserController {
      *
      * Endpoint: POST /api/users/register
      */
-    @PostMapping("/register")
+    @PostMapping(AppConstants.REGISTER_URL)
     public User registerUser(@RequestBody UserRegisterRequest request) {
 
         // DTO to Entity conversion
@@ -56,7 +56,7 @@ public class UserController {
      * @param request contains email and password for authentication
      * @return AuthResponse containing JWT token, email, and role
      */
-    @PostMapping("/login")
+    @PostMapping(AppConstants.LOGIN_URL)
     public AuthResponse loginUser(@RequestBody UserLoginRequest request) {
 
         return userService.loginUser(

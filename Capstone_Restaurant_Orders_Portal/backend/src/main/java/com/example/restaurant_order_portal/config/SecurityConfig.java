@@ -1,5 +1,6 @@
 package com.example.restaurant_order_portal.config;
 
+import com.example.restaurant_order_portal.constants.AppConstants;
 import com.example.restaurant_order_portal.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+/**
+ * Security configuration class.
+ *
+ * Configures JWT authentication and endpoint security.
+ */
 @Configuration
 public class SecurityConfig {
 
@@ -18,6 +24,9 @@ public class SecurityConfig {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
 
+    /**
+     * Configures security filter chain.
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -25,10 +34,11 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // disable csrf for testing
                 .authorizeHttpRequests(auth -> auth
                         // Public APIs
-                        .requestMatchers("/api/users/register", "/api/users/login").permitAll()
+                        .requestMatchers(AppConstants.BASE_USER_URL + AppConstants.REGISTER_URL,
+                                AppConstants.BASE_USER_URL + AppConstants.LOGIN_URL).permitAll()
 
-                        .requestMatchers("/api/admin/**").hasRole("RESTAURANT_OWNER")
-                        .requestMatchers("/api/user/**").hasRole("USER")
+                        .requestMatchers(AppConstants.ADMIN_URL).hasRole("RESTAURANT_OWNER")
+                        .requestMatchers(AppConstants.USER_URL).hasRole("USER")
 
                         // All other APIs require authentication
                         .anyRequest().authenticated()

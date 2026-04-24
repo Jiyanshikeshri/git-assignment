@@ -19,6 +19,9 @@ import jakarta.persistence.Column;
 @Table(name = "addresses")
 public class Address {
 
+    /**
+     * Unique ID for address
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,17 +29,25 @@ public class Address {
     /**
      * Many addresses can belong to one user therefore, ManyToOne relationship
      */
-
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+    /**
+     * Street name of the address
+     */
     @Column(nullable = false)
     private String addressLine;
 
+    /**
+     * City name of the address
+     */
     @Column(nullable = false)
     private String city;
 
+    /**
+     * Pin name of the address
+     */
     @Column(nullable = false)
     private String pincode;
 
