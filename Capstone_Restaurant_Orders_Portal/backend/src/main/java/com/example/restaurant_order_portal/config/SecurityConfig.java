@@ -33,20 +33,18 @@ public class SecurityConfig {
         http
                 // Enable CORS to allow frontend (running on different origin) to access APIs
                 .cors(cors -> {})
-                .csrf(csrf -> csrf.disable()) // disable csrf for testing
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        // Public APIs
+
                         .requestMatchers(AppConstants.BASE_USER_URL + AppConstants.REGISTER_URL,
                                 AppConstants.BASE_USER_URL + AppConstants.LOGIN_URL).permitAll()
 
                         .requestMatchers(AppConstants.ADMIN_URL).hasRole("RESTAURANT_OWNER")
                         .requestMatchers(AppConstants.USER_URL).hasRole("USER")
 
-                        // All other APIs require authentication
                         .anyRequest().authenticated()
                 )
 
-        // Added JWT filter before Spring's default filter
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

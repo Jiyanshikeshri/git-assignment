@@ -10,9 +10,7 @@ import java.util.List;
  *
  * Provides queries related to items inside a cart.
  */
-
 public interface CartItemRepository extends JpaRepository<CartItem, Long> {
-
     /**
      *  This will get all items in a cart
      */
