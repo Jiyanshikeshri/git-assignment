@@ -40,5 +40,11 @@ public class AppConstants {
      * Frontend URL for CORS configuration.
      */
     public static final String FRONTEND_URL = "http://127.0.0.1:5500";
+
+    /**
+     * Restaurant endpoints
+     */
+    public static final String BASE_RESTAURANT_URL = "/api/restaurants";
+    public static final String RESTAURANT_ID = "/{id}";
 }
 
