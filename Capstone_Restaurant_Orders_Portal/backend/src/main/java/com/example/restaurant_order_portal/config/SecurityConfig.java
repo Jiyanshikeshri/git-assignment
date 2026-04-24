@@ -40,7 +40,7 @@ public class SecurityConfig {
                                 AppConstants.BASE_USER_URL + AppConstants.LOGIN_URL).permitAll()
 
                         .requestMatchers(AppConstants.ADMIN_URL).hasRole("RESTAURANT_OWNER")
-                        .requestMatchers(AppConstants.USER_URL).hasRole("USER")
+                        .requestMatchers(AppConstants.USER_URL).hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
 
                         .anyRequest().authenticated()
                 )

@@ -35,16 +35,16 @@ public class UserController {
      * Endpoint: POST /api/users/register
      */
     @PostMapping(AppConstants.REGISTER_URL)
-    public User registerUser(@RequestBody UserRegisterRequest request) {
+    public User registerUser(@RequestBody UserRegisterRequest userRegisterRequest) {
 
         // DTO to Entity conversion
         User user = new User();
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
-        user.setEmail(request.getEmail());
-        user.setPassword(request.getPassword());
-        user.setPhoneNumber(request.getPhoneNumber());
-        user.setRole(Role.valueOf(request.getRole())); // String to Enum
+        user.setFirstName(userRegisterRequest.getFirstName());
+        user.setLastName(userRegisterRequest.getLastName());
+        user.setEmail(userRegisterRequest.getEmail());
+        user.setPassword(userRegisterRequest.getPassword());
+        user.setPhoneNumber(userRegisterRequest.getPhoneNumber());
+        user.setRole(Role.valueOf(userRegisterRequest.getRole())); // String to Enum
 
         return userService.registerUser(user);
     }
@@ -53,15 +53,15 @@ public class UserController {
      * API to login user.
      *
      * Endpoint: POST /api/users/login
-     * @param request contains email and password for authentication
+     * @param userLoginRequest contains email and password for authentication
      * @return AuthResponse containing JWT token, email, and role
      */
     @PostMapping(AppConstants.LOGIN_URL)
-    public AuthResponse loginUser(@RequestBody UserLoginRequest request) {
+    public AuthResponse loginUser(@RequestBody UserLoginRequest userLoginRequest) {
 
         return userService.loginUser(
-                request.getEmail(),
-                request.getPassword()
+                userLoginRequest.getEmail(),
+                userLoginRequest.getPassword()
         );
     }
 }
