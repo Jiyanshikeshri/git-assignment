@@ -1,7 +1,9 @@
 package com.example.restaurant_order_portal.service.impl;
 
 import com.example.restaurant_order_portal.entity.Restaurant;
+import com.example.restaurant_order_portal.entity.User;
 import com.example.restaurant_order_portal.repository.RestaurantRepository;
+import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +22,22 @@ public class RestaurantServiceImpl implements RestaurantService {
         @Autowired
         private RestaurantRepository restaurantRepository;
 
+        @Autowired
+        private UserRepository userRepository;
+
         /**
          * Create a new restaurant
          */
         @Override
         public Restaurant createRestaurant(Restaurant restaurant) {
+
+            Long ownerId = restaurant.getOwner().getId();
+
+            User owner = userRepository.findById(ownerId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            restaurant.setOwner(owner);
+
             return restaurantRepository.save(restaurant);
         }
 
