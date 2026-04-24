@@ -31,6 +31,8 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
+                // Enable CORS to allow frontend (running on different origin) to access APIs
+                .cors(cors -> {})
                 .csrf(csrf -> csrf.disable()) // disable csrf for testing
                 .authorizeHttpRequests(auth -> auth
                         // Public APIs
