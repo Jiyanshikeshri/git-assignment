@@ -50,12 +50,16 @@ public class AppConstants {
     /**
      * Category endpoints
      */
-
     public static final String BASE_CATEGORY_URL = "/api/categories";
 
     public static final String CREATE_CATEGORY = "";
     public static final String GET_BY_RESTAURANT = "/restaurant/{restaurantId}";
     public static final String UPDATE_CATEGORY = "/{id}";
     public static final String DELETE_CATEGORY = "/{id}";
+
+    // Menu Item APIs
+    public static final String BASE_MENU_ITEM_URL = "/api/menu-items";
+    public static final String GET_MENUITEM_BY_RESTAURANT = "/restaurant/";
+    public static final String GET_BY_CATEGORY = "/category/";
 }
 
