@@ -1,5 +1,7 @@
 package com.example.restaurant_order_portal.service;
 
+import com.example.restaurant_order_portal.dto.RestaurantRequestDTO;
+import com.example.restaurant_order_portal.dto.RestaurantResponseDTO;
 import com.example.restaurant_order_portal.entity.Restaurant;
 
 import java.util.List;
@@ -14,26 +16,26 @@ public interface RestaurantService {
     /**
      * Create a new restaurant
      */
-    Restaurant createRestaurant(Restaurant restaurant);
+    RestaurantResponseDTO createRestaurant(RestaurantRequestDTO restaurantRequestDTO);
 
     /**
      * Fetch all restaurants
      *
      * @return list of all restaurants
      */
-    List<Restaurant> getAllRestaurants();
+    List<RestaurantResponseDTO> getAllRestaurants();
 
     /**
      * Get a restaurant by its ID
      * @return restaurant if found
      */
-    Restaurant getRestaurantById(Long id);
+    RestaurantResponseDTO getRestaurantById(Long id);
 
     /**
      * Update restaurant details
      * @return updated restaurant
      */
-    Restaurant updateRestaurant(Long id, Restaurant restaurant);
+    RestaurantResponseDTO updateRestaurant(Long id, RestaurantRequestDTO restaurantRequestDTO);
 
     /**
      * Delete a restaurant by ID

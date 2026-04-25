@@ -1,6 +1,8 @@
 package com.example.restaurant_order_portal.controller;
 
 import com.example.restaurant_order_portal.constants.AppConstants;
+import com.example.restaurant_order_portal.dto.RestaurantRequestDTO;
+import com.example.restaurant_order_portal.dto.RestaurantResponseDTO;
 import com.example.restaurant_order_portal.entity.Restaurant;
 import com.example.restaurant_order_portal.service.RestaurantService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,15 +39,16 @@ public class RestaurantController {
      * Create restaurant
      */
     @PostMapping
-    public Restaurant createRestaurant(@RequestBody Restaurant restaurant) {
-        return restaurantService.createRestaurant(restaurant);
+    public RestaurantResponseDTO createRestaurant(@RequestBody RestaurantRequestDTO restaurantRequestDTO) {
+        System.out.println("Owner ID: " + restaurantRequestDTO.getOwnerId());
+        return restaurantService.createRestaurant(restaurantRequestDTO);
     }
 
     /**
      * Get all restaurants
      */
     @GetMapping
-    public List<Restaurant> getAllRestaurants() {
+    public List<RestaurantResponseDTO> getAllRestaurants() {
         return restaurantService.getAllRestaurants();
     }
 
@@ -53,7 +56,7 @@ public class RestaurantController {
      * Get restaurant by ID
      */
     @GetMapping(AppConstants.RESTAURANT_ID)
-    public Restaurant getRestaurantById(@PathVariable Long id) {
+    public RestaurantResponseDTO getRestaurantById(@PathVariable Long id) {
         return restaurantService.getRestaurantById(id);
     }
 
@@ -61,11 +64,11 @@ public class RestaurantController {
      * Update restaurant
      */
     @PutMapping(AppConstants.RESTAURANT_ID)
-    public Restaurant updateRestaurant(
+    public RestaurantResponseDTO updateRestaurant(
             @PathVariable Long id,
-            @RequestBody Restaurant restaurant
+            @RequestBody RestaurantRequestDTO restaurantRequestDTO
     ) {
-        return restaurantService.updateRestaurant(id, restaurant);
+        return restaurantService.updateRestaurant(id, restaurantRequestDTO);
     }
 
     /**

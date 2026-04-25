@@ -1,15 +1,17 @@
 package com.example.restaurant_order_portal.service.impl;
 
+import com.example.restaurant_order_portal.dto.RestaurantRequestDTO;
+import com.example.restaurant_order_portal.dto.RestaurantResponseDTO;
 import com.example.restaurant_order_portal.entity.Restaurant;
 import com.example.restaurant_order_portal.entity.User;
+import com.example.restaurant_order_portal.enums.RestaurantStatus;
 import com.example.restaurant_order_portal.repository.RestaurantRepository;
 import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.service.RestaurantService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of RestaurantService.
@@ -19,65 +21,102 @@ import java.util.Optional;
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
-        @Autowired
-        private RestaurantRepository restaurantRepository;
+        private final RestaurantRepository restaurantRepository;
+        private final UserRepository userRepository;
 
-        @Autowired
-        private UserRepository userRepository;
+        public RestaurantServiceImpl(RestaurantRepository restaurantRepository,
+                                  UserRepository userRepository) {
+            this.restaurantRepository = restaurantRepository;
+            this.userRepository = userRepository;
+        }
+
+        /**
+         * Convert Entity to ResponseDTO
+         */
+        private RestaurantResponseDTO mapToDTO(Restaurant restaurant) {
+            return new RestaurantResponseDTO(
+                    restaurant.getId(),
+                    restaurant.getName(),
+                    restaurant.getStatus().toString(),
+                    restaurant.getOwner() != null
+                            ? restaurant.getOwner().getFirstName()
+                            : null
+            );
+        }
+
+        /**
+         * DTO to Entity
+         */
+        private Restaurant mapToEntity(RestaurantRequestDTO restaurantRequestDTO) {
+            Restaurant restaurant = new Restaurant();
+            restaurant.setName(restaurantRequestDTO.getName());
+            restaurant.setStatus(RestaurantStatus.valueOf(restaurantRequestDTO.getStatus()));
+
+            return restaurant;
+        }
 
         /**
          * Create a new restaurant
          */
         @Override
-        public Restaurant createRestaurant(Restaurant restaurant) {
+        public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO restaurantRequestDTO) {
 
-            Long ownerId = restaurant.getOwner().getId();
+            Restaurant restaurant = mapToEntity(restaurantRequestDTO);
 
-            User owner = userRepository.findById(ownerId)
+            User owner = userRepository.findById(restaurantRequestDTO.getOwnerId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             restaurant.setOwner(owner);
 
-            return restaurantRepository.save(restaurant);
+            Restaurant saved = restaurantRepository.save(restaurant);
+
+            return mapToDTO(saved);
         }
 
         /**
          * Fetch all restaurants
          */
         @Override
-        public List<Restaurant> getAllRestaurants() {
-            return restaurantRepository.findAll();
+        public List<RestaurantResponseDTO> getAllRestaurants() {
+            return restaurantRepository.findAll()
+                    .stream()
+                    .map(this::mapToDTO)
+                    .collect(Collectors.toList());
         }
 
         /**
          * Get restaurant by ID
          */
         @Override
-        public Restaurant getRestaurantById(Long id) {
+        public RestaurantResponseDTO getRestaurantById(Long id) {
 
-            // Optional used to handle null safely
-            Optional<Restaurant> restaurant = restaurantRepository.findById(id);
+            Restaurant restaurant = restaurantRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
-            if (restaurant.isPresent()) {
-                return restaurant.get();
-            } else {
-                throw new RuntimeException("Restaurant not found with id: " + id);
-            }
+            return mapToDTO(restaurant);
         }
 
         /**
          * Update restaurant details
          */
         @Override
-        public Restaurant updateRestaurant(Long id, Restaurant updatedRestaurant) {
+        public RestaurantResponseDTO updateRestaurant(Long id, RestaurantRequestDTO restaurantRequestDTO) {
 
-            Restaurant existingRestaurant = getRestaurantById(id);
+            Restaurant existing = restaurantRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
-            // Update fields
-            existingRestaurant.setName(updatedRestaurant.getName());
-            existingRestaurant.setStatus(updatedRestaurant.getStatus());
+            existing.setName(restaurantRequestDTO.getName());
+            existing.setStatus(RestaurantStatus.valueOf(restaurantRequestDTO.getStatus()));
 
-            return restaurantRepository.save(existingRestaurant);
+            if (restaurantRequestDTO.getOwnerId() != null) {
+                User owner = userRepository.findById(restaurantRequestDTO.getOwnerId())
+                        .orElseThrow(() -> new RuntimeException("User not found"));
+                existing.setOwner(owner);
+            }
+
+            Restaurant updated = restaurantRepository.save(existing);
+
+            return mapToDTO(updated);
         }
 
         /**
@@ -86,7 +125,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         @Override
         public void deleteRestaurant(Long id) {
 
-            Restaurant restaurant = getRestaurantById(id);
+            Restaurant restaurant = restaurantRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
             restaurantRepository.delete(restaurant);
         }

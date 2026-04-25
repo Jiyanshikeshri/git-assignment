@@ -46,7 +46,6 @@ public class Restaurant {
     private User owner;
 
     public Long getId() {
-
         return id;
     }
 
