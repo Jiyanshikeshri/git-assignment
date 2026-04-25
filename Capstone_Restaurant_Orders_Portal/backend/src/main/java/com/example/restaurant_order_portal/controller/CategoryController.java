@@ -1,7 +1,8 @@
 package com.example.restaurant_order_portal.controller;
 
 import com.example.restaurant_order_portal.constants.AppConstants;
-import com.example.restaurant_order_portal.entity.Category;
+import com.example.restaurant_order_portal.dto.CategoryRequestDTO;
+import com.example.restaurant_order_portal.dto.CategoryResponseDTO;
 import com.example.restaurant_order_portal.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,16 +33,16 @@ public class CategoryController {
      * Create a new category under a restaurant
      */
     @PostMapping(AppConstants.CREATE_CATEGORY)
-    public Category createCategory(@RequestBody Category category) {
+    public CategoryResponseDTO createCategory(@RequestBody CategoryRequestDTO categoryRequestDTO) {
 
-        return categoryService.createCategory(category);
+        return categoryService.createCategory(categoryRequestDTO);
     }
 
     /**
      * Get all categories for a specific restaurant
      */
     @GetMapping(AppConstants.GET_BY_RESTAURANT)
-    public List<Category> getCategoriesByRestaurant(
+    public List<CategoryResponseDTO> getCategoriesByRestaurant(
             @PathVariable Long restaurantId) {
 
         return categoryService.getCategoriesByRestaurant(restaurantId);
@@ -51,11 +52,11 @@ public class CategoryController {
      * Update a category
      */
     @PutMapping(AppConstants.UPDATE_CATEGORY)
-    public Category updateCategory(
+    public CategoryResponseDTO updateCategory(
             @PathVariable Long id,
-            @RequestBody Category category) {
+            @RequestBody CategoryRequestDTO categoryRequestDTO) {
 
-        return categoryService.updateCategory(id, category);
+        return categoryService.updateCategory(id, categoryRequestDTO);
     }
 
     /**

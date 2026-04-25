@@ -1,10 +1,14 @@
 package com.example.restaurant_order_portal.service.impl;
 
+import com.example.restaurant_order_portal.dto.CategoryRequestDTO;
+import com.example.restaurant_order_portal.dto.CategoryResponseDTO;
 import com.example.restaurant_order_portal.entity.Category;
 import com.example.restaurant_order_portal.entity.Restaurant;
 import com.example.restaurant_order_portal.repository.CategoryRepository;
+import com.example.restaurant_order_portal.repository.MenuItemRepository;
 import com.example.restaurant_order_portal.repository.RestaurantRepository;
 import com.example.restaurant_order_portal.service.CategoryService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,62 +28,90 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
+    @Autowired
+    private MenuItemRepository menuItemRepository;
+
     /**
      * Creates a new category under a specific restaurant.
      *
      * Fetches the restaurant from DB
      */
     @Override
-    public Category createCategory(Category category) {
+    public CategoryResponseDTO createCategory(CategoryRequestDTO categoryRequestDTO) {
 
-        /**
-         *  Extract restaurant ID from request
-          */
-        Long restaurantId = category.getRestaurant().getId();
-
-        /**
-         * Fetch actual restaurant from DB
-          */
-        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+        Restaurant restaurant = restaurantRepository.findById(categoryRequestDTO.getRestaurantId())
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
-        /**
-         * Set fetched restaurant
-          */
+        Category category = new Category();
+        category.setName(categoryRequestDTO.getName());
         category.setRestaurant(restaurant);
 
-        return categoryRepository.save(category);
+        Category saved = categoryRepository.save(category);
+
+        return new CategoryResponseDTO(
+                saved.getId(),
+                saved.getName(),
+                restaurant.getId(),
+                restaurant.getName()
+        );
     }
 
     /**
      * Retrieves all categories for a given restaurant.
      */
     @Override
-    public List<Category> getCategoriesByRestaurant(Long restaurantId) {
+    public List<CategoryResponseDTO> getCategoriesByRestaurant(Long restaurantId) {
 
-        return categoryRepository.findByRestaurantId(restaurantId);
+        return categoryRepository.findByRestaurantId(restaurantId)
+                .stream()
+                .map(cat -> new CategoryResponseDTO(
+                        cat.getId(),
+                        cat.getName(),
+                        cat.getRestaurant().getId(),
+                        cat.getRestaurant().getName()
+                ))
+                .toList();
     }
 
     /**
      * Updates an existing category.
      */
     @Override
-    public Category updateCategory(Long id, Category category) {
+    public CategoryResponseDTO updateCategory(Long id, CategoryRequestDTO categoryRequestDTO) {
 
-        Category existingCategory = categoryRepository.findById(id)
+        Category existing = categoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        existingCategory.setName(category.getName());
+        existing.setName(categoryRequestDTO.getName());
 
-        return categoryRepository.save(existingCategory);
+        Category updated = categoryRepository.save(existing);
+
+        return new CategoryResponseDTO(
+                updated.getId(),
+                updated.getName(),
+                updated.getRestaurant().getId(),
+                updated.getRestaurant().getName()
+        );
     }
 
     /**
      * Deletes a category by ID.
      */
     @Override
+    @Transactional
     public void deleteCategory(Long id) {
 
-        categoryRepository.deleteById(id);
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        /**
+         * delete all menu items of this category first
+         */
+        menuItemRepository.deleteByCategoryId(id);
+
+        /**
+         * then delete category
+         */
+        categoryRepository.delete(category);
     }
 }
