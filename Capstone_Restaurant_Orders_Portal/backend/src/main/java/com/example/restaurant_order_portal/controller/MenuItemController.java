@@ -1,6 +1,8 @@
 package com.example.restaurant_order_portal.controller;
 
 import com.example.restaurant_order_portal.constants.AppConstants;
+import com.example.restaurant_order_portal.dto.MenuItemRequestDTO;
+import com.example.restaurant_order_portal.dto.MenuItemResponseDTO;
 import com.example.restaurant_order_portal.entity.MenuItem;
 import com.example.restaurant_order_portal.service.MenuItemService;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,15 +35,15 @@ public class MenuItemController {
      * Create menu item
      */
     @PostMapping
-    public MenuItem createMenuItem(@RequestBody MenuItem menuItem) {
-        return menuItemService.createMenuItem(menuItem);
+    public MenuItemResponseDTO createMenuItem(@RequestBody MenuItemRequestDTO menuItemRequestDTO) {
+        return menuItemService.createMenuItem(menuItemRequestDTO);
     }
 
     /**
      * Get menu items by restaurant
      */
     @GetMapping(AppConstants.GET_MENUITEM_BY_RESTAURANT + "{restaurantId}")
-    public List<MenuItem> getByRestaurant(@PathVariable Long restaurantId) {
+    public List<MenuItemResponseDTO> getByRestaurant(@PathVariable Long restaurantId) {
         return menuItemService.getMenuItemsByRestaurant(restaurantId);
     }
 
@@ -49,7 +51,7 @@ public class MenuItemController {
      * Get menu items by category
      */
     @GetMapping(AppConstants.GET_BY_CATEGORY + "{categoryId}")
-    public List<MenuItem> getByCategory(@PathVariable Long categoryId) {
+    public List<MenuItemResponseDTO> getByCategory(@PathVariable Long categoryId) {
         return menuItemService.getMenuItemsByCategory(categoryId);
     }
 
@@ -57,8 +59,8 @@ public class MenuItemController {
      ** Update menu item
      */
     @PutMapping("/{id}")
-    public MenuItem updateMenuItem(@PathVariable Long id, @RequestBody MenuItem menuItem) {
-        return menuItemService.updateMenuItem(id, menuItem);
+    public MenuItemResponseDTO updateMenuItem(@PathVariable Long id, @RequestBody MenuItemRequestDTO menuItemRequestDTO) {
+        return menuItemService.updateMenuItem(id, menuItemRequestDTO);
     }
 
     /**

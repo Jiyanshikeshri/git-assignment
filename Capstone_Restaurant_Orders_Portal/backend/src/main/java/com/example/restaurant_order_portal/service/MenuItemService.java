@@ -1,6 +1,7 @@
 package com.example.restaurant_order_portal.service;
 
-import com.example.restaurant_order_portal.entity.MenuItem;
+import com.example.restaurant_order_portal.dto.MenuItemRequestDTO;
+import com.example.restaurant_order_portal.dto.MenuItemResponseDTO;
 
 import java.util.List;
 
@@ -13,22 +14,22 @@ public interface MenuItemService {
     /**
      * Create a new menu item
      */
-    MenuItem createMenuItem(MenuItem menuItem);
+    MenuItemResponseDTO createMenuItem(MenuItemRequestDTO menuItemRequestDTO);
 
     /**
      * Get all menu items by restaurant
      */
-    List<MenuItem> getMenuItemsByRestaurant(Long restaurantId);
+    List<MenuItemResponseDTO> getMenuItemsByRestaurant(Long restaurantId);
 
     /**
      * Get all menu items by category
      */
-    List<MenuItem> getMenuItemsByCategory(Long categoryId);
+    List<MenuItemResponseDTO> getMenuItemsByCategory(Long categoryId);
 
     /**
      * Update menu item
      */
-    MenuItem updateMenuItem(Long id, MenuItem menuItem);
+    MenuItemResponseDTO updateMenuItem(Long id, MenuItemRequestDTO menuItemRequestDTO);
 
     /**
      * Delete menu item

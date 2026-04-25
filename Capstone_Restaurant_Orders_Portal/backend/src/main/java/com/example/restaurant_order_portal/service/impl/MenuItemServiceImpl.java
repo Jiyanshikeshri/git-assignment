@@ -1,5 +1,7 @@
 package com.example.restaurant_order_portal.service.impl;
 
+import com.example.restaurant_order_portal.dto.MenuItemRequestDTO;
+import com.example.restaurant_order_portal.dto.MenuItemResponseDTO;
 import com.example.restaurant_order_portal.entity.Category;
 import com.example.restaurant_order_portal.entity.MenuItem;
 import com.example.restaurant_order_portal.entity.Restaurant;
@@ -10,6 +12,7 @@ import com.example.restaurant_order_portal.service.MenuItemService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of MenuItemService.
@@ -33,50 +36,79 @@ public class MenuItemServiceImpl implements MenuItemService {
      * Create menu item
      */
     @Override
-    public MenuItem createMenuItem(MenuItem menuItem) {
+    public MenuItemResponseDTO createMenuItem(MenuItemRequestDTO menuItemRequestDTO) {
         // fetch full category
-        Category category = categoryRepository.findById(menuItem.getCategory().getId())
+        Category category = categoryRepository.findById(menuItemRequestDTO.getCategoryId())
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
         // fetch full restaurant
-        Restaurant restaurant = restaurantRepository.findById(menuItem.getRestaurant().getId())
+        Restaurant restaurant = restaurantRepository.findById(menuItemRequestDTO.getRestaurantId())
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
+        MenuItem menuItem = new MenuItem();
+        menuItem.setName(menuItemRequestDTO.getName());
+        menuItem.setPrice(menuItemRequestDTO.getPrice());
         menuItem.setCategory(category);
         menuItem.setRestaurant(restaurant);
-        return menuItemRepository.save(menuItem);
+
+        MenuItem saved = menuItemRepository.save(menuItem);
+
+        return mapToResponseDTO(saved);
     }
 
     /**
      * Get menu items by restaurant
      */
     @Override
-    public List<MenuItem> getMenuItemsByRestaurant(Long restaurantId) {
-        return menuItemRepository.findByRestaurantId(restaurantId);
+    public List<MenuItemResponseDTO> getMenuItemsByRestaurant(Long restaurantId) {
+        return menuItemRepository.findByRestaurantId(restaurantId)
+        .stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
     }
 
     /**
      * Get menu items by category
      */
     @Override
-    public List<MenuItem> getMenuItemsByCategory(Long categoryId) {
-        return menuItemRepository.findByCategoryId(categoryId);
+    public List<MenuItemResponseDTO> getMenuItemsByCategory(Long categoryId) {
+        return menuItemRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(this::mapToResponseDTO)
+                .collect(Collectors.toList());
     }
 
     /**
      * Update menu item
      */
     @Override
-    public MenuItem updateMenuItem(Long id, MenuItem menuItem) {
+    public MenuItemResponseDTO updateMenuItem(Long id, MenuItemRequestDTO menuItemRequestDTO) {
+        /**
+         * To fetch existing item
+         */
         MenuItem existing = menuItemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Menu Item not found"));
 
-        existing.setName(menuItem.getName());
-        existing.setPrice(menuItem.getPrice());
-        existing.setCategory(menuItem.getCategory());
-        existing.setRestaurant(menuItem.getRestaurant());
+        /**
+         * To Fetch existing category
+         */
+        Category category = categoryRepository.findById(menuItemRequestDTO.getCategoryId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        return menuItemRepository.save(existing);
+        /**
+         * To fetch restaurant
+         */
+        Restaurant restaurant = restaurantRepository.findById(menuItemRequestDTO.getRestaurantId())
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        existing.setName(menuItemRequestDTO.getName());
+        existing.setPrice(menuItemRequestDTO.getPrice());
+        existing.setCategory(category);
+        existing.setRestaurant(restaurant);
+
+        MenuItem updated = menuItemRepository.save(existing);
+
+        return mapToResponseDTO(updated);
     }
 
     /**
@@ -85,5 +117,18 @@ public class MenuItemServiceImpl implements MenuItemService {
     @Override
     public void deleteMenuItem(Long id) {
         menuItemRepository.deleteById(id);
+    }
+
+    /**
+     * Mapper method from Entity to DTO
+     */
+    private MenuItemResponseDTO mapToResponseDTO(MenuItem item) {
+        return new MenuItemResponseDTO(
+                item.getId(),
+                item.getName(),
+                item.getPrice(),
+                item.getCategory().getName(),
+                item.getRestaurant().getName()
+        );
     }
 }
