@@ -1,7 +1,11 @@
 package com.example.restaurant_order_portal.service.impl;
 
+import com.example.restaurant_order_portal.entity.Category;
 import com.example.restaurant_order_portal.entity.MenuItem;
+import com.example.restaurant_order_portal.entity.Restaurant;
+import com.example.restaurant_order_portal.repository.CategoryRepository;
 import com.example.restaurant_order_portal.repository.MenuItemRepository;
+import com.example.restaurant_order_portal.repository.RestaurantRepository;
 import com.example.restaurant_order_portal.service.MenuItemService;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +20,13 @@ import java.util.List;
 public class MenuItemServiceImpl implements MenuItemService {
 
     private final MenuItemRepository menuItemRepository;
+    private final CategoryRepository categoryRepository;
+    private final RestaurantRepository restaurantRepository;
 
-    public MenuItemServiceImpl(MenuItemRepository menuItemRepository) {
+    public MenuItemServiceImpl(MenuItemRepository menuItemRepository, CategoryRepository categoryRepository, RestaurantRepository restaurantRepository) {
         this.menuItemRepository = menuItemRepository;
+        this.categoryRepository = categoryRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     /**
@@ -26,6 +34,16 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public MenuItem createMenuItem(MenuItem menuItem) {
+        // fetch full category
+        Category category = categoryRepository.findById(menuItem.getCategory().getId())
+                .orElseThrow(() -> new RuntimeException("Category not found"));
+
+        // fetch full restaurant
+        Restaurant restaurant = restaurantRepository.findById(menuItem.getRestaurant().getId())
+                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        menuItem.setCategory(category);
+        menuItem.setRestaurant(restaurant);
         return menuItemRepository.save(menuItem);
     }
 
