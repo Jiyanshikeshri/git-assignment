@@ -3,7 +3,6 @@ package com.example.restaurant_order_portal.controller;
 import com.example.restaurant_order_portal.constants.AppConstants;
 import com.example.restaurant_order_portal.dto.RestaurantRequestDTO;
 import com.example.restaurant_order_portal.dto.RestaurantResponseDTO;
-import com.example.restaurant_order_portal.entity.Restaurant;
 import com.example.restaurant_order_portal.service.RestaurantService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -37,7 +37,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(AppConstants.BASE_USER_URL + AppConstants.REGISTER_URL,
-                                AppConstants.BASE_USER_URL + AppConstants.LOGIN_URL).permitAll()
+                                AppConstants.BASE_USER_URL + AppConstants.LOGIN_URL,
+                                AppConstants.BASE_RESTAURANT_URL + "/**",
+                                AppConstants.BASE_CATEGORY_URL + "/**",
+                                AppConstants.BASE_MENU_ITEM_URL + "/**").permitAll()
 
                         .requestMatchers(AppConstants.ADMIN_URL).hasRole("RESTAURANT_OWNER")
                         .requestMatchers(AppConstants.USER_URL).hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
