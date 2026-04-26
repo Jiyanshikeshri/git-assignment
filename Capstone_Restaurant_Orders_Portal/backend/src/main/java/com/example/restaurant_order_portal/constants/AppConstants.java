@@ -7,28 +7,43 @@ package com.example.restaurant_order_portal.constants;
 public class AppConstants {
 
     /**
-     * For testing API through Postman
+     * Base API path for all endpoints.
       */
     public static final String BASE_API = "/api";
 
+    /**
+     * Test endpoint accessible by USER role.
+     */
     public static final String USER_TEST = "/user/test";
+
+    /**
+     * Test endpoint accessible by ADMIN role.
+     */
     public static final String ADMIN_TEST = "/admin/test";
 
     /**
-     * Base URLs
+     * Base URL for user-related APIs.
       */
     public static final String BASE_USER_URL = "/api/users";
 
     /**
-     * Auth endpoints
-      */
+     * Endpoint for user registration.
+     */
     public static final String REGISTER_URL = "/register";
+
+    /**
+     * Endpoint for user login.
+     */
     public static final String LOGIN_URL = "/login";
 
     /**
-     * Role-based endpoints
+     * URL pattern for user-restricted APIs. (rbac)
      */
     public static final String ADMIN_URL = "/api/admin/**";
+
+    /**
+     * URL pattern for user-restricted APIs. (rbac)
+     */
     public static final String USER_URL = "/api/user/**";
 
     /**
@@ -42,24 +57,53 @@ public class AppConstants {
     public static final String FRONTEND_URL = "http://127.0.0.1:5500";
 
     /**
-     * Restaurant endpoints
+     * Base URL for restaurant-related APIs.
      */
     public static final String BASE_RESTAURANT_URL = "/api/restaurants";
+
+    /**
+     * Path variable for restaurant ID.
+     */
     public static final String RESTAURANT_ID = "/{id}";
 
     /**
-     * Category endpoints
+     * Base URL for category-related APIs.
      */
     public static final String BASE_CATEGORY_URL = "/api/categories";
 
+    /**
+     * Endpoint to create a category.
+     */
     public static final String CREATE_CATEGORY = "";
+
+    /**
+     * Endpoint to fetch categories by restaurant ID.
+     */
     public static final String GET_BY_RESTAURANT = "/restaurant/{restaurantId}";
+
+    /**
+     * Endpoint to update a category by ID.
+     */
     public static final String UPDATE_CATEGORY = "/{id}";
+
+    /**
+     * Endpoint to delete a category by ID.
+     */
     public static final String DELETE_CATEGORY = "/{id}";
 
-    // Menu Item APIs
+    /**
+     * Base URL for menu item-related APIs.
+     */
     public static final String BASE_MENU_ITEM_URL = "/api/menu-items";
+
+    /**
+     * Endpoint to fetch menu items by restaurant ID.
+     */
     public static final String GET_MENUITEM_BY_RESTAURANT = "/restaurant/";
+
+    /**
+     * Endpoint to fetch menu items by category ID.
+     */
     public static final String GET_BY_CATEGORY = "/category/";
 }
 

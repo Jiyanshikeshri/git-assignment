@@ -13,8 +13,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This filter runs on every request.
@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         // Validating token
-        if (token != null) {
+        if (Objects.nonNull(token)) {
             String email = jwtUtil.extractEmail(token);
 
             String role = jwtUtil.extractRole(token);

@@ -37,7 +37,7 @@ public class Address {
      * Street name of the address
      */
     @Column(nullable = false)
-    private String addressLine;
+    private String streetAddress;
 
     /**
      * City name of the address
@@ -55,9 +55,9 @@ public class Address {
 
     }
 
-    public Address(User user, String addressLine, String city, String pincode) {
+    public Address(User user, String streetAddress, String city, String pincode) {
         this.user = user;
-        this.addressLine = addressLine;
+        this.streetAddress = streetAddress;
         this.city = city;
         this.pincode = pincode;
     }
@@ -74,12 +74,12 @@ public class Address {
         this.user = user;
     }
 
-    public String getAddressLine() {
-        return addressLine;
+    public String getStreetAddress() {
+        return streetAddress;
     }
 
-    public void setAddressLine(String addressLine) {
-        this.addressLine = addressLine;
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
     }
 
     public String getCity() {
@@ -102,7 +102,7 @@ public class Address {
     public String toString() {
         return "Address{" +
                 "id=" + id +
-                ", addressLine='" + addressLine + '\'' +
+                ", streetAddress='" + streetAddress + '\'' +
                 ", city='" + city + '\'' +
                 ", pincode='" + pincode + '\'' +
                 '}';

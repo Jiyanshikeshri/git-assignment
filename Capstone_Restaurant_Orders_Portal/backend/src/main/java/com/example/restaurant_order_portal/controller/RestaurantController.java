@@ -26,6 +26,9 @@ import java.util.List;
 @RequestMapping(AppConstants.BASE_RESTAURANT_URL)
 public class RestaurantController {
 
+    /**
+     * Service layer for handling restaurant operations
+     */
     private final RestaurantService restaurantService;
 
     /**

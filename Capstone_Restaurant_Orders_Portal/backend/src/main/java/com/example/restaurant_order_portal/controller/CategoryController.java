@@ -26,6 +26,9 @@ import java.util.List;
 @RequestMapping(AppConstants.BASE_CATEGORY_URL)
 public class CategoryController {
 
+    /**
+     * Service layer for handling category operations
+     */
     @Autowired
     private CategoryService categoryService;
 

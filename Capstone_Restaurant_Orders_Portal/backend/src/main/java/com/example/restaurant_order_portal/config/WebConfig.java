@@ -17,6 +17,8 @@ public class WebConfig {
     /**
      * Configures CORS mappings for all endpoints.
      *
+     * Allows cross-origin requests from frontend
+     * to access backend APIs.
      */
     @Bean
     public WebMvcConfigurer corsConfigurer() {

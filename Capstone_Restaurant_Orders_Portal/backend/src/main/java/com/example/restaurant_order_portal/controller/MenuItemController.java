@@ -25,8 +25,14 @@ import java.util.List;
 @RequestMapping(AppConstants.BASE_MENU_ITEM_URL)
 public class MenuItemController {
 
+    /**
+     * Service layer for handling MenuItem operations
+     */
     private final MenuItemService menuItemService;
 
+    /**
+     * Constructor for MenuItemController.
+     */
     public MenuItemController(MenuItemService menuItemService) {
         this.menuItemService = menuItemService;
     }
