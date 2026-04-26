@@ -1,0 +1,57 @@
+/* Page layout */
+.page {
+    padding: 40px;
+    text-align: center;
+}
+
+/* Title */
+.title {
+    margin-bottom: 30px;
+}
+
+/* Grid layout */
+.restaurant-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 280px);
+    gap: 25px;
+    justify-content: center;
+    max-width: 1000px;
+    margin: auto;
+}
+
+/* Card */
+.restaurant-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+
+/* Hover */
+.restaurant-card:hover {
+    transform: scale(1.05);
+}
+
+/* Image */
+.restaurant-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+/* Content */
+.restaurant-info {
+    padding: 15px;
+    text-align: left;
+}
+
+.restaurant-info h3 {
+    margin: 0;
+}
+
+.restaurant-info p {
+    font-size: 14px;
+    color: gray;
+}
