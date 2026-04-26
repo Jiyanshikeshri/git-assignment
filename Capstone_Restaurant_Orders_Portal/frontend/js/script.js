@@ -20,8 +20,9 @@ function login() {
         localStorage.setItem("token", data.token);
 
         alert("Login Successful");
+
+        window.location.href = "restaurants.html";
     });
-    window.location.href = "restaurants.html";
 }
 
 function register() {

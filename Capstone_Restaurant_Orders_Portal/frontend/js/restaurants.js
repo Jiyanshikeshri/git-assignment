@@ -42,8 +42,7 @@ function displayRestaurants(restaurants) {
          * On click → go to menu page
          */
         card.onclick = () => {
-            localStorage.setItem("restaurantId", res.id);
-            window.location.href = "menu.html";
+            window.location.href = `menu.html?restaurantId=${res.id}`;
         };
 
         container.appendChild(card);

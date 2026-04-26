@@ -1,0 +1,56 @@
+.page {
+    padding: 40px;
+    text-align: center;
+}
+
+.title {
+    margin-bottom: 30px;
+}
+
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 25px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.menu-card {
+    background: white;
+    border-radius: 12px;
+    padding: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: transform 0.2s;
+}
+
+.menu-card:hover {
+    transform: scale(1.05);
+}
+
+.menu-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.menu-info {
+    text-align: left;
+    margin-top: 10px;
+}
+
+.price {
+    color: green;
+    font-weight: bold;
+}
+
+button {
+    margin-top: 10px;
+    width: 100%;
+    padding: 8px;
+    background-color: orange;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+}
