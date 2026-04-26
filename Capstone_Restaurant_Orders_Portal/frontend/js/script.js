@@ -18,10 +18,15 @@ function login() {
         console.log(data);
 
         localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
 
         alert("Login Successful");
 
-        window.location.href = "restaurants.html";
+        if (data.role === "RESTAURANT_OWNER") {
+        window.location.href = "owner-dashboard.html";
+        } else {
+            window.location.href = "restaurants.html";
+        }
     });
 }
 

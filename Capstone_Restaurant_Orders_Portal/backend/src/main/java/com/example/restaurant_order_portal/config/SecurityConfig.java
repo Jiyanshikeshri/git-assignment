@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.http.HttpMethod;
 
 /**
  * Security configuration class.
@@ -37,13 +38,30 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
 
                         .requestMatchers(AppConstants.BASE_USER_URL + AppConstants.REGISTER_URL,
-                                AppConstants.BASE_USER_URL + AppConstants.LOGIN_URL,
-                                AppConstants.BASE_RESTAURANT_URL + "/**",
-                                AppConstants.BASE_CATEGORY_URL + "/**",
-                                AppConstants.BASE_MENU_ITEM_URL + "/**").permitAll()
+                                AppConstants.BASE_USER_URL + AppConstants.LOGIN_URL).permitAll()
 
-                        .requestMatchers(AppConstants.ADMIN_URL).hasRole("RESTAURANT_OWNER")
-                        .requestMatchers(AppConstants.USER_URL).hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+                        .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+
+                        /**
+                         * OWNER ONLY has access to manage restaurants
+                         */
+                        .requestMatchers(HttpMethod.POST, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
+                        .requestMatchers(HttpMethod.PUT, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
+                        .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
+
+                        /**
+                         * OWNER ONLY has access to manage categories
+                         */
+                        .requestMatchers(HttpMethod.POST, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
+                        .requestMatchers(HttpMethod.PUT, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
+                        .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
+
+                        /**
+                         * OWNER ONLY has access to manage Menu Items
+                          */
+                        .requestMatchers(HttpMethod.POST, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
+                        .requestMatchers(HttpMethod.PUT, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
+                        .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
 
                         .anyRequest().authenticated()
                 )
