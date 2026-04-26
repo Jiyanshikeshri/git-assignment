@@ -4,13 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <!-- Linking CSS file -->
+    <link rel="stylesheet" href="../css/owner.css">
 </head>
 <body>
-    <h1>Owner Dashboard</h1>
+    <div class="layout">
 
-    <button onclick="goToCreateRestaurant()">Create Restaurant</button>
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Restaurant_Owner</h2>
 
-    <button onclick="viewMyRestaurants()">My Restaurants</button>
+            <ul>
+                <li onclick="loadDashboard()">Dashboard</li>
+                <li onclick="loadRestaurants()">Restaurants</li>
+                <li onclick="loadCategories()">Categories</li>
+                <li onclick="loadMenu()">Menu</li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+
+            <!-- Navbar -->
+            <div class="navbar">
+                <span>Owner Panel</span>
+                <button onclick="logout()">Logout</button>
+            </div>
+
+            <!-- Dynamic Content -->
+            <div id="content"></div>
+
+        </div>
+
+    </div>
 
     <script src="../js/owner.js"></script>
 </body>
