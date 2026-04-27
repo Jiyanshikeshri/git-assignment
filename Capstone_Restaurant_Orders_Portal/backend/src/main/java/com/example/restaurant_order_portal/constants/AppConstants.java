@@ -125,6 +125,26 @@ public class AppConstants {
      * Endpoint to fetch orders by restaurant ID.
      */
     public static final String GET_ORDERS_BY_RESTAURANT = "/restaurant/{restaurantId}";
+
+    /**
+     * Base URL for cart-related APIs.
+     */
+    public static final String BASE_CART_URL = "/api/carts";
+
+    /**
+     * Endpoint to create a cart.
+     */
+    public static final String CREATE_CART = "";
+
+    /**
+     * Endpoint to fetch cart by user ID.
+     */
+    public static final String GET_CART_BY_USER = "/user/{userId}";
+
+    /**
+     * Endpoint to clear cart by user ID.
+     */
+    public static final String CLEAR_CART = "/clear/{userId}";
 }
 
 
