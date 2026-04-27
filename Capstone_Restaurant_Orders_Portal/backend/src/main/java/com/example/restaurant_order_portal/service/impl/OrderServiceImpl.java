@@ -21,23 +21,23 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-    private final RestaurantRepository restaurantRepository;
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
+    private final OrderItemRepository orderItemRepository;
 
     /**
      * Constructor-based dependency injection
      */
     public OrderServiceImpl(OrderRepository orderRepository,
                             UserRepository userRepository,
-                            RestaurantRepository restaurantRepository,
                             CartRepository cartRepository,
-                            CartItemRepository cartItemRepository) {
+                            CartItemRepository cartItemRepository,
+                            OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
-        this.restaurantRepository = restaurantRepository;
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     /**
@@ -76,6 +76,20 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(OrderStatus.PLACED);
 
         Order savedOrder = orderRepository.save(order);
+
+        /**
+         * Converting cart items to OrderItems
+         */
+        for (CartItem item : cartItems) {
+
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrder(savedOrder);
+            orderItem.setMenuItem(item.getMenuItem());
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setPrice(item.getMenuItem().getPrice()); // snapshot price
+
+            orderItemRepository.save(orderItem);
+        }
 
         /**
          * Clear cart after successful order
