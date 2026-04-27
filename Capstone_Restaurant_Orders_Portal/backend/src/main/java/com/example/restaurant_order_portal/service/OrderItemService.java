@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Service for handling order item operations
  */
-public class OrderItemService {
+public interface OrderItemService {
     /**
      * Get all items of an order
      */
