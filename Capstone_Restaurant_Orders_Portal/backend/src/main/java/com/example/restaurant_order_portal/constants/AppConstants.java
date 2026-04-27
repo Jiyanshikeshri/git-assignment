@@ -105,6 +105,26 @@ public class AppConstants {
      * Endpoint to fetch menu items by category ID.
      */
     public static final String GET_BY_CATEGORY = "/category/";
+
+    /**
+     * Base URL for order-related APIs.
+     */
+    public static final String BASE_ORDER_URL = "/api/orders";
+
+    /**
+     * Endpoint to create a new order.
+     */
+    public static final String CREATE_ORDER = "";
+
+    /**
+     * Endpoint to fetch orders by user ID.
+     */
+    public static final String GET_ORDERS_BY_USER = "/user/{userId}";
+
+    /**
+     * Endpoint to fetch orders by restaurant ID.
+     */
+    public static final String GET_ORDERS_BY_RESTAURANT = "/restaurant/{restaurantId}";
 }
 
 

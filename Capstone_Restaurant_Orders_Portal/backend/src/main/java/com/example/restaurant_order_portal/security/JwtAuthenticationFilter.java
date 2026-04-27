@@ -52,7 +52,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String role = jwtUtil.extractRole(token);
 
-            if (jwtUtil.validateToken(token, email)) {
+            System.out.println("JWT EMAIL: " + email);
+            System.out.println("JWT ROLE: " + role);
+
+            if (jwtUtil.validateToken(token, email) &&
+                    SecurityContextHolder.getContext().getAuthentication() == null) {
+
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 email,
@@ -65,9 +70,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-
         // Continue request
         filterChain.doFilter(request, response);
     }
-
 }
+
