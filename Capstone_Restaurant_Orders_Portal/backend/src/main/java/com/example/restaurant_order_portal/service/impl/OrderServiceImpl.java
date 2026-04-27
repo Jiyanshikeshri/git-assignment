@@ -2,13 +2,9 @@ package com.example.restaurant_order_portal.service.impl;
 
 import com.example.restaurant_order_portal.dto.OrderRequestDTO;
 import com.example.restaurant_order_portal.dto.OrderResponseDTO;
-import com.example.restaurant_order_portal.entity.Order;
-import com.example.restaurant_order_portal.entity.Restaurant;
-import com.example.restaurant_order_portal.entity.User;
+import com.example.restaurant_order_portal.entity.*;
 import com.example.restaurant_order_portal.enums.OrderStatus;
-import com.example.restaurant_order_portal.repository.OrderRepository;
-import com.example.restaurant_order_portal.repository.RestaurantRepository;
-import com.example.restaurant_order_portal.repository.UserRepository;
+import com.example.restaurant_order_portal.repository.*;
 import com.example.restaurant_order_portal.service.OrderService;
 import org.springframework.stereotype.Service;
 
@@ -26,48 +22,65 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final RestaurantRepository restaurantRepository;
+    private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
 
     /**
      * Constructor-based dependency injection
      */
     public OrderServiceImpl(OrderRepository orderRepository,
                             UserRepository userRepository,
-                            RestaurantRepository restaurantRepository) {
+                            RestaurantRepository restaurantRepository,
+                            CartRepository cartRepository,
+                            CartItemRepository cartItemRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.restaurantRepository = restaurantRepository;
+        this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
     }
 
     /**
      * Create a new order
      */
     @Override
-    public OrderResponseDTO createOrder(OrderRequestDTO dto) {
+    public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
 
-        User user = userRepository.findById(dto.getUserId())
+        User user = userRepository.findById(orderRequestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Restaurant restaurant = restaurantRepository.findById(dto.getRestaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+        Cart cart = cartRepository.findByUserId(orderRequestDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("Cart not found"));
+
+        List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
+
+        if (cartItems.isEmpty()) {
+            throw new RuntimeException("Cart is empty");
+        }
+
+        if (!cart.getRestaurant().getId().equals(orderRequestDTO.getRestaurantId())) {
+            throw new RuntimeException("Cart restaurant mismatch");
+        }
+
+        double totalAmount = 0.0;
+
+        for (CartItem item : cartItems) {
+            double price = item.getMenuItem().getPrice();
+            totalAmount += price * item.getQuantity();
+        }
 
         Order order = new Order();
         order.setUser(user);
-        order.setRestaurant(restaurant);
-
-        /**
-         * totalAmount will come from cart (for now dummy value for testing)
-         */
-        order.setTotalAmount(500.0);
-
-        /**
-         * Default status
-         */
+        order.setRestaurant(cart.getRestaurant());
+        order.setTotalAmount(totalAmount);
         order.setStatus(OrderStatus.PLACED);
 
-        /**
-         * Save order
-         */
         Order savedOrder = orderRepository.save(order);
+
+        /**
+         * Clear cart after successful order
+         */
+        cartItemRepository.deleteByCartId(cart.getId());
 
         /**
          * Convert Entity to DTO
@@ -104,15 +117,15 @@ public class OrderServiceImpl implements OrderService {
      */
     private OrderResponseDTO mapToDTO(Order order) {
 
-        OrderResponseDTO dto = new OrderResponseDTO();
+        OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
 
-        dto.setId(order.getId());
-        dto.setUserId(order.getUser().getId());
-        dto.setRestaurantId(order.getRestaurant().getId());
-        dto.setTotalAmount(order.getTotalAmount());
-        dto.setStatus(order.getStatus());
-        dto.setCreatedAt(order.getCreatedAt());
+        orderResponseDTO.setId(order.getId());
+        orderResponseDTO.setUserId(order.getUser().getId());
+        orderResponseDTO.setRestaurantId(order.getRestaurant().getId());
+        orderResponseDTO.setTotalAmount(order.getTotalAmount());
+        orderResponseDTO.setStatus(order.getStatus());
+        orderResponseDTO.setCreatedAt(order.getCreatedAt());
 
-        return dto;
+        return orderResponseDTO;
     }
 }
