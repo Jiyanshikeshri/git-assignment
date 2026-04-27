@@ -6,6 +6,7 @@ import com.example.restaurant_order_portal.entity.*;
 import com.example.restaurant_order_portal.enums.OrderStatus;
 import com.example.restaurant_order_portal.repository.*;
 import com.example.restaurant_order_portal.service.OrderService;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -44,6 +45,7 @@ public class OrderServiceImpl implements OrderService {
      * Create a new order
      */
     @Override
+    @Transactional
     public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
 
         User user = userRepository.findById(orderRequestDTO.getUserId())
