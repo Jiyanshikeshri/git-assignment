@@ -145,6 +145,26 @@ public class AppConstants {
      * Endpoint to clear cart by user ID.
      */
     public static final String CLEAR_CART = "/clear/{userId}";
+
+    /**
+     * Base URL for cart item APIs.
+     */
+    public static final String BASE_CART_ITEM_URL = "/api/cart-items";
+
+    /**
+     * Add item to cart.
+     */
+    public static final String ADD_CART_ITEM = "";
+
+    /**
+     * Get cart items by user.
+     */
+    public static final String GET_CART_ITEMS = "/user/{userId}";
+
+    /**
+     * Remove cart item.
+     */
+    public static final String REMOVE_CART_ITEM = "/{cartItemId}";
 }
 
 
