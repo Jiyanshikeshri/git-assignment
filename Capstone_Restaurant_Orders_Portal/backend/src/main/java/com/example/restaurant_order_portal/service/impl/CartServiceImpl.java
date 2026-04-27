@@ -35,12 +35,12 @@ public class CartServiceImpl implements CartService {
      * Creates a new cart for a user.
      */
     @Override
-    public CartResponseDTO createCart(CartRequestDTO requestDTO) {
+    public CartResponseDTO createCart(CartRequestDTO cartRequestDTO) {
 
-        User user = userRepository.findById(requestDTO.getUserId())
+        User user = userRepository.findById(cartRequestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Restaurant restaurant = restaurantRepository.findById(requestDTO.getRestaurantId())
+        Restaurant restaurant = restaurantRepository.findById(cartRequestDTO.getRestaurantId())
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
 
         Cart cart = new Cart(user, restaurant);

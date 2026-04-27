@@ -13,7 +13,7 @@ public interface CartService {
     /**
      * Creates a new cart for a user.
      */
-    CartResponseDTO createCart(CartRequestDTO requestDTO);
+    CartResponseDTO createCart(CartRequestDTO cartRequestDTO);
 
     /**
      * Retrieves cart by user ID.
