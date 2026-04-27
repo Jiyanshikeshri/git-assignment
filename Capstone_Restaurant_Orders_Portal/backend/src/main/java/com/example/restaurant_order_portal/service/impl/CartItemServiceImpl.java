@@ -13,6 +13,7 @@ import com.example.restaurant_order_portal.service.CartService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +50,19 @@ public class CartItemServiceImpl implements CartItemService {
             throw new RuntimeException("Cannot add items from different restaurant");
         }
 
-        CartItem cartItem = new CartItem(cart, menuItem, cartItemRequestDTO.getQuantity());
+        // If item already exists in cart, instead of adding it again update the quantity
+        Optional<CartItem> existingItem =
+                cartItemRepository.findByCartIdAndMenuItemId(cart.getId(), menuItem.getId());
+
+        CartItem cartItem;
+
+        if (existingItem.isPresent()) {
+            cartItem = existingItem.get();
+            cartItem.setQuantity(cartItem.getQuantity() + cartItemRequestDTO.getQuantity());
+        } else {
+            cartItem = new CartItem(cart, menuItem, cartItemRequestDTO.getQuantity());
+        }
+
         CartItem saved = cartItemRepository.save(cartItem);
 
         return new CartItemResponseDTO(
