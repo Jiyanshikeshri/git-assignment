@@ -91,6 +91,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
 
+                        /**
+                         * User can view Order Items
+                         */
+                        .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_ITEM_URL + "/**").hasRole("USER")
+
                         .anyRequest().authenticated()
                 )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

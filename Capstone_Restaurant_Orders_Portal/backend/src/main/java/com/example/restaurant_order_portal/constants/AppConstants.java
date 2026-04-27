@@ -165,6 +165,16 @@ public class AppConstants {
      * Remove cart item.
      */
     public static final String REMOVE_CART_ITEM = "/{cartItemId}";
+
+    /**
+     * Base URL for order item-related APIs.
+     */
+    public static final String BASE_ORDER_ITEM_URL = "/api/order-items";
+
+    /**
+     * Endpoint to get order items by order ID.
+     */
+    public static final String GET_ORDER_ITEMS_BY_ORDER = "/order/{orderId}";
 }
 
 
