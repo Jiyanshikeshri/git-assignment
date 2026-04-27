@@ -77,6 +77,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/user/**").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/restaurant/**").hasRole("RESTAURANT_OWNER")
 
+                        /**
+                         * User has access to CART APIs
+                         */
+                        .requestMatchers(HttpMethod.POST, AppConstants.BASE_CART_URL).hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_URL + "/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CART_URL + "/**").hasRole("USER")
+
                         .anyRequest().authenticated()
                 )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
