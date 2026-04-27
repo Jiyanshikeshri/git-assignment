@@ -52,7 +52,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         // If item already exists in cart, instead of adding it again update the quantity
         Optional<CartItem> existingItem =
-                cartItemRepository.findByCartIdAndMenuItemId(cart.getId(), menuItem.getId());
+                cartItemRepository.findByCart_IdAndMenuItem_Id(cart.getId(), menuItem.getId());
 
         CartItem cartItem;
 
