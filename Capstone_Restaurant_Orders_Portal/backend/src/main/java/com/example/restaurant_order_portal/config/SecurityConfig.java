@@ -84,6 +84,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_URL + "/**").hasRole("USER")
                         .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CART_URL + "/**").hasRole("USER")
 
+                        /**
+                         * User has access to CART ITEM APIs
+                         */
+                        .requestMatchers(HttpMethod.POST, AppConstants.BASE_CART_ITEM_URL).hasRole("USER")
+                        .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
+                        .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
+
                         .anyRequest().authenticated()
                 )
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
