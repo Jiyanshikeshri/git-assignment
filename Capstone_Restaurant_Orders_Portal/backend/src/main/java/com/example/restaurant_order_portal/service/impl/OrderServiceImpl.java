@@ -9,6 +9,8 @@ import com.example.restaurant_order_portal.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -136,6 +138,42 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(this::mapToDTO)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Cancels an order and refunds the amount to user's wallet.
+     */
+    @Override
+    @Transactional
+    public void cancelOrder(Long orderId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new RuntimeException("Order is already cancelled");
+        }
+
+        if (order.getStatus() != OrderStatus.PLACED) {
+            throw new RuntimeException("Only PLACED orders can be cancelled");
+        }
+
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime orderTime = order.getCreatedAt();
+
+        long diffInSeconds = Duration.between(orderTime, now).getSeconds();
+
+        if (diffInSeconds > 30) {
+            throw new RuntimeException("Cancellation time exceeded (30 seconds limit)");
+        }
+
+        User user = order.getUser();
+
+        user.setWalletBalance(user.getWalletBalance() + order.getTotalAmount());
+        userRepository.save(user);
+
+        order.setStatus(OrderStatus.CANCELLED);
+        orderRepository.save(order);
     }
 
     /**

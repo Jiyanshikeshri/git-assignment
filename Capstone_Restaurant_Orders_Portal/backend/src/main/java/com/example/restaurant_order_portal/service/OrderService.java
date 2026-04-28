@@ -26,4 +26,9 @@ public interface OrderService {
      * Get all orders for a specific restaurant
      */
     List<OrderResponseDTO> getOrdersByRestaurant(Long restaurantId);
+
+    /**
+     * Cancel an order and refund wallet
+     */
+    void cancelOrder(Long orderId);
 }

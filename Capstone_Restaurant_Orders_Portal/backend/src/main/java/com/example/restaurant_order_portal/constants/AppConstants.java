@@ -127,6 +127,11 @@ public class AppConstants {
     public static final String GET_ORDERS_BY_RESTAURANT = "/restaurant/{restaurantId}";
 
     /**
+     * Endpoint to cancel an order.
+     */
+    public static final String CANCEL_ORDER = "/cancel/{orderId}";
+
+    /**
      * Base URL for cart-related APIs.
      */
     public static final String BASE_CART_URL = "/api/carts";
