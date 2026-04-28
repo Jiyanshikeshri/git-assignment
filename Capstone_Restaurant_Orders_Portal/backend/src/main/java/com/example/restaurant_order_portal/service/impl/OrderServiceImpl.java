@@ -7,6 +7,8 @@ import com.example.restaurant_order_portal.enums.OrderStatus;
 import com.example.restaurant_order_portal.repository.*;
 import com.example.restaurant_order_portal.service.OrderService;
 import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -149,6 +151,26 @@ public class OrderServiceImpl implements OrderService {
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
+
+        /**
+         * To get logged in user
+         */
+        UserDetails userDetails = (UserDetails) SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getPrincipal();
+
+        String email = userDetails.getUsername();
+
+        User loggedInUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        /**
+         * This ensures that logged in user owns the order
+         */
+        if (!order.getUser().getId().equals(loggedInUser.getId())) {
+            throw new RuntimeException("You are not allowed to cancel this order");
+        }
 
         if (order.getStatus() == OrderStatus.CANCELLED) {
             throw new RuntimeException("Order is already cancelled");
