@@ -5,7 +5,7 @@
     <title>Register</title>
 
     <!-- Same CSS reuse -->
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/register.css">
 </head>
 <body>
 
@@ -28,11 +28,21 @@
         <!-- Phone -->
         <input type="number" id="phoneNumber" placeholder="Enter Phone number">
 
+        <!-- Role -->
+        <select id="role">
+            <option value="">Select Role</option>
+            <option value="USER">User</option>
+            <option value="RESTAURANT_OWNER">Restaurant Owner</option>
+        </select>
+
         <!-- Password -->
         <input type="password" id="password" placeholder="Enter Password">
 
         <!-- Register Button -->
         <button onclick="register()">Register</button>
+
+        <!-- Message -->
+        <div id="message" class="message"></div>
 
         <!-- Redirect to Login -->
         <p>
@@ -44,7 +54,7 @@
 </div>
 
 <!-- JS -->
-<script src="../js/script.js"></script>
+<script src="../js/register.js"></script>
 
 </body>
 </html>

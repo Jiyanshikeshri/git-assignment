@@ -1,84 +1,59 @@
-/* Reset default margin & padding */
-body {
+/* Reset */
+* {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-
-    /* Background image */
-    background: url('../assets/bg.jpg') no-repeat center center/cover;
-
-    /* Full screen height */
-    height: 100vh;
-}
-
-/* Centering container */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-}
-
-/* Card styling */
-.card {
-    background: rgba(255, 255, 255, 0.9);
-    padding: 30px;
-    border-radius: 12px;
-    width: 320px;
-
-    text-align: center;
-
-    /* shadow */
-    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-}
-
-/* Heading */
-.card h2 {
-    margin-bottom: 20px;
-}
-
-* {
     box-sizing: border-box;
 }
 
-/* Input fields */
-input {
+/* Full screen red background */
+.hero {
+    height: 100vh;
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
 
-    border: 1px solid #ccc;
-    border-radius: 6px;
+    /* Your exact red */
+    background: #9d0708;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-/* Button styling */
+/* Center content */
+.content {
+    display: flex;
+    flex-direction: column;   /* image upar, button niche */
+    align-items: center;      /* horizontally center */
+    justify-content: center;  /* vertically center (extra safety) */
+}
+
+/* Pizza image */
+.pizza {
+    width: 350px;
+    border-radius: 50%;
+    margin-bottom: 30px; /* thoda tight spacing */
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Button */
 button {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
 
-    background-color: orange;
     border: none;
-    border-radius: 6px;
+    border-radius: 12px;
 
-    color: white;
-    font-size: 16px;
+    background: white;
+    color: #9d0708;
 
     cursor: pointer;
+    transition: 0.3s;
+
+    display: block; /* ensure proper centering */
 }
 
-/* Button hover effect */
+/* Hover effect */
 button:hover {
-    background-color: darkorange;
-}
-
-/* Link text */
-p {
-    margin-top: 15px;
-}
-
-/* Link style */
-a {
-    color: orange;
-    text-decoration: none;
+    background: #ffe5e5;
 }

@@ -2,40 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food App - Landing</title>
 
-    <!-- Linking CSS file -->
+    <!-- Link CSS -->
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 
-<!-- Main container to center the card -->
-<div class="container">
+    <!-- Full Screen Hero Section -->
+    <div class="hero">
 
-    <!-- Login Card -->
-    <div class="card">
-        <h2>Login</h2>
+        <!-- Center Content -->
+        <div class="content">
 
-        <!-- Email input -->
-        <input type="email" id="email" placeholder="Enter Email">
+            <!-- Pizza Image -->
+            <img src="../assets/pizza landing.jpg" alt="Pizza" class="pizza">
 
-        <!-- Password input -->
-        <input type="password" id="password" placeholder="Enter Password">
+            <!-- Button -->
+            <button onclick="goToLogin()">Get Started</button>
 
-        <!-- Login button -->
-        <button onclick="login()">Login</button>
+        </div>
 
-        <!-- Redirect to Register page -->
-        <p>
-            Don't have an account? 
-            <a href="register.html">Register</a>
-        </p>
     </div>
 
-</div>
-
-<!-- Linking JS file -->
-<script src="../js/script.js"></script>
+    <script src="../js/script.js"></script>
 
 </body>
 </html>
