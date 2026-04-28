@@ -37,11 +37,21 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponseDTO createCart(CartRequestDTO cartRequestDTO) {
 
+        if (cartRequestDTO.getUserId() == null || cartRequestDTO.getRestaurantId() == null) {
+            throw new RuntimeException("UserId and RestaurantId are required");
+        }
+
         User user = userRepository.findById(cartRequestDTO.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         Restaurant restaurant = restaurantRepository.findById(cartRequestDTO.getRestaurantId())
                 .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+
+        Optional<Cart> existingCart = cartRepository.findByUserId(cartRequestDTO.getUserId());
+
+        if (existingCart.isPresent()) {
+            return mapToDTO(existingCart.get());
+        }
 
         Cart cart = new Cart(user, restaurant);
         Cart savedCart = cartRepository.save(cart);
@@ -78,5 +88,13 @@ public class CartServiceImpl implements CartService {
         Optional<Cart> cartOptional = cartRepository.findByUserId(userId);
 
         cartOptional.ifPresent(cartRepository::delete);
+    }
+
+    private CartResponseDTO mapToDTO(Cart cart) {
+        return new CartResponseDTO(
+                cart.getId(),
+                cart.getUser().getId(),
+                cart.getRestaurant().getId()
+        );
     }
 }
