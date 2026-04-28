@@ -3,7 +3,10 @@ package com.example.restaurant_order_portal.controller;
 import com.example.restaurant_order_portal.constants.AppConstants;
 import com.example.restaurant_order_portal.dto.CartItemRequestDTO;
 import com.example.restaurant_order_portal.dto.CartItemResponseDTO;
+import com.example.restaurant_order_portal.entity.User;
+import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.service.CartItemService;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,9 +25,11 @@ import java.util.List;
 public class CartItemController {
 
     private final CartItemService cartItemService;
+    private final UserRepository userRepository;
 
-    public CartItemController(CartItemService cartItemService) {
+    public CartItemController(CartItemService cartItemService, UserRepository userRepository) {
         this.cartItemService = cartItemService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -38,9 +43,14 @@ public class CartItemController {
     /**
      * Get all cart items.
      */
-    @GetMapping(AppConstants.GET_CART_ITEMS)
-    public List<CartItemResponseDTO> getItems(@PathVariable Long userId) {
-        return cartItemService.getCartItems(userId);
+    @GetMapping("/user")
+    public List<CartItemResponseDTO> getItems(Authentication authentication) {
+        String email = authentication.getName();
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return cartItemService.getCartItems(user.getId());
     }
 
     /**

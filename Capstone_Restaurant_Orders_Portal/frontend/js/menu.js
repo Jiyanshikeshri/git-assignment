@@ -1,10 +1,3 @@
-const token = localStorage.getItem("token");
-
-if (!token) {
-    alert("Please login first");
-    window.location.href = "login.html";
-}
-
 const BASE_CATEGORY_URL = "http://localhost:8080/api/categories";
 const BASE_MENU_URL = "http://localhost:8080/api/menu-items";
 
@@ -86,7 +79,7 @@ function renderMenu(categories, items) {
                 <div class="menu-info">
                     <h3>${item.name}</h3>
                     <p class="price">₹ ${item.price}</p>
-                    <button>Add to Cart</button>
+                    <button onclick="addToCart(${item.id})">Add to Cart</button>
                 </div>
             `;
 
@@ -124,5 +117,54 @@ document.getElementById("searchBox").addEventListener("input", function () {
         }
     });
 });
+
+/**
+ * Add item to cart
+ */
+function addToCart(menuItemId) {
+    console.log("Token:", token);
+    console.log("UserId:", userId);
+    console.log("MenuItemId:", menuItemId);
+
+    const cartRestaurantId = localStorage.getItem("cartRestaurantId");
+
+    if (cartRestaurantId && cartRestaurantId != restaurantId) {
+        alert("You can only order from one restaurant at a time");
+        return;
+    }
+
+    fetch("http://localhost:8080/api/cart-items", {
+        method: "POST",
+        headers: {
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            userId: userId,
+            menuItemId: menuItemId,
+            quantity: 1
+        })
+    })
+    .then(res => {
+        if (!res.ok) {
+            throw new Error("Failed to add item");
+        }
+        return res.json();
+    })
+    .then(data => {
+        console.log("Added to cart:", data);
+
+        localStorage.setItem("cartRestaurantId", restaurantId);
+
+        if (typeof loadCartCount === "function") {
+            loadCartCount();
+        }
+        alert("Item added to cart");
+    })
+    .catch(err => {
+        console.error(err);
+        alert("Error adding item");
+    });
+}
 
 loadData();

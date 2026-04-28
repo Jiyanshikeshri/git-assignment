@@ -5,11 +5,12 @@ import com.example.restaurant_order_portal.dto.CartItemResponseDTO;
 import com.example.restaurant_order_portal.entity.Cart;
 import com.example.restaurant_order_portal.entity.CartItem;
 import com.example.restaurant_order_portal.entity.MenuItem;
+import com.example.restaurant_order_portal.entity.User;
 import com.example.restaurant_order_portal.repository.CartItemRepository;
 import com.example.restaurant_order_portal.repository.CartRepository;
 import com.example.restaurant_order_portal.repository.MenuItemRepository;
 import com.example.restaurant_order_portal.service.CartItemService;
-import com.example.restaurant_order_portal.service.CartService;
+import com.example.restaurant_order_portal.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,13 +26,16 @@ public class CartItemServiceImpl implements CartItemService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final MenuItemRepository menuItemRepository;
+    private final UserRepository userRepository;
 
     public CartItemServiceImpl(CartRepository cartRepository,
                                CartItemRepository cartItemRepository,
-                               MenuItemRepository menuItemRepository) {
+                               MenuItemRepository menuItemRepository,
+                               UserRepository userRepository) {
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.menuItemRepository = menuItemRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -40,11 +44,30 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemResponseDTO addItemToCart(CartItemRequestDTO cartItemRequestDTO) {
 
-        Cart cart = cartRepository.findByUserId(cartItemRequestDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
-
         MenuItem menuItem = menuItemRepository.findById(cartItemRequestDTO.getMenuItemId())
                 .orElseThrow(() -> new RuntimeException("Menu item not found"));
+
+        Optional<Cart> cartOptional = cartRepository.findByUserId(cartItemRequestDTO.getUserId());
+
+        Cart cart;
+
+        if (cartOptional.isPresent()) {
+            cart = cartOptional.get();
+        } else {
+            User user = userRepository.findById(cartItemRequestDTO.getUserId())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            cart = new Cart();
+            cart.setUser(user);
+            cart.setRestaurant(menuItem.getRestaurant());
+
+            cart = cartRepository.save(cart);
+        }
+
+        if (cart.getRestaurant() == null) {
+            cart.setRestaurant(menuItem.getRestaurant());
+            cartRepository.save(cart);
+        }
 
         if (!cart.getRestaurant().getId().equals(menuItem.getRestaurant().getId())) {
             throw new RuntimeException("Cannot add items from different restaurant");

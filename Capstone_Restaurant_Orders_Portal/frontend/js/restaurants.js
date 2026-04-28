@@ -11,7 +11,10 @@ const BASE_URL = "http://localhost:8080/api/restaurants";
  * Fetch all restaurants from backend
  */
 function loadRestaurants() {
-    fetch(BASE_URL)
+    fetch(BASE_URL,{
+    headers: {
+        "Authorization": "Bearer " + token
+    }})
         .then(res => res.json())
         .then(data => {
             console.log("Restaurants:", data);
@@ -55,11 +58,6 @@ function displayRestaurants(restaurants) {
 
         container.appendChild(card);
     });
-}
-
-function logout() {
-    localStorage.clear();
-    window.location.href = "index.html";
 }
 
 /**

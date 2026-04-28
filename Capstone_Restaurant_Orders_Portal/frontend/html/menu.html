@@ -5,8 +5,31 @@
     <title>Menu</title>
 
     <link rel="stylesheet" href="../css/menu.css">
+    <link rel="stylesheet" href="../css/common.css">
 </head>
 <body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h2 class="logo">Foodie</h2>
+        <div class="nav-links">
+            <a href="restaurants.html">Home</a>
+            <a href="restaurants.html">Restaurants</a>
+            <a href="#">My Orders</a>
+
+            <!-- Cart with count -->
+            <a href="cart.html">
+                Cart<span id="cartCount">0</span>
+            </a>
+
+            <!-- Wallet -->
+            <span>
+                Wallet ₹<span id="walletAmount">0</span>
+            </span>
+
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
     <!-- Title -->
     <h1 class="title">Menu</h1>
 
@@ -17,7 +40,11 @@
 
     <div id="menuContainer"></div>
 
+<script src="../js/common.js"></script>
 <script src="../js/menu.js"></script>
+<script>
+    initNavbar();
+</script>
 
 </body>
 </html>

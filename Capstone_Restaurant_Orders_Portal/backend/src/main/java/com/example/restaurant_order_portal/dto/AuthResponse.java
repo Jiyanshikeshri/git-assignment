@@ -22,14 +22,20 @@ public class AuthResponse {
      */
     private String role;
 
+    /**
+     * User ID of logged in user
+     */
+    private Long userId;
+
     public AuthResponse(){
 
     }
 
-    public AuthResponse(String token, String email, String role) {
+    public AuthResponse(String token, String email, String role, Long userId) {
         this.token = token;
         this.email = email;
         this.role = role;
+        this.userId = userId;
     }
 
     /**
@@ -57,5 +63,13 @@ public class AuthResponse {
      */
     public String getRole() {
         return role;
+    }
+
+    /**
+     * Gets the user id of logged in user
+     * @return
+     */
+    public Long getUserId() {
+        return userId;
     }
 }

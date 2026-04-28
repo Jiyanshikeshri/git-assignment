@@ -6,6 +6,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="../css/restaurants.css">
+    <link rel="stylesheet" href="../css/common.css">
 </head>
 <body>
     <!-- Navbar -->
@@ -16,7 +17,10 @@
             <a href="#">Home</a>
             <a href="#">Restaurants</a>
             <a href="#">My Orders</a>
-            <a href="#">Cart</a>
+            <a href="cart.html">Cart<span id="cartCount">0</span></a>
+            <span>
+                Wallet ₹<span id="walletAmount">0</span>
+            </span>
             <a href="#">Contact</a>
             <button onclick="logout()">Logout</button>
         </div>
@@ -35,6 +39,10 @@
     </div>
 
     <!-- JS -->
+    <script src="../js/common.js"></script>  
     <script src="../js/restaurants.js"></script>
+    <script>
+        initNavbar();
+    </script>
 </body>
 </html>

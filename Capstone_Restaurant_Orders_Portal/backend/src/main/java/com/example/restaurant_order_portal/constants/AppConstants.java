@@ -144,7 +144,7 @@ public class AppConstants {
     /**
      * Endpoint to fetch cart by user ID.
      */
-    public static final String GET_CART_BY_USER = "/user/{userId}";
+    public static final String GET_CART_BY_USER = "/user";
 
     /**
      * Endpoint to clear cart by user ID.

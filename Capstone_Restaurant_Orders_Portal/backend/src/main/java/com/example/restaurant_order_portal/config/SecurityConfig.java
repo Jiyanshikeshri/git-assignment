@@ -47,7 +47,11 @@
                             .requestMatchers(AppConstants.BASE_USER_URL + AppConstants.REGISTER_URL,
                                     AppConstants.BASE_USER_URL + AppConstants.LOGIN_URL).permitAll()
 
-                            .requestMatchers(HttpMethod.GET, "/api/**").permitAll()
+                            .requestMatchers(HttpMethod.GET,
+                                    "/api/restaurants/**",
+                                    "/api/categories/**",
+                                    "/api/menu-items/**"
+                            ).permitAll()
 
                             /**
                              * OWNER ONLY has access to manage restaurants
@@ -88,9 +92,7 @@
                             /**
                              * User has access to CART ITEM APIs
                              */
-                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_CART_ITEM_URL).hasRole("USER")
-                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
-                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
+                            .requestMatchers(AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
 
                             /**
                              * User can view Order Items

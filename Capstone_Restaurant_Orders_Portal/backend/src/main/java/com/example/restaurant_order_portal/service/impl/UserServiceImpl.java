@@ -1,7 +1,9 @@
 package com.example.restaurant_order_portal.service.impl;
 
 import com.example.restaurant_order_portal.dto.AuthResponse;
+import com.example.restaurant_order_portal.entity.Cart;
 import com.example.restaurant_order_portal.entity.User;
+import com.example.restaurant_order_portal.repository.CartRepository;
 import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.security.JwtUtil;
 import com.example.restaurant_order_portal.service.UserService;
@@ -20,6 +22,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final CartRepository cartRepository;
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
 
@@ -27,10 +30,11 @@ public class UserServiceImpl implements UserService {
      * Constructor-based dependency injection.
      */
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, JwtUtil jwtUtil,PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, CartRepository cartRepository, JwtUtil jwtUtil,PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
+        this.cartRepository = cartRepository;
     }
 
     /**
@@ -76,7 +80,14 @@ public class UserServiceImpl implements UserService {
         return new AuthResponse(
                 token,
                 user.getEmail(),
-                user.getRole().name()
+                user.getRole().name(),
+                user.getId()
         );
+    }
+
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 }

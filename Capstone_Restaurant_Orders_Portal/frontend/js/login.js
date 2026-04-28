@@ -36,6 +36,7 @@ function login() {
 
         localStorage.setItem("token", data.token);
         localStorage.setItem("role", data.role);
+        localStorage.setItem("userId", data.userId);
 
         // Success message
         messageDiv.innerText = "Login successful!";
