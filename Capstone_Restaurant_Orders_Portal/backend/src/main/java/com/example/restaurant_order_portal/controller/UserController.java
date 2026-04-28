@@ -36,10 +36,6 @@ public class UserController {
      */
     @PostMapping(AppConstants.REGISTER_URL)
     public User registerUser(@RequestBody UserRegisterRequest userRegisterRequest) {
-
-        /**
-         * DTO to Entity conversion
-          */
         User user = new User();
         user.setFirstName(userRegisterRequest.getFirstName());
         user.setLastName(userRegisterRequest.getLastName());
