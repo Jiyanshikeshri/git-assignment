@@ -2,49 +2,87 @@ const token = localStorage.getItem("token");
 
 if (!token) {
     alert("Please login first");
-    window.location.href = "index.html";
+    window.location.href = "login.html";
 }
 
-const BASE_URL = "http://localhost:8080/api/menu-items";
+const BASE_CATEGORY_URL = "http://localhost:8080/api/categories";
+const BASE_MENU_URL = "http://localhost:8080/api/menu-items";
 
 // Get restaurantId from URL
 const params = new URLSearchParams(window.location.search);
 const restaurantId = params.get("restaurantId");
 
-function loadMenu() {
+async function loadData() {
+    try {
+        const [categories, items] = await Promise.all([
+            fetch(BASE_CATEGORY_URL + "/restaurant/" + restaurantId, {
+                headers: { "Authorization": "Bearer " + token }
+            }).then(res => res.json()),
 
-    fetch(BASE_URL + "/restaurant/" + restaurantId, {
-        method: "GET",
-        headers: {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json"
-        }
-    })
-    .then(res => {
-        if (!res.ok) {
-            if (res.status === 403 || res.status === 401) {
-                alert("Session expired, please login again");
-                localStorage.removeItem("token");
-                window.location.href = "index.html";
-            }
-            throw new Error("API Error: " + res.status);
-        }
-        return res.json();
-    })
-    .then(data => {
+            fetch(BASE_MENU_URL + "/restaurant/" + restaurantId, {
+                headers: { "Authorization": "Bearer " + token }
+            }).then(res => res.json())
+        ]);
 
-        console.log("Menu items:", data);
+        console.log("Categories:", categories);
+        console.log("Items:", items);
 
-        const container = document.getElementById("menuList");
-        container.innerHTML = "";
+        renderCategories(categories);
+        renderMenu(categories, items);
 
-        data.forEach(item => {
+    } catch (err) {
+        console.error(err);
+    }
+}
 
+/**
+ * Render categories (TOP)
+ */
+function renderCategories(categories) {
+    const container = document.getElementById("categoryList");
+    container.innerHTML = "";
+
+    categories.forEach(cat => {
+        const div = document.createElement("div");
+        div.classList.add("category");
+        div.innerHTML = `
+            <img src="../assets/category_static_image.jpg" />
+            <p>${cat.name}</p>
+        `;
+
+        div.onclick = () => scrollToCategory(cat.id);
+
+        container.appendChild(div);
+    });
+}
+
+/**
+ * Render menu grouped by category
+ */
+function renderMenu(categories, items) {
+    const container = document.getElementById("menuContainer");
+    container.innerHTML = "";
+
+    categories.forEach(cat => {
+
+        const section = document.createElement("div");
+        section.classList.add("menu-section");
+        section.id = "cat-" + cat.id;
+
+        section.innerHTML = `<h2>${cat.name}</h2>`;
+
+        const grid = document.createElement("div");
+        grid.classList.add("menu-grid");
+
+        // filter items for this category
+        const filtered = items.filter(item => item.categoryName === cat.name);
+
+        filtered.forEach(item => {
             const card = document.createElement("div");
             card.classList.add("menu-card");
 
             card.innerHTML = `
-                <img src="../assets/default.jpg" />
+                <img src="../assets/menu_item_static.jpg" />
                 <div class="menu-info">
                     <h3>${item.name}</h3>
                     <p class="price">₹ ${item.price}</p>
@@ -52,12 +90,39 @@ function loadMenu() {
                 </div>
             `;
 
-            container.appendChild(card);
+            grid.appendChild(card);
         });
-    })
-    .catch(err => {
-        console.error("Error:", err);
+
+        section.appendChild(grid);
+        container.appendChild(section);
     });
 }
 
-loadMenu();
+/**
+ * Scroll to section
+ */
+function scrollToCategory(id) {
+    const element = document.getElementById("cat-" + id);
+
+    element.scrollIntoView({
+        behavior: "smooth"
+    });
+}
+
+document.getElementById("searchBox").addEventListener("input", function () {
+    const value = this.value.toLowerCase();
+
+    const cards = document.querySelectorAll(".menu-card");
+
+    cards.forEach(card => {
+        const name = card.querySelector("h3").innerText.toLowerCase();
+
+        if (name.includes(value)) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+});
+
+loadData();

@@ -1,26 +1,79 @@
-.page {
-    padding: 40px;
+.title {
+    text-align: center;
+    color: #9d0708;
+    margin-bottom: 20px;
+}
+
+#searchBox {
+    display: block;
+    margin: 0 auto 25px auto;
+    padding: 12px;
+    width: 300px;
+
+    border-radius: 25px;
+    border: 1px solid #ddd;
+
     text-align: center;
 }
 
-.title {
+.categories {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
     margin-bottom: 30px;
+    flex-wrap: wrap;
+}
+
+.category {
+    text-align: center;
+    cursor: pointer;
+}
+
+.category img {
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+    object-fit: cover;
+
+    border: 2px solid #ddd;
+    transition: 0.3s;
+}
+
+.category:hover img {
+    border: 2px solid #9d0708;
+    transform: scale(1.1);
+}
+
+.category p {
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.menu-section {
+    margin-bottom: 40px;
+}
+
+.menu-section h2 {
+    color: #9d0708;
+    text-align: center;
+    margin-bottom: 15px;
 }
 
 .menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 280px);;
     gap: 25px;
-    max-width: 1000px;
-    margin: auto;
+    justify-content: center;
 }
 
 .menu-card {
     background: white;
     border-radius: 12px;
-    padding: 15px;
+    padding: 10px;
+
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    transition: transform 0.2s;
+    transition: 0.3s;
 }
 
 .menu-card:hover {
@@ -29,13 +82,12 @@
 
 .menu-card img {
     width: 100%;
-    height: 150px;
-    object-fit: cover;
+    height: 140px;
     border-radius: 10px;
+    object-fit: cover;
 }
 
 .menu-info {
-    text-align: left;
     margin-top: 10px;
 }
 
@@ -45,12 +97,14 @@
 }
 
 button {
-    margin-top: 10px;
+    margin-top: 8px;
     width: 100%;
     padding: 8px;
-    background-color: orange;
+
+    background: #9d0708;
+    color: white;
+
     border: none;
     border-radius: 6px;
-    color: white;
     cursor: pointer;
 }
