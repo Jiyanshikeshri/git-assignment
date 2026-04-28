@@ -8,14 +8,33 @@
     <link rel="stylesheet" href="../css/restaurants.css">
 </head>
 <body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h2 class="logo">Foodie</h2>
 
-<div class="page">
-    <h1 class="title">Restaurants</h1>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Restaurants</a>
+            <a href="#">My Orders</a>
+            <a href="#">Cart</a>
+            <a href="#">Contact</a>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
 
-    <!-- Restaurant Cards Container -->
-    <div id="restaurantList" class="restaurant-grid"></div>
-</div>
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Discover Best Food Near You!!</h1>
+    </div>
 
-<script src="../js/restaurants.js"></script>
+    <div class="page">
+        <h1 class="title">Restaurants Near You!!</h1>
+
+        <!-- Restaurant Cards Container -->
+        <div id="restaurantList" class="restaurant-grid"></div>
+    </div>
+
+    <!-- JS -->
+    <script src="../js/restaurants.js"></script>
 </body>
 </html>

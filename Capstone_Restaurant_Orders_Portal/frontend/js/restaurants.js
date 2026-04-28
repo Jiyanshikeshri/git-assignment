@@ -34,7 +34,7 @@ function displayRestaurants(restaurants) {
         card.classList.add("restaurant-card");
 
         /**
-         * Since no image in backend → using static image
+         * Since no image in backend therefore using static image
          */
         card.innerHTML = `
             <img src="../assets/dominos.jpg" alt="restaurant">
@@ -42,11 +42,12 @@ function displayRestaurants(restaurants) {
             <div class="restaurant-info">
                 <h3>${res.name}</h3>
                 <p>Click to view menu</p>
+                <span class="tag">Explore</span>
             </div>
         `;
 
         /**
-         * On click → go to menu page
+         * On click to go to menu page
          */
         card.onclick = () => {
             window.location.href = `menu.html?restaurantId=${res.id}`;
@@ -54,6 +55,11 @@ function displayRestaurants(restaurants) {
 
         container.appendChild(card);
     });
+}
+
+function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
 }
 
 /**
