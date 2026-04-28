@@ -71,6 +71,16 @@ public class OrderServiceImpl implements OrderService {
             totalAmount += price * item.getQuantity();
         }
 
+        /**
+         * Validate and deduct wallet balance
+         */
+        if (user.getWalletBalance() < totalAmount) {
+            throw new RuntimeException("Insufficient wallet balance");
+        }
+
+        user.setWalletBalance(user.getWalletBalance() - totalAmount);
+        userRepository.save(user);
+
         Order order = new Order();
         order.setUser(user);
         order.setRestaurant(cart.getRestaurant());
