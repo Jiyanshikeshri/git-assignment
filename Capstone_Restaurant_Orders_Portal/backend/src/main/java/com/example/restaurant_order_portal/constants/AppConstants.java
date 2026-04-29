@@ -8,7 +8,7 @@ public class AppConstants {
 
     /**
      * Base API path for all endpoints.
-      */
+     */
     public static final String BASE_API = "/api";
 
     /**
@@ -23,7 +23,7 @@ public class AppConstants {
 
     /**
      * Base URL for user-related APIs.
-      */
+     */
     public static final String BASE_USER_URL = "/api/users";
 
     /**
@@ -144,7 +144,7 @@ public class AppConstants {
     /**
      * Endpoint to fetch cart by user ID.
      */
-    public static final String GET_CART_BY_USER = "/user";
+    public static final String GET_CART_BY_USER = "/user/{userId}";
 
     /**
      * Endpoint to clear cart by user ID.
@@ -164,7 +164,7 @@ public class AppConstants {
     /**
      * Get cart items by user.
      */
-    public static final String GET_CART_ITEMS = "/user/{userId}";
+    public static final String GET_CART_ITEMS = "/user";
 
     /**
      * Remove cart item.
@@ -180,6 +180,31 @@ public class AppConstants {
      * Endpoint to get order items by order ID.
      */
     public static final String GET_ORDER_ITEMS_BY_ORDER = "/order/{orderId}";
+
+    /**
+     * Base URL for address APIs
+     */
+    public static final String BASE_ADDRESS_URL = "/api/addresses";
+
+    /**
+     * Create new address
+     */
+    public static final String CREATE_ADDRESS = "";
+
+    /**
+     * Get all addresses of user
+     */
+    public static final String GET_USER_ADDRESSES = "/user";
+
+    /**
+     * Update address
+     */
+    public static final String UPDATE_ADDRESS = "/{addressId}";
+
+    /**
+     * Delete address
+     */
+    public static final String DELETE_ADDRESS = "/{addressId}";
 }
 
 

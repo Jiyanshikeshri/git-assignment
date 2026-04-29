@@ -11,6 +11,7 @@ import com.example.restaurant_order_portal.service.RestaurantService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -108,7 +109,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             existing.setName(restaurantRequestDTO.getName());
             existing.setStatus(RestaurantStatus.valueOf(restaurantRequestDTO.getStatus()));
 
-            if (restaurantRequestDTO.getOwnerId() != null) {
+            if (Objects.nonNull(restaurantRequestDTO.getOwnerId())) {
                 User owner = userRepository.findById(restaurantRequestDTO.getOwnerId())
                         .orElseThrow(() -> new RuntimeException("User not found"));
                 existing.setOwner(owner);

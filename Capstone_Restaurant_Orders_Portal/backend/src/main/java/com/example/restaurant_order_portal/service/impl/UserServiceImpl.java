@@ -50,7 +50,6 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("User already exists with this email");
         }
 
-        // It encrypts the password before storing
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -65,18 +64,15 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // It compares the encrypted password
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
 
-        // It generates JWT
         String token = jwtUtil.generateToken(
                 user.getEmail(),
                 user.getRole().name()
         );
 
-        // return DTO
         return new AuthResponse(
                 token,
                 user.getEmail(),

@@ -8,7 +8,6 @@ import com.example.restaurant_order_portal.repository.*;
 import com.example.restaurant_order_portal.service.OrderService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -29,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
     private final OrderItemRepository orderItemRepository;
+    private final AddressRepository addressRepository;
 
     /**
      * Constructor-based dependency injection
@@ -37,12 +37,14 @@ public class OrderServiceImpl implements OrderService {
                             UserRepository userRepository,
                             CartRepository cartRepository,
                             CartItemRepository cartItemRepository,
-                            OrderItemRepository orderItemRepository) {
+                            OrderItemRepository orderItemRepository,
+                            AddressRepository addressRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.orderItemRepository = orderItemRepository;
+        this.addressRepository = addressRepository;
     }
 
     /**
@@ -52,20 +54,24 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderResponseDTO createOrder(OrderRequestDTO orderRequestDTO) {
 
-        User user = userRepository.findById(orderRequestDTO.getUserId())
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        Cart cart = cartRepository.findByUserId(orderRequestDTO.getUserId())
+        Address address = addressRepository.findById(orderRequestDTO.getAddressId())
+                .orElseThrow(() -> new RuntimeException("Address not found"));
+
+        Cart cart = cartRepository.findByUserId(user.getId())
                 .orElseThrow(() -> new RuntimeException("Cart not found"));
 
         List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
 
         if (cartItems.isEmpty()) {
             throw new RuntimeException("Cart is empty");
-        }
-
-        if (!cart.getRestaurant().getId().equals(orderRequestDTO.getRestaurantId())) {
-            throw new RuntimeException("Cart restaurant mismatch");
         }
 
         double totalAmount = 0.0;
@@ -75,9 +81,6 @@ public class OrderServiceImpl implements OrderService {
             totalAmount += price * item.getQuantity();
         }
 
-        /**
-         * Validate and deduct wallet balance
-         */
         if (user.getWalletBalance() < totalAmount) {
             throw new RuntimeException("Insufficient wallet balance");
         }
@@ -90,12 +93,10 @@ public class OrderServiceImpl implements OrderService {
         order.setRestaurant(cart.getRestaurant());
         order.setTotalAmount(totalAmount);
         order.setStatus(OrderStatus.PLACED);
+        order.setAddress(address);
 
         Order savedOrder = orderRepository.save(order);
 
-        /**
-         * Converting cart items to OrderItems
-         */
         for (CartItem item : cartItems) {
 
             OrderItem orderItem = new OrderItem();
@@ -107,15 +108,9 @@ public class OrderServiceImpl implements OrderService {
             orderItemRepository.save(orderItem);
         }
 
-        /**
-         * Clear cart after successful order
-         */
         cartItemRepository.deleteByCartId(cart.getId());
 
-        /**
-         * Convert Entity to DTO
-         */
-        return mapToDTO(savedOrder);
+        return orderResponseDTO(savedOrder);
     }
 
     /**
@@ -126,7 +121,7 @@ public class OrderServiceImpl implements OrderService {
 
         return orderRepository.findByUserId(userId)
                 .stream()
-                .map(this::mapToDTO)
+                .map(this::orderResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -138,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
 
         return orderRepository.findByRestaurantId(restaurantId)
                 .stream()
-                .map(this::mapToDTO)
+                .map(this::orderResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -152,22 +147,14 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
 
-        /**
-         * To get logged in user
-         */
-        UserDetails userDetails = (UserDetails) SecurityContextHolder
+        String email = SecurityContextHolder
                 .getContext()
                 .getAuthentication()
-                .getPrincipal();
-
-        String email = userDetails.getUsername();
+                .getName();
 
         User loggedInUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        /**
-         * This ensures that logged in user owns the order
-         */
         if (!order.getUser().getId().equals(loggedInUser.getId())) {
             throw new RuntimeException("You are not allowed to cancel this order");
         }
@@ -201,7 +188,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * Entity to DTO conversion
      */
-    private OrderResponseDTO mapToDTO(Order order) {
+    private OrderResponseDTO orderResponseDTO(Order order) {
 
         OrderResponseDTO orderResponseDTO = new OrderResponseDTO();
 
@@ -211,6 +198,11 @@ public class OrderServiceImpl implements OrderService {
         orderResponseDTO.setTotalAmount(order.getTotalAmount());
         orderResponseDTO.setStatus(order.getStatus());
         orderResponseDTO.setCreatedAt(order.getCreatedAt());
+        orderResponseDTO.setAddress(
+                order.getAddress().getStreetAddress() + ", " +
+                        order.getAddress().getCity() + " - " +
+                        order.getAddress().getPincode()
+        );
 
         return orderResponseDTO;
     }

@@ -36,7 +36,7 @@ public class Address {
     /**
      * Street name of the address
      */
-    @Column(nullable = false)
+    @Column(name = "address_line",nullable = false)
     private String streetAddress;
 
     /**

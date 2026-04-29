@@ -34,7 +34,6 @@
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
             http
-                    // Enable CORS to allow frontend (running on different origin) to access APIs
                     .cors(cors -> {})
                     .csrf(csrf -> csrf.disable())
 
@@ -53,51 +52,32 @@
                                     "/api/menu-items/**"
                             ).permitAll()
 
-                            /**
-                             * OWNER ONLY has access to manage restaurants
-                             */
                             .requestMatchers(HttpMethod.POST, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
                             .requestMatchers(HttpMethod.PUT, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
                             .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
 
-                            /**
-                             * OWNER ONLY has access to manage categories
-                             */
                             .requestMatchers(HttpMethod.POST, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
                             .requestMatchers(HttpMethod.PUT, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
                             .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
 
-                            /**
-                             * OWNER ONLY has access to manage Menu Items
-                              */
                             .requestMatchers(HttpMethod.POST, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
                             .requestMatchers(HttpMethod.PUT, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
                             .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
 
-                            /**
-                             * ORDER APIs (User can create and view order, whereas owner can also view order of its own restaurant)
-                             */
                             .requestMatchers(HttpMethod.POST, AppConstants.BASE_ORDER_URL).hasRole("USER")
                             .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/user/**").hasRole("USER")
                             .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/restaurant/**").hasRole("RESTAURANT_OWNER")
                             .requestMatchers(HttpMethod.PUT, AppConstants.BASE_ORDER_URL + "/cancel/**").hasRole("USER")
 
-                            /**
-                             * User has access to CART APIs
-                             */
                             .requestMatchers(HttpMethod.POST, AppConstants.BASE_CART_URL).hasRole("USER")
                             .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_URL + "/**").hasRole("USER")
                             .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CART_URL + "/**").hasRole("USER")
 
-                            /**
-                             * User has access to CART ITEM APIs
-                             */
                             .requestMatchers(AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
 
-                            /**
-                             * User can view Order Items
-                             */
                             .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_ITEM_URL + "/**").hasRole("USER")
+
+                            .requestMatchers(AppConstants.BASE_ADDRESS_URL + "/**").hasRole("USER")
 
                             .anyRequest().authenticated()
                     )

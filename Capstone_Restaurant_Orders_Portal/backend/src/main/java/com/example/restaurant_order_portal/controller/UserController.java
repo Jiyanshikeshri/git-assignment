@@ -31,8 +31,6 @@ public class UserController {
 
     /**
      * API to register a new user.
-     *
-     * Endpoint: POST /api/users/register
      */
     @PostMapping(AppConstants.REGISTER_URL)
     public User registerUser(@RequestBody UserRegisterRequest userRegisterRequest) {
@@ -49,10 +47,6 @@ public class UserController {
 
     /**
      * API to login user.
-     *
-     * Endpoint: POST /api/users/login
-     * @param userLoginRequest contains email and password for authentication
-     * @return AuthResponse containing JWT token, email, and role
      */
     @PostMapping(AppConstants.LOGIN_URL)
     public AuthResponse loginUser(@RequestBody UserLoginRequest userLoginRequest) {
@@ -63,6 +57,9 @@ public class UserController {
         );
     }
 
+    /**
+     * API to get user id
+     */
     @GetMapping("/{id}")
     public User getUserById(@PathVariable Long id) {
         return userService.getUserById(id);

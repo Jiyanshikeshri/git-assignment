@@ -57,6 +57,10 @@ public class Order {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "address_id", nullable = false)
+    private Address address;
+
     /**
      * Auto-set time
       */
@@ -69,11 +73,12 @@ public class Order {
 
     }
 
-    public Order(User user, Restaurant restaurant, Double totalAmount, OrderStatus status) {
+    public Order(User user, Restaurant restaurant, Double totalAmount, OrderStatus status, Address address) {
         this.user = user;
         this.restaurant = restaurant;
         this.totalAmount = totalAmount;
         this.status = status;
+        this.address = address;
     }
 
     public Long getId() {
@@ -114,6 +119,14 @@ public class Order {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
     }
 
     @Override

@@ -62,7 +62,6 @@ public class OrderController {
      *
      * Allows user to cancel an order if it's in PLACED state.
      * Refund will be processed to user's wallet.
-
      */
     @PutMapping(AppConstants.CANCEL_ORDER)
     public String cancelOrder(@PathVariable Long orderId) {

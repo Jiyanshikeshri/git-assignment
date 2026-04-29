@@ -67,7 +67,6 @@ public class AuthResponse {
 
     /**
      * Gets the user id of logged in user
-     * @return
      */
     public Long getUserId() {
         return userId;

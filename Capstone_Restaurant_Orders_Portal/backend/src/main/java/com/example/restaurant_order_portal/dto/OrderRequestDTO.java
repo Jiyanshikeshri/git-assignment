@@ -4,38 +4,28 @@ package com.example.restaurant_order_portal.dto;
  * Data Transfer Object used to receive order creation request from client.
  */
 public class OrderRequestDTO {
-    /**
-     * ID of the user placing the order
-     */
-    private Long userId;
 
-    /**
-     * ID of the restaurant from which order is placed
-     */
-    private Long restaurantId;
+    private Long addressId;
 
     public OrderRequestDTO() {
 
     }
 
-    public OrderRequestDTO(Long userId, Long restaurantId) {
-        this.userId = userId;
-        this.restaurantId = restaurantId;
+    public OrderRequestDTO(Long addressId) {
+        this.addressId = addressId;
     }
 
-    public Long getUserId() {
-        return userId;
+    /**
+     * to get the address id
+     */
+    public Long getAddressId() {
+        return addressId;
     }
 
-    public Long getRestaurantId() {
-        return restaurantId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public void setRestaurantId(Long restaurantId) {
-        this.restaurantId = restaurantId;
+    /**
+     * To set the address id
+     */
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
     }
 }

@@ -88,12 +88,17 @@ public class CartItemServiceImpl implements CartItemService {
 
         CartItem saved = cartItemRepository.save(cartItem);
 
-        return new CartItemResponseDTO(
-                saved.getId(),
-                cart.getId(),
-                menuItem.getId(),
-                saved.getQuantity()
-        );
+        CartItemResponseDTO cartItemResponseDTO = new CartItemResponseDTO();
+
+        cartItemResponseDTO.setCartItemId(saved.getId());
+        cartItemResponseDTO.setCartId(cart.getId());
+        cartItemResponseDTO.setMenuItemId(menuItem.getId());
+        cartItemResponseDTO.setQuantity(saved.getQuantity());
+
+        cartItemResponseDTO.setMenuItemName(menuItem.getName());
+        cartItemResponseDTO.setPrice(menuItem.getPrice());
+
+        return cartItemResponseDTO;
     }
 
     /**
@@ -107,12 +112,22 @@ public class CartItemServiceImpl implements CartItemService {
 
         return cartItemRepository.findByCartId(cart.getId())
                 .stream()
-                .map(item -> new CartItemResponseDTO(
-                        item.getId(),
-                        cart.getId(),
-                        item.getMenuItem().getId(),
-                        item.getQuantity()
-                ))
+                .map(item -> {
+
+                    CartItemResponseDTO cartItemResponseDTO = new CartItemResponseDTO();
+
+                    cartItemResponseDTO.setCartItemId(item.getId());
+                    cartItemResponseDTO.setCartId(cart.getId());
+                    cartItemResponseDTO.setMenuItemId(item.getMenuItem().getId());
+                    cartItemResponseDTO.setQuantity(item.getQuantity());
+
+                    MenuItem menuItem = item.getMenuItem();
+
+                    cartItemResponseDTO.setMenuItemName(menuItem.getName());
+                    cartItemResponseDTO.setPrice(menuItem.getPrice());
+
+                    return cartItemResponseDTO;
+                })
                 .collect(Collectors.toList());
     }
 
