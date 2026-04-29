@@ -108,3 +108,22 @@ button {
     border-radius: 6px;
     cursor: pointer;
 }
+
+#messageBox {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: white;
+    display: none;
+    z-index: 9999;
+}
+
+#messageBox.success {
+    background: #4caf50;
+}
+
+#messageBox.error {
+    background: #f44336;
+}

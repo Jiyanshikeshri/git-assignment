@@ -5,6 +5,8 @@ const BASE_MENU_URL = "http://localhost:8080/api/menu-items";
 const params = new URLSearchParams(window.location.search);
 const restaurantId = params.get("restaurantId");
 
+localStorage.setItem("restaurantId", restaurantId);
+
 async function loadData() {
     try {
         const [categories, items] = await Promise.all([
@@ -29,7 +31,7 @@ async function loadData() {
 }
 
 /**
- * Render categories (TOP)
+ * Render categories
  */
 function renderCategories(categories) {
     const container = document.getElementById("categoryList");
@@ -67,7 +69,6 @@ function renderMenu(categories, items) {
         const grid = document.createElement("div");
         grid.classList.add("menu-grid");
 
-        // filter items for this category
         const filtered = items.filter(item => item.categoryName === cat.name);
 
         filtered.forEach(item => {
@@ -129,7 +130,7 @@ function addToCart(menuItemId) {
     const cartRestaurantId = localStorage.getItem("cartRestaurantId");
 
     if (cartRestaurantId && cartRestaurantId != restaurantId) {
-        alert("You can only order from one restaurant at a time");
+        showMessage("You can only order from one restaurant at a time", "error");
         return;
     }
 
@@ -159,12 +160,26 @@ function addToCart(menuItemId) {
         if (typeof loadCartCount === "function") {
             loadCartCount();
         }
-        alert("Item added to cart");
+        showMessage("Item added to cart", "success");
     })
     .catch(err => {
         console.error(err);
-        alert("Error adding item");
+        showMessage("Failed to add item to cart", "error");
     });
+}
+
+function showMessage(message, type = "info") {
+    const box = document.getElementById("messageBox");
+
+    box.innerText = message;
+    box.className = "";
+    box.classList.add(type);
+
+    box.style.display = "block";
+
+    setTimeout(() => {
+        box.style.display = "none";
+    }, 3000);
 }
 
 loadData();
