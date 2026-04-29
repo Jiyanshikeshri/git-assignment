@@ -7,6 +7,7 @@ public class CategoryRequestDTO {
 
     private String name;
     private Long restaurantId;
+    private String imageUrl;
 
     public CategoryRequestDTO() {}
 
@@ -24,5 +25,13 @@ public class CategoryRequestDTO {
 
     public void setRestaurantId(Long restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

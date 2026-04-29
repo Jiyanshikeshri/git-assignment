@@ -53,7 +53,7 @@ public class CartItemServiceImpl implements CartItemService {
 
         if (cartOptional.isPresent()) {
             cart = cartOptional.get();
-        } else {
+            } else {
             User user = userRepository.findById(cartItemRequestDTO.getUserId())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -69,7 +69,7 @@ public class CartItemServiceImpl implements CartItemService {
             cartRepository.save(cart);
         }
 
-        if (!cart.getRestaurant().getId().equals(menuItem.getRestaurant().getId())) {
+        if(!cart.getRestaurant().getId().equals(menuItem.getRestaurant().getId())) {
             throw new RuntimeException("Cannot add items from different restaurant");
         }
 

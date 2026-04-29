@@ -41,7 +41,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                     restaurant.getStatus().toString(),
                     restaurant.getOwner() != null
                             ? restaurant.getOwner().getFirstName()
-                            : null
+                            : null,
+                    restaurant.getImageUrl()
             );
         }
 
@@ -52,7 +53,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             Restaurant restaurant = new Restaurant();
             restaurant.setName(restaurantRequestDTO.getName());
             restaurant.setStatus(RestaurantStatus.valueOf(restaurantRequestDTO.getStatus()));
-
+            restaurant.setImageUrl(restaurantRequestDTO.getImageUrl());
             return restaurant;
         }
 
@@ -114,6 +115,8 @@ public class RestaurantServiceImpl implements RestaurantService {
                         .orElseThrow(() -> new RuntimeException("User not found"));
                 existing.setOwner(owner);
             }
+
+            existing.setImageUrl(restaurantRequestDTO.getImageUrl());
 
             Restaurant updated = restaurantRepository.save(existing);
 

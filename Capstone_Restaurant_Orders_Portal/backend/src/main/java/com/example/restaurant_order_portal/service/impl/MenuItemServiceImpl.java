@@ -50,6 +50,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         menuItem.setPrice(menuItemRequestDTO.getPrice());
         menuItem.setCategory(category);
         menuItem.setRestaurant(restaurant);
+        menuItem.setImageUrl(menuItemRequestDTO.getImageUrl());
 
         MenuItem saved = menuItemRepository.save(menuItem);
 
@@ -105,6 +106,7 @@ public class MenuItemServiceImpl implements MenuItemService {
         existing.setPrice(menuItemRequestDTO.getPrice());
         existing.setCategory(category);
         existing.setRestaurant(restaurant);
+        existing.setImageUrl(menuItemRequestDTO.getImageUrl());
 
         MenuItem updated = menuItemRepository.save(existing);
 
@@ -128,7 +130,8 @@ public class MenuItemServiceImpl implements MenuItemService {
                 item.getName(),
                 item.getPrice(),
                 item.getCategory().getName(),
-                item.getRestaurant().getName()
+                item.getRestaurant().getName(),
+                item.getImageUrl()
         );
     }
 }

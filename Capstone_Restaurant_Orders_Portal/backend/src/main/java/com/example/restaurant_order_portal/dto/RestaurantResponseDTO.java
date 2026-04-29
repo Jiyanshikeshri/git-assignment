@@ -9,14 +9,16 @@ public class RestaurantResponseDTO {
     private String name;
     private String status;
     private String ownerName;
+    private String imageUrl;
 
     public RestaurantResponseDTO() {}
 
-    public RestaurantResponseDTO(Long id, String name, String status, String ownerName) {
+    public RestaurantResponseDTO(Long id, String name, String status, String ownerName, String imageUrl) {
         this.id = id;
         this.name = name;
         this.status = status;
         this.ownerName = ownerName;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -33,5 +35,9 @@ public class RestaurantResponseDTO {
 
     public String getOwnerName() {
         return ownerName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

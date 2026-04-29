@@ -45,15 +45,22 @@ public class MenuItem {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
+    /**
+     * Image of the menu Item
+     */
+    @Column(name = "image_url")
+    private String imageUrl;
+
     public MenuItem() {
 
     }
 
-    public MenuItem(String name, Double price, Category category, Restaurant restaurant) {
+    public MenuItem(String name, Double price, Category category, Restaurant restaurant, String imageUrl) {
         this.name = name;
         this.price = price;
         this.category = category;
         this.restaurant = restaurant;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -90,6 +97,14 @@ public class MenuItem {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override

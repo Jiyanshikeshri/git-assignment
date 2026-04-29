@@ -9,6 +9,7 @@ public class MenuItemRequestDTO {
     private Double price;
     private Long categoryId;
     private Long restaurantId;
+    private String imageUrl;
 
     public String getName() {
         return name;
@@ -40,5 +41,13 @@ public class MenuItemRequestDTO {
 
     public void setRestaurantId(Long restaurantId) {
         this.restaurantId = restaurantId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -10,14 +10,16 @@ public class MenuItemResponseDTO {
     private Double price;
     private String categoryName;
     private String restaurantName;
+    private String imageUrl;
 
     public MenuItemResponseDTO(Long id, String name, Double price,
-                               String categoryName, String restaurantName) {
+                               String categoryName, String restaurantName, String imageUrl) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.categoryName = categoryName;
         this.restaurantName = restaurantName;
+        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -38,5 +40,9 @@ public class MenuItemResponseDTO {
 
     public String getRestaurantName() {
         return restaurantName;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 }

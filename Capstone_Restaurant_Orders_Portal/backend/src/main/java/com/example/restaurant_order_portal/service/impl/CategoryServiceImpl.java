@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * Implementation of CategoryService interface.
  *
@@ -44,6 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category category = new Category();
         category.setName(categoryRequestDTO.getName());
+        category.setImageUrl(categoryRequestDTO.getImageUrl());
         category.setRestaurant(restaurant);
 
         Category saved = categoryRepository.save(category);
@@ -52,7 +55,8 @@ public class CategoryServiceImpl implements CategoryService {
                 saved.getId(),
                 saved.getName(),
                 restaurant.getId(),
-                restaurant.getName()
+                restaurant.getName(),
+                saved.getImageUrl()
         );
     }
 
@@ -68,7 +72,8 @@ public class CategoryServiceImpl implements CategoryService {
                         cat.getId(),
                         cat.getName(),
                         cat.getRestaurant().getId(),
-                        cat.getRestaurant().getName()
+                        cat.getRestaurant().getName(),
+                        cat.getImageUrl()
                 ))
                 .toList();
     }
@@ -83,6 +88,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .orElseThrow(() -> new RuntimeException("Category not found"));
 
         existing.setName(categoryRequestDTO.getName());
+        existing.setImageUrl(categoryRequestDTO.getImageUrl());
 
         Category updated = categoryRepository.save(existing);
 
@@ -90,7 +96,8 @@ public class CategoryServiceImpl implements CategoryService {
                 updated.getId(),
                 updated.getName(),
                 updated.getRestaurant().getId(),
-                updated.getRestaurant().getName()
+                updated.getRestaurant().getName(),
+                updated.getImageUrl()
         );
     }
 

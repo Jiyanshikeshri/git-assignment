@@ -36,6 +36,9 @@ public class Category {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     public  Category(){
 
     }
@@ -63,6 +66,14 @@ public class Category {
 
     public void setRestaurant(Restaurant restaurant) {
         this.restaurant = restaurant;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     @Override

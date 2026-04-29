@@ -45,6 +45,12 @@ public class Restaurant {
     @JoinColumn(name = "owner_id", nullable = false)
     private User owner;
 
+    /**
+     * image of the restaurant
+     */
+    @Column(name = "image_url")
+    private String imageUrl;
+
     public Long getId() {
         return id;
     }
@@ -71,6 +77,18 @@ public class Restaurant {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public Restaurant(){

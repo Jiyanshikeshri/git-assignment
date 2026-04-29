@@ -8,6 +8,7 @@ public class RestaurantRequestDTO {
     private String name;
     private String status;
     private Long ownerId;
+    private String imageUrl;
 
     public RestaurantRequestDTO() {}
 
@@ -23,6 +24,10 @@ public class RestaurantRequestDTO {
         return ownerId;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -33,5 +38,9 @@ public class RestaurantRequestDTO {
 
     public void setOwnerId(Long ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
