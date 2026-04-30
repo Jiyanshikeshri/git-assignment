@@ -4,9 +4,14 @@ import com.example.restaurant_order_portal.dto.OrderRequestDTO;
 import com.example.restaurant_order_portal.dto.OrderResponseDTO;
 import com.example.restaurant_order_portal.entity.*;
 import com.example.restaurant_order_portal.enums.OrderStatus;
+import com.example.restaurant_order_portal.exception.BadRequestException;
+import com.example.restaurant_order_portal.exception.ConflictException;
+import com.example.restaurant_order_portal.exception.ResourceNotFoundException;
 import com.example.restaurant_order_portal.repository.*;
 import com.example.restaurant_order_portal.service.OrderService;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +27,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class OrderServiceImpl implements OrderService {
+
+    private static final Logger log = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
@@ -59,19 +66,31 @@ public class OrderServiceImpl implements OrderService {
                 .getAuthentication()
                 .getName();
 
+        log.info("Creating order for user: {}", email);
+
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> {
+                    log.error("User not found: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
 
         Address address = addressRepository.findById(orderRequestDTO.getAddressId())
-                .orElseThrow(() -> new RuntimeException("Address not found"));
+                .orElseThrow(() -> {
+                    log.error("Address not found with id: {}", orderRequestDTO.getAddressId());
+                    return new ResourceNotFoundException("Address not found");
+                });
 
         Cart cart = cartRepository.findByUserId(user.getId())
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> {
+                    log.error("Cart not found for userId: {}", user.getId());
+                    return new ResourceNotFoundException("Cart not found");
+                });
 
         List<CartItem> cartItems = cartItemRepository.findByCartId(cart.getId());
 
         if (cartItems.isEmpty()) {
-            throw new RuntimeException("Cart is empty");
+            log.error("Cart is empty for userId: {}", user.getId());
+            throw new BadRequestException("Cart is empty");
         }
 
         double totalAmount = 0.0;
@@ -81,8 +100,12 @@ public class OrderServiceImpl implements OrderService {
             totalAmount += price * item.getQuantity();
         }
 
+        log.info("Total amount calculated: {}", totalAmount);
+
         if (user.getWalletBalance() < totalAmount) {
-            throw new RuntimeException("Insufficient wallet balance");
+            log.error("Insufficient balance. Required: {}, Available: {}",
+                    totalAmount, user.getWalletBalance());
+            throw new ConflictException("Insufficient wallet balance");
         }
 
         user.setWalletBalance(user.getWalletBalance() - totalAmount);
@@ -96,6 +119,7 @@ public class OrderServiceImpl implements OrderService {
         order.setAddress(address);
 
         Order savedOrder = orderRepository.save(order);
+        log.info("Order created with id: {}", savedOrder.getId());
 
         for (CartItem item : cartItems) {
 
@@ -109,6 +133,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         cartItemRepository.deleteByCartId(cart.getId());
+        log.info("Cart cleared for userId: {}", user.getId());
 
         return orderResponseDTO(savedOrder);
     }
@@ -118,6 +143,8 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public List<OrderResponseDTO> getOrdersByUser(Long userId) {
+
+        log.info("Fetching orders for userId: {}", userId);
 
         return orderRepository.findByUserId(userId)
                 .stream()
@@ -130,6 +157,8 @@ public class OrderServiceImpl implements OrderService {
      */
     @Override
     public List<OrderResponseDTO> getOrdersByRestaurant(Long restaurantId) {
+
+        log.info("Fetching orders for restaurantId: {}", restaurantId);
 
         return orderRepository.findByRestaurantId(restaurantId)
                 .stream()
@@ -144,8 +173,13 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public void cancelOrder(Long orderId) {
 
+        log.info("Cancelling order with id: {}", orderId);
+
         Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new RuntimeException("Order not found"));
+                .orElseThrow(() -> {
+                    log.error("Order not found with id: {}", orderId);
+                    return new ResourceNotFoundException("Order not found");
+                });
 
         String email = SecurityContextHolder
                 .getContext()
@@ -153,18 +187,19 @@ public class OrderServiceImpl implements OrderService {
                 .getName();
 
         User loggedInUser = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if (!order.getUser().getId().equals(loggedInUser.getId())) {
-            throw new RuntimeException("You are not allowed to cancel this order");
+            log.error("Unauthorized cancel attempt by user: {}", email);
+            throw new ConflictException("You are not allowed to cancel this order");
         }
 
         if (order.getStatus() == OrderStatus.CANCELLED) {
-            throw new RuntimeException("Order is already cancelled");
+            throw new ConflictException("Order is already cancelled");
         }
 
         if (order.getStatus() != OrderStatus.PLACED) {
-            throw new RuntimeException("Only PLACED orders can be cancelled");
+            throw new ConflictException("Only PLACED orders can be cancelled");
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -173,7 +208,7 @@ public class OrderServiceImpl implements OrderService {
         long diffInSeconds = Duration.between(orderTime, now).getSeconds();
 
         if (diffInSeconds > 30) {
-            throw new RuntimeException("Cancellation time exceeded (30 seconds limit)");
+            throw new ConflictException("Cancellation time exceeded (30 seconds limit)");
         }
 
         User user = order.getUser();
@@ -183,6 +218,8 @@ public class OrderServiceImpl implements OrderService {
 
         order.setStatus(OrderStatus.CANCELLED);
         orderRepository.save(order);
+
+        log.info("Order cancelled and amount refunded for orderId: {}", orderId);
     }
 
     /**
