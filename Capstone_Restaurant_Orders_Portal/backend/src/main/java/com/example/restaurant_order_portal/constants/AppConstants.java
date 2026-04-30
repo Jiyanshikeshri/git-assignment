@@ -47,11 +47,6 @@ public class AppConstants {
     public static final String USER_URL = "/api/user/**";
 
     /**
-     * Role for restaurant owner (admin).
-     */
-    public static final String ROLE_RESTAURANT_OWNER = "RESTAURANT_OWNER";
-
-    /**
      * Frontend URL for CORS configuration.
      */
     public static final String FRONTEND_URL = "http://127.0.0.1:5500";
@@ -205,6 +200,16 @@ public class AppConstants {
      * Delete address
      */
     public static final String DELETE_ADDRESS = "/{addressId}";
+
+    /**
+     * USER role constant
+     */
+    public static final String ROLE_USER = "USER";
+
+    /**
+     * RESTAURANT_OWNER role constant
+     */
+    public static final String ROLE_RESTAURANT_OWNER = "RESTAURANT_OWNER";
 }
 
 

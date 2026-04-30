@@ -21,8 +21,14 @@
     @Configuration
     public class SecurityConfig {
 
+        /**
+         * JWT authentication filter used to validate tokens.
+         */
         private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
+        /**
+         * Constructor to inject JwtAuthenticationFilter.
+         */
         public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
             this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         }
@@ -52,32 +58,32 @@
                                     "/api/menu-items/**"
                             ).permitAll()
 
-                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
-                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
-                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole("RESTAURANT_OWNER")
+                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_RESTAURANT_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
 
-                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
-                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
-                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CATEGORY_URL + "/**").hasRole("RESTAURANT_OWNER")
+                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_CATEGORY_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_CATEGORY_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CATEGORY_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
 
-                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
-                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
-                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole("RESTAURANT_OWNER")
+                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_MENU_ITEM_URL + "/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
 
-                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_ORDER_URL).hasRole("USER")
-                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/user/**").hasRole("USER")
-                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/restaurant/**").hasRole("RESTAURANT_OWNER")
-                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_ORDER_URL + "/cancel/**").hasRole("USER")
+                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_ORDER_URL).hasRole(AppConstants.ROLE_USER)
+                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/user/**").hasRole(AppConstants.ROLE_USER)
+                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/restaurant/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_ORDER_URL + "/cancel/**").hasRole(AppConstants.ROLE_USER)
 
-                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_CART_URL).hasRole("USER")
-                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_URL + "/**").hasRole("USER")
-                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CART_URL + "/**").hasRole("USER")
+                            .requestMatchers(HttpMethod.POST, AppConstants.BASE_CART_URL).hasRole(AppConstants.ROLE_USER)
+                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_URL + "/**").hasRole(AppConstants.ROLE_USER)
+                            .requestMatchers(HttpMethod.DELETE, AppConstants.BASE_CART_URL + "/**").hasRole(AppConstants.ROLE_USER)
 
-                            .requestMatchers(AppConstants.BASE_CART_ITEM_URL + "/**").hasRole("USER")
+                            .requestMatchers(AppConstants.BASE_CART_ITEM_URL + "/**").hasRole(AppConstants.ROLE_USER)
 
-                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_ITEM_URL + "/**").hasRole("USER")
+                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_ITEM_URL + "/**").hasRole(AppConstants.ROLE_USER)
 
-                            .requestMatchers(AppConstants.BASE_ADDRESS_URL + "/**").hasRole("USER")
+                            .requestMatchers(AppConstants.BASE_ADDRESS_URL + "/**").hasRole(AppConstants.ROLE_USER)
 
                             .anyRequest().authenticated()
                     )
