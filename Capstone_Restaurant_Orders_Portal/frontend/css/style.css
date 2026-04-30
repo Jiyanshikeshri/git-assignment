@@ -1,0 +1,59 @@
+/* Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Full screen red background */
+.hero {
+    height: 100vh;
+    width: 100%;
+
+    /* Your exact red */
+    background: #9d0708;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Center content */
+.content {
+    display: flex;
+    flex-direction: column;   /* image upar, button niche */
+    align-items: center;      /* horizontally center */
+    justify-content: center;  /* vertically center (extra safety) */
+}
+
+/* Pizza image */
+.pizza {
+    width: 350px;
+    border-radius: 50%;
+    margin-bottom: 30px; /* thoda tight spacing */
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+/* Button */
+button {
+    padding: 15px 40px;
+    font-size: 18px;
+    font-weight: bold;
+
+    border: none;
+    border-radius: 12px;
+
+    background: white;
+    color: #9d0708;
+
+    cursor: pointer;
+    transition: 0.3s;
+
+    display: block; /* ensure proper centering */
+}
+
+/* Hover effect */
+button:hover {
+    background: #ffe5e5;
+}

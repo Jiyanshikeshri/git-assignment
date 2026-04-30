@@ -1,0 +1,19 @@
+package com.example.restaurant_order_portal.repository;
+
+import com.example.restaurant_order_portal.entity.Restaurant;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+/**
+ * Repository interface for Restaurant entity.
+ *
+ * Provides queries related to restaurants managed by owners.
+ */
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
+
+    /**
+     * Method to find all restaurants of a specific owner
+      */
+    List<Restaurant> findByOwnerId(Long ownerId);
+}

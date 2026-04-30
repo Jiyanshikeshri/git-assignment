@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/cart.css">
+</head>
+<body onload="loadCart()">
+    <div id="messageBox" class="hidden"></div>
+    
+    <h2 class="title">Your Cart</h2>
+
+    <div id="cartContainer"></div>
+
+    <div class="footer">
+        <h3>Total: ₹ <span id="totalAmount">0</span></h3>
+        <button onclick="showAddressForm()">Place Order</button>
+    </div>
+
+    <div id="addressForm" style="display:none;">
+        <input type="text" id="street" placeholder="Street" />
+        <input type="text" id="city" placeholder="City" />
+        <input type="text" id="pincode" placeholder="Pincode" />
+
+        <button onclick="confirmOrder()">Confirm Order</button>
+    </div>
+
+     <div id="orderSuccessBox" class="hidden">
+
+        <div class="success-card">
+            <div class="success-left">
+                <div class="check-icon">&check;</div>
+                <div>
+                    <h3>Order Placed Successfully!</h3>
+                    <p>Your order has been placed and is being processed.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cancel-card">
+            <div class="cancel-left">
+                <div class="timer-icon">⏱</div>
+                <div>
+                    <p>You can cancel this order within</p>
+                    <h2 id="countdown">00:30</h2>
+                    <span>seconds</span>
+                </div>
+            </div>
+
+            <button id="cancelBtnStyled">Cancel Order</button>
+        </div>
+
+        <div class="info-card">
+            After 30 seconds, cancellation will not be possible.
+        </div>
+
+    </div>
+
+    <script src="../js/cart.js"></script>
+</body>
+</html>

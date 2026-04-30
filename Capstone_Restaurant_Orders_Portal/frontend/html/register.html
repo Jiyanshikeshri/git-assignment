@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+
+    <!-- Same CSS reuse -->
+    <link rel="stylesheet" href="../css/register.css">
+</head>
+<body>
+
+<!-- Center container -->
+<div class="container">
+
+    <!-- Register Card -->
+    <div class="card">
+        <h2>Register</h2>
+
+        <!-- First Name -->
+        <input type="text" id="firstName" placeholder="Enter First Name">
+
+        <!-- Last Name -->
+        <input type="text" id="lastName" placeholder="Enter Last Name">
+
+        <!-- Email -->
+        <input type="email" id="email" placeholder="Enter Email">
+
+        <!-- Phone -->
+        <input type="number" id="phoneNumber" placeholder="Enter Phone number">
+
+        <!-- Role -->
+        <select id="role">
+            <option value="">Select Role</option>
+            <option value="USER">User</option>
+            <option value="RESTAURANT_OWNER">Restaurant Owner</option>
+        </select>
+
+        <!-- Password -->
+        <input type="password" id="password" placeholder="Enter Password">
+
+        <!-- Register Button -->
+        <button onclick="register()">Register</button>
+
+        <!-- Message -->
+        <div id="message" class="message"></div>
+
+        <!-- Redirect to Login -->
+        <p>
+            Already have an account?
+            <a href="index.html">Login</a>
+        </p>
+    </div>
+
+</div>
+
+<!-- JS -->
+<script src="../js/register.js"></script>
+
+</body>
+</html>

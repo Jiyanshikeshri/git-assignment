@@ -1,0 +1,113 @@
+/* Full screen background image */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+
+    height: 100vh;
+
+    /* Background image */
+    background: url('../assets/bg.jpg') no-repeat center center/cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Dark overlay for better visibility */
+body::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* dark overlay */
+    z-index: 0;
+}
+
+/* Card styling */
+.card {
+    position: relative;
+    z-index: 1;
+
+    background: white;
+    padding: 35px;
+    border-radius: 16px;
+    width: 350px;
+
+    text-align: center;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+/* Heading */
+.card h2 {
+    margin-bottom: 20px;
+    color: #9d0708;
+}
+
+/* Input fields */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+
+    border: 1px solid #ddd;
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+
+    background: #9d0708;
+    border: none;
+    border-radius: 8px;
+
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* Hover */
+button:hover {
+    background: #c62828;
+}
+
+/* Links */
+p {
+    margin-top: 15px;
+}
+
+a {
+    color: #9d0708;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Message styling */
+.message {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Success message */
+.message.success {
+    color: green;
+}
+
+/* Error message */
+.message.error {
+    color: red;
+}

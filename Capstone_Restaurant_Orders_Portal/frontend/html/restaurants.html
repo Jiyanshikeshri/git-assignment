@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Restaurants</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="../css/restaurants.css">
+    <link rel="stylesheet" href="../css/common.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <h2 class="logo">Foodie</h2>
+
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Restaurants</a>
+            <a href="#">My Orders</a>
+            <a href="cart.html">Cart<span id="cartCount">0</span></a>
+            <span>
+                Wallet ₹<span id="walletAmount">0</span>
+            </span>
+            <a href="#">Contact</a>
+            <button onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Discover Best Food Near You!!</h1>
+    </div>
+
+    <div class="page">
+        <h1 class="title">Restaurants Near You!!</h1>
+
+        <!-- Restaurant Cards Container -->
+        <div id="restaurantList" class="restaurant-grid"></div>
+    </div>
+
+    <!-- JS -->
+    <script src="../js/common.js"></script>  
+    <script src="../js/restaurants.js"></script>
+    <script>
+        initNavbar();
+    </script>
+</body>
+</html>
