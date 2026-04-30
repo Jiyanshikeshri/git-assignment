@@ -9,6 +9,7 @@ import com.example.restaurant_order_portal.exception.ResourceNotFoundException;
 import com.example.restaurant_order_portal.repository.RestaurantRepository;
 import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.service.RestaurantService;
+import com.example.restaurant_order_portal.validation.RestaurantValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,8 @@ public class RestaurantServiceImpl implements RestaurantService {
 
             log.info("Creating restaurant with name: {}", restaurantRequestDTO.getName());
 
+            RestaurantValidator.validateCreate(restaurantRequestDTO);
+
             Restaurant restaurant = mapToEntity(restaurantRequestDTO);
 
             User owner = userRepository.findById(restaurantRequestDTO.getOwnerId())
@@ -124,6 +127,8 @@ public class RestaurantServiceImpl implements RestaurantService {
         public RestaurantResponseDTO updateRestaurant(Long id, RestaurantRequestDTO restaurantRequestDTO) {
 
             log.info("Updating restaurant with id: {}", id);
+
+            RestaurantValidator.validateUpdate(restaurantRequestDTO);
 
             Restaurant existing = restaurantRepository.findById(id)
                     .orElseThrow(() -> {
