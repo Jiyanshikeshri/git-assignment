@@ -5,10 +5,14 @@ import com.example.restaurant_order_portal.dto.CartResponseDTO;
 import com.example.restaurant_order_portal.entity.Cart;
 import com.example.restaurant_order_portal.entity.Restaurant;
 import com.example.restaurant_order_portal.entity.User;
+import com.example.restaurant_order_portal.exception.BadRequestException;
+import com.example.restaurant_order_portal.exception.ResourceNotFoundException;
 import com.example.restaurant_order_portal.repository.CartRepository;
 import com.example.restaurant_order_portal.repository.RestaurantRepository;
 import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.service.CartService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +22,8 @@ import java.util.Optional;
  */
 @Service
 public class CartServiceImpl implements CartService {
+
+    private static final Logger log = LoggerFactory.getLogger(CartServiceImpl.class);
 
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
@@ -37,24 +43,37 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponseDTO createCart(CartRequestDTO cartRequestDTO) {
 
+        log.info("Creating cart for userId: {}, restaurantId: {}",
+                cartRequestDTO.getUserId(), cartRequestDTO.getRestaurantId());
+
         if (cartRequestDTO.getUserId() == null || cartRequestDTO.getRestaurantId() == null) {
-            throw new RuntimeException("UserId and RestaurantId are required");
+            log.error("UserId or RestaurantId is null");
+            throw new BadRequestException("UserId and RestaurantId are required");
         }
 
         User user = userRepository.findById(cartRequestDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> {
+                    log.error("User not found with id: {}", cartRequestDTO.getUserId());
+                    return new ResourceNotFoundException("User not found");
+                });
 
         Restaurant restaurant = restaurantRepository.findById(cartRequestDTO.getRestaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+                .orElseThrow(() -> {
+                    log.error("Restaurant not found with id: {}", cartRequestDTO.getRestaurantId());
+                    return new ResourceNotFoundException("Restaurant not found");
+                });
 
         Optional<Cart> existingCart = cartRepository.findByUserId(cartRequestDTO.getUserId());
 
         if (existingCart.isPresent()) {
+            log.info("Cart already exists for userId: {}", cartRequestDTO.getUserId());
             return mapToDTO(existingCart.get());
         }
 
         Cart cart = new Cart(user, restaurant);
         Cart savedCart = cartRepository.save(cart);
+
+        log.info("Cart created successfully with id: {}", savedCart.getId());
 
         return new CartResponseDTO(
                 savedCart.getId(),
@@ -69,8 +88,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public CartResponseDTO getCartByUserId(Long userId) {
 
+        log.info("Fetching cart for userId: {}", userId);
+
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> {
+                    log.error("Cart not found for userId: {}", userId);
+                    return new ResourceNotFoundException("Cart not found");
+                });
 
         return new CartResponseDTO(
                 cart.getId(),
@@ -84,6 +108,8 @@ public class CartServiceImpl implements CartService {
      */
     @Override
     public void clearCart(Long userId) {
+
+        log.info("Clearing cart for userId: {}", userId);
 
         Optional<Cart> cartOptional = cartRepository.findByUserId(userId);
 

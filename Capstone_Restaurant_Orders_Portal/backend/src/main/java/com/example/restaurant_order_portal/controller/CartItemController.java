@@ -4,6 +4,7 @@ import com.example.restaurant_order_portal.constants.AppConstants;
 import com.example.restaurant_order_portal.dto.CartItemRequestDTO;
 import com.example.restaurant_order_portal.dto.CartItemResponseDTO;
 import com.example.restaurant_order_portal.entity.User;
+import com.example.restaurant_order_portal.exception.ResourceNotFoundException;
 import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.service.CartItemService;
 import org.springframework.security.core.Authentication;
@@ -48,7 +49,7 @@ public class CartItemController {
         String email = authentication.getName();
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         return cartItemService.getCartItems(user.getId());
     }
