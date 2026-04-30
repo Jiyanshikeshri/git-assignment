@@ -5,9 +5,12 @@ import com.example.restaurant_order_portal.dto.RestaurantResponseDTO;
 import com.example.restaurant_order_portal.entity.Restaurant;
 import com.example.restaurant_order_portal.entity.User;
 import com.example.restaurant_order_portal.enums.RestaurantStatus;
+import com.example.restaurant_order_portal.exception.ResourceNotFoundException;
 import com.example.restaurant_order_portal.repository.RestaurantRepository;
 import com.example.restaurant_order_portal.repository.UserRepository;
 import com.example.restaurant_order_portal.service.RestaurantService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +25,8 @@ import java.util.stream.Collectors;
 @Service
 public class RestaurantServiceImpl implements RestaurantService {
 
+        private static final Logger log = LoggerFactory.getLogger(RestaurantServiceImpl.class);
+
         private final RestaurantRepository restaurantRepository;
         private final UserRepository userRepository;
 
@@ -34,7 +39,7 @@ public class RestaurantServiceImpl implements RestaurantService {
         /**
          * Convert Entity to ResponseDTO
          */
-        private RestaurantResponseDTO mapToDTO(Restaurant restaurant) {
+        private RestaurantResponseDTO restaurantResponseDTO(Restaurant restaurant) {
             return new RestaurantResponseDTO(
                     restaurant.getId(),
                     restaurant.getName(),
@@ -63,16 +68,23 @@ public class RestaurantServiceImpl implements RestaurantService {
         @Override
         public RestaurantResponseDTO createRestaurant(RestaurantRequestDTO restaurantRequestDTO) {
 
+            log.info("Creating restaurant with name: {}", restaurantRequestDTO.getName());
+
             Restaurant restaurant = mapToEntity(restaurantRequestDTO);
 
             User owner = userRepository.findById(restaurantRequestDTO.getOwnerId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> {
+                        log.error("Owner not found with id: {}", restaurantRequestDTO.getOwnerId());
+                        return new ResourceNotFoundException("User not found");
+                    });
 
             restaurant.setOwner(owner);
 
             Restaurant saved = restaurantRepository.save(restaurant);
 
-            return mapToDTO(saved);
+            log.info("Restaurant created successfully with id: {}", saved.getId());
+
+            return restaurantResponseDTO(saved);
         }
 
         /**
@@ -80,9 +92,11 @@ public class RestaurantServiceImpl implements RestaurantService {
          */
         @Override
         public List<RestaurantResponseDTO> getAllRestaurants() {
+            log.info("Fetching all restaurants");
+
             return restaurantRepository.findAll()
                     .stream()
-                    .map(this::mapToDTO)
+                    .map(this::restaurantResponseDTO)
                     .collect(Collectors.toList());
         }
 
@@ -92,10 +106,15 @@ public class RestaurantServiceImpl implements RestaurantService {
         @Override
         public RestaurantResponseDTO getRestaurantById(Long id) {
 
-            Restaurant restaurant = restaurantRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+            log.info("Fetching restaurant with id: {}", id);
 
-            return mapToDTO(restaurant);
+            Restaurant restaurant = restaurantRepository.findById(id)
+                    .orElseThrow(() -> {
+                        log.error("Restaurant not found with id: {}", id);
+                        return new ResourceNotFoundException("Restaurant not found");
+                    });
+
+            return restaurantResponseDTO(restaurant);
         }
 
         /**
@@ -104,15 +123,23 @@ public class RestaurantServiceImpl implements RestaurantService {
         @Override
         public RestaurantResponseDTO updateRestaurant(Long id, RestaurantRequestDTO restaurantRequestDTO) {
 
+            log.info("Updating restaurant with id: {}", id);
+
             Restaurant existing = restaurantRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+                    .orElseThrow(() -> {
+                        log.error("Restaurant not found with id: {}", id);
+                        return new ResourceNotFoundException("Restaurant not found");
+                    });
 
             existing.setName(restaurantRequestDTO.getName());
             existing.setStatus(RestaurantStatus.valueOf(restaurantRequestDTO.getStatus()));
 
             if (Objects.nonNull(restaurantRequestDTO.getOwnerId())) {
                 User owner = userRepository.findById(restaurantRequestDTO.getOwnerId())
-                        .orElseThrow(() -> new RuntimeException("User not found"));
+                        .orElseThrow(() -> {
+                            log.error("Owner not found with id: {}", restaurantRequestDTO.getOwnerId());
+                            return new ResourceNotFoundException("User not found");
+                        });
                 existing.setOwner(owner);
             }
 
@@ -120,7 +147,9 @@ public class RestaurantServiceImpl implements RestaurantService {
 
             Restaurant updated = restaurantRepository.save(existing);
 
-            return mapToDTO(updated);
+            log.info("Restaurant updated successfully with id: {}", updated.getId());
+
+            return restaurantResponseDTO(updated);
         }
 
         /**
@@ -129,10 +158,17 @@ public class RestaurantServiceImpl implements RestaurantService {
         @Override
         public void deleteRestaurant(Long id) {
 
+            log.info("Deleting restaurant with id: {}", id);
+
             Restaurant restaurant = restaurantRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+                    .orElseThrow(() -> {
+                        log.error("Restaurant not found with id: {}", id);
+                        return new ResourceNotFoundException("Restaurant not found");
+                    });
 
             restaurantRepository.delete(restaurant);
+
+            log.info("Restaurant deleted successfully with id: {}", id);
         }
 
 }
