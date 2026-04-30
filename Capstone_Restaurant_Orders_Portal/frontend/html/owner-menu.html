@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Menu Items</title>
+    <link rel="stylesheet" href="../css/owner-menu.css">
+</head>
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <h2>Restaurant_Owner</h2>
+            <ul>
+                <li><a href="#">Dashboard</a></li>
+                <li><a href="#">Restaurants</a></li>
+                <li><a href="#">Categories</a></li>
+                <li><a href="#" class="active">Menu</a></li>
+            </ul>
+        </div>
+        <div class="main">
+            <div class="topbar">
+                <h3>Owner Panel</h3>
+                <button onclick="logout()">Logout</button>
+            </div>
+            <div id="menuContent"></div>
+        </div>
+        <div id="messageBox" class="message-box"></div>
+    </div>
+
+    <script src="../js/owner-menu.js"></script>
+</body>
+</html>

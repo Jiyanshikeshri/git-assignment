@@ -7,9 +7,6 @@ if (role !== "USER") {
 
 const BASE_URL = "http://localhost:8080/api/restaurants";
 
-/**
- * Fetch all restaurants from backend
- */
 function loadRestaurants() {
     fetch(BASE_URL,{
     headers: {
@@ -23,9 +20,6 @@ function loadRestaurants() {
         .catch(err => console.error(err));
 }
 
-/**
- * Render restaurants on UI
- */
 function displayRestaurants(restaurants) {
     const container = document.getElementById("restaurantList");
 
@@ -36,11 +30,8 @@ function displayRestaurants(restaurants) {
         const card = document.createElement("div");
         card.classList.add("restaurant-card");
 
-        /**
-         * Since no image in backend therefore using static image
-         */
         card.innerHTML = `
-            <img src="../assets/dominos.jpg" alt="restaurant">
+            <img src=${res.imageUrl || '../assets/pizza_landing.jpg'} alt="restaurant">
 
             <div class="restaurant-info">
                 <h3>${res.name}</h3>
@@ -49,9 +40,6 @@ function displayRestaurants(restaurants) {
             </div>
         `;
 
-        /**
-         * On click to go to menu page
-         */
         card.onclick = () => {
             window.location.href = `menu.html?restaurantId=${res.id}`;
         };
@@ -60,7 +48,4 @@ function displayRestaurants(restaurants) {
     });
 }
 
-/**
- * Load data when page opens
- */
 loadRestaurants();

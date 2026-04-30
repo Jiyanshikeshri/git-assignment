@@ -1,7 +1,6 @@
 const BASE_CATEGORY_URL = "http://localhost:8080/api/categories";
 const BASE_MENU_URL = "http://localhost:8080/api/menu-items";
 
-// Get restaurantId from URL
 const params = new URLSearchParams(window.location.search);
 const restaurantId = params.get("restaurantId");
 
@@ -30,9 +29,6 @@ async function loadData() {
     }
 }
 
-/**
- * Render categories
- */
 function renderCategories(categories) {
     const container = document.getElementById("categoryList");
     container.innerHTML = "";
@@ -41,7 +37,7 @@ function renderCategories(categories) {
         const div = document.createElement("div");
         div.classList.add("category");
         div.innerHTML = `
-            <img src="../assets/category_static_image.jpg" />
+            <img src="${cat.imageUrl || '../assets/category_static_image.jpg'}" />
             <p>${cat.name}</p>
         `;
 
@@ -51,9 +47,6 @@ function renderCategories(categories) {
     });
 }
 
-/**
- * Render menu grouped by category
- */
 function renderMenu(categories, items) {
     const container = document.getElementById("menuContainer");
     container.innerHTML = "";
@@ -76,7 +69,7 @@ function renderMenu(categories, items) {
             card.classList.add("menu-card");
 
             card.innerHTML = `
-                <img src="../assets/menu_item_static.jpg" />
+                <img src="${item.imageUrl || '../assets/menu_item_static.jpg'}" />
                 <div class="menu-info">
                     <h3>${item.name}</h3>
                     <p class="price">₹ ${item.price}</p>
@@ -92,9 +85,6 @@ function renderMenu(categories, items) {
     });
 }
 
-/**
- * Scroll to section
- */
 function scrollToCategory(id) {
     const element = document.getElementById("cat-" + id);
 
@@ -119,15 +109,15 @@ document.getElementById("searchBox").addEventListener("input", function () {
     });
 });
 
-/**
- * Add item to cart
- */
 function addToCart(menuItemId) {
     console.log("Token:", token);
     console.log("UserId:", userId);
     console.log("MenuItemId:", menuItemId);
 
     const cartRestaurantId = localStorage.getItem("cartRestaurantId");
+
+    console.log("Current restaurantId:", restaurantId);
+    console.log("Cart restaurantId:", cartRestaurantId);
 
     if (cartRestaurantId && cartRestaurantId != restaurantId) {
         showMessage("You can only order from one restaurant at a time", "error");
