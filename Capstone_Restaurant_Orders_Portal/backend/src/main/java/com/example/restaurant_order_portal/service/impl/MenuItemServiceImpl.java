@@ -5,10 +5,13 @@ import com.example.restaurant_order_portal.dto.MenuItemResponseDTO;
 import com.example.restaurant_order_portal.entity.Category;
 import com.example.restaurant_order_portal.entity.MenuItem;
 import com.example.restaurant_order_portal.entity.Restaurant;
+import com.example.restaurant_order_portal.exception.ResourceNotFoundException;
 import com.example.restaurant_order_portal.repository.CategoryRepository;
 import com.example.restaurant_order_portal.repository.MenuItemRepository;
 import com.example.restaurant_order_portal.repository.RestaurantRepository;
 import com.example.restaurant_order_portal.service.MenuItemService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +24,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class MenuItemServiceImpl implements MenuItemService {
+
+    private static final Logger log = LoggerFactory.getLogger(MenuItemServiceImpl.class);
 
     private final MenuItemRepository menuItemRepository;
     private final CategoryRepository categoryRepository;
@@ -37,13 +42,20 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public MenuItemResponseDTO createMenuItem(MenuItemRequestDTO menuItemRequestDTO) {
-        // fetch full category
-        Category category = categoryRepository.findById(menuItemRequestDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
 
-        // fetch full restaurant
+        log.info("Creating menu item: {}", menuItemRequestDTO.getName());
+
+        Category category = categoryRepository.findById(menuItemRequestDTO.getCategoryId())
+                .orElseThrow(() ->  {
+                    log.error("Category not found with id: {}", menuItemRequestDTO.getCategoryId());
+                    return new ResourceNotFoundException("Category not found");
+                });
+
         Restaurant restaurant = restaurantRepository.findById(menuItemRequestDTO.getRestaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+                .orElseThrow(() -> {
+                    log.error("Restaurant not found with id: {}", menuItemRequestDTO.getRestaurantId());
+                    return new ResourceNotFoundException("Restaurant not found");
+                });
 
         MenuItem menuItem = new MenuItem();
         menuItem.setName(menuItemRequestDTO.getName());
@@ -54,6 +66,8 @@ public class MenuItemServiceImpl implements MenuItemService {
 
         MenuItem saved = menuItemRepository.save(menuItem);
 
+        log.info("Menu item created successfully with id: {}", saved.getId());
+
         return mapToResponseDTO(saved);
     }
 
@@ -62,6 +76,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public List<MenuItemResponseDTO> getMenuItemsByRestaurant(Long restaurantId) {
+        log.info("Fetching menu items for restaurantId: {}", restaurantId);
         return menuItemRepository.findByRestaurantId(restaurantId)
         .stream()
                 .map(this::mapToResponseDTO)
@@ -73,6 +88,7 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public List<MenuItemResponseDTO> getMenuItemsByCategory(Long categoryId) {
+        log.info("Fetching menu items for categoryId: {}", categoryId);
         return menuItemRepository.findByCategoryId(categoryId)
                 .stream()
                 .map(this::mapToResponseDTO)
@@ -84,23 +100,25 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public MenuItemResponseDTO updateMenuItem(Long id, MenuItemRequestDTO menuItemRequestDTO) {
-        /**
-         * To fetch existing item
-         */
+        log.info("Updating menu item with id: {}", id);
+
         MenuItem existing = menuItemRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Menu Item not found"));
+                .orElseThrow(() -> {
+                    log.error("Menu item not found with id: {}", id);
+                    return new ResourceNotFoundException("Menu item not found");
+                });
 
-        /**
-         * To Fetch existing category
-         */
         Category category = categoryRepository.findById(menuItemRequestDTO.getCategoryId())
-                .orElseThrow(() -> new RuntimeException("Category not found"));
+                .orElseThrow(() -> {
+                    log.error("Category not found with id: {}", menuItemRequestDTO.getCategoryId());
+                    return new ResourceNotFoundException("Category not found");
+                });
 
-        /**
-         * To fetch restaurant
-         */
         Restaurant restaurant = restaurantRepository.findById(menuItemRequestDTO.getRestaurantId())
-                .orElseThrow(() -> new RuntimeException("Restaurant not found"));
+                .orElseThrow(() -> {
+                    log.error("Restaurant not found with id: {}", menuItemRequestDTO.getRestaurantId());
+                    return new ResourceNotFoundException("Restaurant not found");
+                });
 
         existing.setName(menuItemRequestDTO.getName());
         existing.setPrice(menuItemRequestDTO.getPrice());
@@ -110,6 +128,8 @@ public class MenuItemServiceImpl implements MenuItemService {
 
         MenuItem updated = menuItemRepository.save(existing);
 
+        log.info("Menu item updated successfully: {}", updated.getId());
+
         return mapToResponseDTO(updated);
     }
 
@@ -118,7 +138,15 @@ public class MenuItemServiceImpl implements MenuItemService {
      */
     @Override
     public void deleteMenuItem(Long id) {
+        log.info("Deleting menu item with id: {}", id);
+
+        if (!menuItemRepository.existsById(id)) {
+            log.error("Menu item not found with id: {}", id);
+            throw new ResourceNotFoundException("Menu item not found");
+        }
+
         menuItemRepository.deleteById(id);
+        log.info("Menu item deleted successfully: {}", id);
     }
 
     /**
