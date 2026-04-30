@@ -6,12 +6,17 @@ import com.example.restaurant_order_portal.entity.Cart;
 import com.example.restaurant_order_portal.entity.CartItem;
 import com.example.restaurant_order_portal.entity.MenuItem;
 import com.example.restaurant_order_portal.entity.User;
+import com.example.restaurant_order_portal.exception.ConflictException;
+import com.example.restaurant_order_portal.exception.ResourceNotFoundException;
 import com.example.restaurant_order_portal.repository.CartItemRepository;
 import com.example.restaurant_order_portal.repository.CartRepository;
 import com.example.restaurant_order_portal.repository.MenuItemRepository;
 import com.example.restaurant_order_portal.service.CartItemService;
 import com.example.restaurant_order_portal.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +27,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class CartItemServiceImpl implements CartItemService {
+
+    private static final Logger log = LoggerFactory.getLogger(CartItemServiceImpl.class);
 
     private final CartRepository cartRepository;
     private final CartItemRepository cartItemRepository;
@@ -44,8 +51,13 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItemResponseDTO addItemToCart(CartItemRequestDTO cartItemRequestDTO) {
 
+        log.info("Adding item to cart for userId: {}, menuItemId: {}", cartItemRequestDTO.getUserId(), cartItemRequestDTO.getMenuItemId());
+
         MenuItem menuItem = menuItemRepository.findById(cartItemRequestDTO.getMenuItemId())
-                .orElseThrow(() -> new RuntimeException("Menu item not found"));
+                .orElseThrow(() -> {
+                    log.error("Menu item not found with id: {}", cartItemRequestDTO.getMenuItemId());
+                    return new ResourceNotFoundException("Menu item not found");
+                });
 
         Optional<Cart> cartOptional = cartRepository.findByUserId(cartItemRequestDTO.getUserId());
 
@@ -55,13 +67,17 @@ public class CartItemServiceImpl implements CartItemService {
             cart = cartOptional.get();
             } else {
             User user = userRepository.findById(cartItemRequestDTO.getUserId())
-                    .orElseThrow(() -> new RuntimeException("User not found"));
+                    .orElseThrow(() -> {
+                        log.error("User not found with id: {}", cartItemRequestDTO.getUserId());
+                        return new ResourceNotFoundException("User not found");
+                    });
 
             cart = new Cart();
             cart.setUser(user);
             cart.setRestaurant(menuItem.getRestaurant());
 
             cart = cartRepository.save(cart);
+            log.info("New cart created for userId: {}", cartItemRequestDTO.getUserId());
         }
 
         if (cart.getRestaurant() == null) {
@@ -70,7 +86,8 @@ public class CartItemServiceImpl implements CartItemService {
         }
 
         if(!cart.getRestaurant().getId().equals(menuItem.getRestaurant().getId())) {
-            throw new RuntimeException("Cannot add items from different restaurant");
+            log.error("User tried to add item from different restaurant");
+            throw new ConflictException("Cannot add items from different restaurant");
         }
 
         // If item already exists in cart, instead of adding it again update the quantity
@@ -82,8 +99,10 @@ public class CartItemServiceImpl implements CartItemService {
         if (existingItem.isPresent()) {
             cartItem = existingItem.get();
             cartItem.setQuantity(cartItem.getQuantity() + cartItemRequestDTO.getQuantity());
+            log.info("Updated quantity for existing cart item");
         } else {
             cartItem = new CartItem(cart, menuItem, cartItemRequestDTO.getQuantity());
+            log.info("Added new item to cart");
         }
 
         CartItem saved = cartItemRepository.save(cartItem);
@@ -98,6 +117,8 @@ public class CartItemServiceImpl implements CartItemService {
         cartItemResponseDTO.setMenuItemName(menuItem.getName());
         cartItemResponseDTO.setPrice(menuItem.getPrice());
 
+        log.info("Item successfully added to cart. cartItemId: {}", saved.getId());
+
         return cartItemResponseDTO;
     }
 
@@ -107,8 +128,13 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public List<CartItemResponseDTO> getCartItems(Long userId) {
 
+        log.info("Fetching cart items for userId: {}", userId);
+
         Cart cart = cartRepository.findByUserId(userId)
-                .orElseThrow(() -> new RuntimeException("Cart not found"));
+                .orElseThrow(() -> {
+                    log.error("Cart not found for userId: {}", userId);
+                    return new ResourceNotFoundException("Cart not found");
+                }   );
 
         return cartItemRepository.findByCartId(cart.getId())
                 .stream()
@@ -137,9 +163,16 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public void removeItem(Long cartItemId) {
 
+        log.info("Removing cart item with id: {}", cartItemId);
+
         CartItem item = cartItemRepository.findById(cartItemId)
-                .orElseThrow(() -> new RuntimeException("Cart item not found"));
+                .orElseThrow(() -> {
+            log.error("Cart item not found with id: {}", cartItemId);
+            return new ResourceNotFoundException("Cart item not found");
+        });
 
         cartItemRepository.delete(item);
+
+        log.info("Cart item deleted successfully: {}", cartItemId);
     }
 }
