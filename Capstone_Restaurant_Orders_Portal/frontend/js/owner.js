@@ -1,8 +1,11 @@
 const role = localStorage.getItem("role");
 
 if (role !== "RESTAURANT_OWNER") {
-    alert("Access Denied");
-    window.location.href = "index.html";
+    showMessage("Access Denied", "error");
+
+    setTimeout(() => {
+        window.location.href = "index.html";
+    }, 1500);
 }
 
 const BASE_URL = "http://localhost:8080/api/restaurants";

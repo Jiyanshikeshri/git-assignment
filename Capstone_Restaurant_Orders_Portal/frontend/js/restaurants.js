@@ -30,15 +30,35 @@ function displayRestaurants(restaurants) {
         const card = document.createElement("div");
         card.classList.add("restaurant-card");
 
-        card.innerHTML = `
-            <img src=${res.imageUrl || '../assets/pizza_landing.jpg'} alt="restaurant">
+        // Image
+        const img = document.createElement("img");
+        img.src = res.imageUrl || '../assets/pizza_landing.jpg';
+        img.alt = "restaurant";
 
-            <div class="restaurant-info">
-                <h3>${res.name}</h3>
-                <p>Click to view menu</p>
-                <span class="tag">Explore</span>
-            </div>
-        `;
+        // Info container
+        const info = document.createElement("div");
+        info.classList.add("restaurant-info");
+
+        // Name
+        const name = document.createElement("h3");
+        name.textContent = res.name;
+
+        // Description
+        const desc = document.createElement("p");
+        desc.textContent = "Click to view menu";
+
+        // Tag
+        const tag = document.createElement("span");
+        tag.classList.add("tag");
+        tag.textContent = "Explore";
+
+        // Append all
+        info.appendChild(name);
+        info.appendChild(desc);
+        info.appendChild(tag);
+
+        card.appendChild(img);
+        card.appendChild(info);
 
         card.onclick = () => {
             window.location.href = `menu.html?restaurantId=${res.id}`;

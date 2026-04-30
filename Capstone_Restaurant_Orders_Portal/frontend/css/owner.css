@@ -28,13 +28,14 @@ body {
     padding: 0;
 }
 
-.sidebar li {
+.sidebar li button {
+    width: 100%;
     padding: 12px;
     cursor: pointer;
     border-radius: 6px;
 }
 
-.sidebar li:hover {
+.sidebar li button :hover {
     background: #444;
 }
 
