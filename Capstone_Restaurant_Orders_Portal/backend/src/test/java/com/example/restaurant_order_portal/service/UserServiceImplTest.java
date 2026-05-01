@@ -117,7 +117,7 @@ public class UserServiceImplTest {
         assertThrows(BadRequestException.class, () ->
                 userService.loginUser("test@gmail.com", "plain123"));
     }
-    
+
     /**
      * Get user by id
      */
