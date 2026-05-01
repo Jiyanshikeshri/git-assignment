@@ -86,6 +86,14 @@ public class Address {
         return city;
     }
 
+    /**
+     * Added this for testing purpose
+     * @param id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setCity(String city) {
         this.city = city;
     }

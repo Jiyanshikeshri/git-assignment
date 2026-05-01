@@ -67,6 +67,14 @@ public class User {
         return id;
     }
 
+    /**
+     * Added for testing
+     * @param id
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
