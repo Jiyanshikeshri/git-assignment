@@ -256,3 +256,104 @@ body {
 .info {
     background: #2196f3;
 }
+
+/* Tablet view */
+@media (max-width: 768px) {
+
+    #cartContainer {
+        width: 90%;
+    }
+
+    .cart-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .controls {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .left img {
+        width: 70px;
+        height: 70px;
+    }
+
+    #orderSuccessBox {
+        width: 90%;
+    }
+
+    #addressForm {
+        width: 90%;
+    }
+}
+
+/* Mobile view */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+
+    .cart-card {
+        padding: 10px;
+    }
+
+    .item-name {
+        font-size: 16px;
+    }
+
+    .left {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .left img {
+        width: 60px;
+        height: 60px;
+    }
+
+    .controls {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .footer button {
+        width: 100%;
+        font-size: 14px;
+    }
+
+    #addressForm {
+        width: 100%;
+        padding: 15px;
+    }
+
+    #orderSuccessBox {
+        width: 100%;
+    }
+
+    .success-card,
+    .cancel-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    #cancelBtnStyled {
+        width: 100%;
+        text-align: center;
+    }
+
+    #messageBox {
+        right: 10px;
+        left: 10px;
+        top: 10px;
+        text-align: center;
+    }
+}

@@ -111,3 +111,48 @@ a {
 .message.error {
     color: red;
 }
+/* Tablet view */
+@media (max-width: 768px) {
+
+    .card {
+        width: 80%;
+        padding: 30px;
+    }
+
+    .card h2 {
+        font-size: 22px;
+    }
+}
+
+/* Mobile view */
+@media (max-width: 480px) {
+
+    body {
+        padding: 10px;
+        align-items: flex-start; 
+    }
+
+    .card {
+        width: 100%;
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .card h2 {
+        font-size: 20px;
+    }
+
+    input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+}

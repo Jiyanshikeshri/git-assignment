@@ -35,7 +35,7 @@ body {
     border-radius: 6px;
 }
 
-.sidebar li button :hover {
+.sidebar li button:hover {
     background: #444;
 }
 
@@ -159,4 +159,87 @@ button:hover {
 
 .form-card button {
     width: 48%;
+}
+
+/* Mobile view */
+@media (max-width: 768px) {
+
+    .layout {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding: 10px;
+        text-align: center;
+    }
+
+    .sidebar ul {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+    }
+
+    .sidebar li {
+        width: auto;
+    }
+
+    .sidebar li button {
+        width: auto;
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+
+    .main {
+        margin-left: 0; 
+        padding: 10px;
+    }
+
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        width: 100%;
+    }
+
+    .form-card {
+        width: 90%;
+        margin: 20px auto;
+    }
+
+    .form-card button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+/* Tablet view */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    .sidebar {
+        width: 180px;
+    }
+
+    .main {
+        margin-left: 200px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .form-card {
+        width: 70%;
+        margin: auto;
+    }
 }

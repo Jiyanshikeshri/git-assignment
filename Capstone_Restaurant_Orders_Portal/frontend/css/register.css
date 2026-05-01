@@ -4,7 +4,7 @@ body {
     padding: 0;
     font-family: Arial, sans-serif;
 
-    height: 100vh;
+    min-height: 100vh;
 
     /* Background image */
     background: url('../assets/bg.jpg') no-repeat center center/cover;
@@ -122,4 +122,61 @@ select {
 
     font-size: 14px;
     background: white;
+}
+
+/* Tablet view */
+@media (max-width: 768px) {
+
+    body {
+        padding: 15px;
+        align-items: flex-start; 
+    }
+
+    .card {
+        width: 100%;
+        max-width: 350px;
+        padding: 25px;
+    }
+
+    .card h2 {
+        font-size: 20px;
+    }
+
+    input,
+    select {
+        padding: 12px;
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 15px;
+        padding: 12px;
+    }
+
+    p {
+        font-size: 14px;
+    }
+}
+
+/* Mobile view */
+@media (max-width: 480px) {
+
+    .card {
+        padding: 20px;
+        border-radius: 12px;
+    }
+
+    .card h2 {
+        font-size: 18px;
+    }
+
+    input,
+    select {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    button {
+        font-size: 14px;
+    }
 }

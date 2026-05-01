@@ -127,3 +127,70 @@ button {
 #messageBox.error {
     background: #f44336;
 }
+
+/* Tablet view */
+@media (max-width: 768px) {
+
+    #searchBox {
+        width: 80%;
+    }
+
+    .menu-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+        padding: 0 10px;
+    }
+
+    .category img {
+        width: 55px;
+        height: 55px;
+    }
+}
+
+/* Mobile view */
+@media (max-width: 480px) {
+
+    .title {
+        font-size: 20px;
+    }
+
+    #searchBox {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .categories {
+        gap: 12px;
+    }
+
+    .category img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .category p {
+        font-size: 12px;
+    }
+
+    .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        padding: 0 5px;
+    }
+
+    .menu-card img {
+        height: 120px;
+    }
+
+    button {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    #messageBox {
+        left: 10px;
+        right: 10px;
+        top: 70px;
+        text-align: center;
+    }
+}
