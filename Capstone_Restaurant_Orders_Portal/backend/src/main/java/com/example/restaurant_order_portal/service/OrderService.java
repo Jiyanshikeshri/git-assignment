@@ -31,4 +31,9 @@ public interface OrderService {
      * Cancel an order and refund wallet
      */
     void cancelOrder(Long orderId);
+
+    /**
+     * To view all the orders
+     */
+    List<OrderResponseDTO> getOrdersForLoggedInUser();
 }

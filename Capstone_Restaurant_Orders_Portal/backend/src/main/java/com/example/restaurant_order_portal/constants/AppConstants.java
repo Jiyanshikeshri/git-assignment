@@ -117,6 +117,11 @@ public class AppConstants {
     public static final String GET_ORDERS_BY_USER = "/user/{userId}";
 
     /**
+     * Endpoint to get my orders history
+     */
+    public static final String GET_MY_ORDERS = "/user";
+
+    /**
      * Endpoint to fetch orders by restaurant ID.
      */
     public static final String GET_ORDERS_BY_RESTAURANT = "/restaurant/{restaurantId}";

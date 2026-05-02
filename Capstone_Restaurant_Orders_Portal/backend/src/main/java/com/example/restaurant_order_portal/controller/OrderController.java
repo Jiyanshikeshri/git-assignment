@@ -68,4 +68,12 @@ public class OrderController {
         orderService.cancelOrder(orderId);
         return "Order cancelled successfully and amount refunded";
     }
+
+    /**
+     * To get the history of orders
+     */
+    @GetMapping(AppConstants.GET_MY_ORDERS)
+    public List<OrderResponseDTO> getMyOrders() {
+        return orderService.getOrdersForLoggedInUser();
+    }
 }

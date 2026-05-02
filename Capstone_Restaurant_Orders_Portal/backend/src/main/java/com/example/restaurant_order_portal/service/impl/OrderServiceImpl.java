@@ -243,4 +243,36 @@ public class OrderServiceImpl implements OrderService {
 
         return orderResponseDTO;
     }
+
+    /**
+     * Method to view all orders
+     */
+    @Override
+    public List<OrderResponseDTO> getOrdersForLoggedInUser() {
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        log.info("Fetching orders for logged-in user: {}", email);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    log.error("User not found with email: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
+
+        List<Order> orders = orderRepository.findByUserId(user.getId());
+
+        if (orders.isEmpty()) {
+            log.warn("No orders found for userId: {}", user.getId());
+        } else {
+            log.info("Found {} orders for userId: {}", orders.size(), user.getId());
+        }
+
+        return orders.stream()
+                .map(this::orderResponseDTO)
+                .collect(Collectors.toList());
+    }
 }
