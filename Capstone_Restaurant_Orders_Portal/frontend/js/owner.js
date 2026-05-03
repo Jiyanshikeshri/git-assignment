@@ -8,7 +8,7 @@ if (role !== "RESTAURANT_OWNER") {
     }, 1500);
 }
 
-const BASE_URL = "http://localhost:8080/api/restaurants";
+const BASE_URL = "http://localhost:8080/api/restaurants/owner";
 
 function loadRestaurants() {
 
@@ -419,4 +419,119 @@ function showMessage(message, type = "info") {
     setTimeout(() => {
         box.style.display = "none";
     }, 3000);
+}
+
+function loadOwnerOrders() {
+
+    const token = localStorage.getItem("token");
+
+    fetch("http://localhost:8080/api/orders/owner", {
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    })
+    .then(res => {
+        console.log("Status:", res.status); 
+        if (!res.ok) throw new Error("Failed to load orders");
+        return res.json();
+    })
+    .then(data => displayOwnerOrders(data))
+    .catch(err => {
+        console.error(err);
+        showMessage("Error loading orders");
+    });
+}
+
+function displayOwnerOrders(orders) {
+
+    const content = document.getElementById("content");
+
+    content.innerHTML = "<h2>Orders</h2>";
+
+    if (orders.length === 0) {
+        content.innerHTML += "<p>No orders found</p>";
+        return;
+    }
+
+    orders.forEach(order => {
+
+        let statusColor = "black";
+
+        if (order.status === "PLACED") statusColor = "orange";
+        else if (order.status === "PENDING") statusColor = "blue";
+        else if (order.status === "DELIVERED") statusColor = "green";
+        else if (order.status === "CANCELLED") statusColor = "red";
+
+        const card = document.createElement("div");
+        card.classList.add("order-card");
+
+        card.innerHTML = `
+            <p><b>Order ID:</b> ${order.id}</p>
+            <p><b>User ID:</b> ${order.userId}</p>
+            <p><b>Total:</b> ₹${order.totalAmount}</p>
+            <p><b>Status:</b> <span style="color:${statusColor}">${order.status}</span></p>
+            <p><b>Address:</b> ${order.address}</p>
+
+            <select id="status-${order.id}">
+                <option value="PLACED">PLACED</option>
+                <option value="PENDING">PENDING</option>
+                <option value="DELIVERED">DELIVERED</option>
+                <option value="COMPLETED">COMPLETED</option>
+                <option value="CANCELLED">CANCELLED</option>
+            </select>
+
+            <button onclick="updateOrderStatus(${order.id})">
+                Update
+            </button>
+
+            <hr>
+        `;
+
+        content.appendChild(card);
+    });
+}
+
+function updateOrderStatus(orderId) {
+
+    const token = localStorage.getItem("token");
+    const status = document.getElementById(`status-${orderId}`).value;
+
+    fetch(`http://localhost:8080/api/orders/status/${orderId}?status=${status}`, {
+        method: "PUT",
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    })
+    .then(res => {
+        if (!res.ok) {
+            return res.text().then(text => {
+                throw new Error(text);
+            });
+        }
+        return res.text();
+    })
+    .then(() => {
+        showMessage(`Order marked as ${status}`, "success"); 
+        loadOwnerOrders();
+    })
+    .catch(err => {
+        console.error(err);
+
+        let message = "Something went wrong";
+
+        if (err.message.includes("not allowed")) {
+            message = "You cannot update this order";
+        }
+        else if (err.message.includes("cancelled")) {
+            message = "This order is already cancelled";
+        }
+        else if (err.message.includes("Order not found")) {
+            message = "Order not found";
+        }
+        else if (err.message.includes("No enum constant")) {
+            message = "Invalid status selected";
+        }
+
+        showMessage(message, "error");
+    });
 }
