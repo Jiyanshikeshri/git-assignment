@@ -81,4 +81,11 @@ public class RestaurantController {
         restaurantService.deleteRestaurant(id);
     }
 
+    /**
+     * Get the restaurants of owner
+     */
+    @GetMapping(AppConstants.GET_RESTAURANTS_BY_OWNER)
+    public List<RestaurantResponseDTO> getRestaurantsByOwner() {
+        return restaurantService.getRestaurantsForLoggedInOwner();
+    }
 }

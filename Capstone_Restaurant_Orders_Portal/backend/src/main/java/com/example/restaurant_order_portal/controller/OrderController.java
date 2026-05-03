@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -75,5 +76,23 @@ public class OrderController {
     @GetMapping(AppConstants.GET_MY_ORDERS)
     public List<OrderResponseDTO> getMyOrders() {
         return orderService.getOrdersForLoggedInUser();
+    }
+
+    /**
+     * To get the list of orders raised for restaurant
+     */
+    @GetMapping(AppConstants.GET_ORDERS_FOR_OWNER)
+    public List<OrderResponseDTO> getOrdersForOwner() {
+        return orderService.getOrdersForLoggedInOwner();
+    }
+
+    /**
+     * To update the status of the order by restaurant owner
+     */
+    @PutMapping(AppConstants.UPDATE_ORDER_STATUS)
+    public String updateOrderStatus(@PathVariable Long orderId,
+                                    @RequestParam String status) {
+        orderService.updateOrderStatus(orderId, status);
+        return "Order status updated successfully";
     }
 }

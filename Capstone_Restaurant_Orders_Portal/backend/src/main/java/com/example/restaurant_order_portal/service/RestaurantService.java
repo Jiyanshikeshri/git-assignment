@@ -1,5 +1,6 @@
 package com.example.restaurant_order_portal.service;
 
+import com.example.restaurant_order_portal.dto.OrderResponseDTO;
 import com.example.restaurant_order_portal.dto.RestaurantRequestDTO;
 import com.example.restaurant_order_portal.dto.RestaurantResponseDTO;
 import com.example.restaurant_order_portal.entity.Restaurant;
@@ -41,4 +42,9 @@ public interface RestaurantService {
      * Delete a restaurant by ID
      */
     void deleteRestaurant(Long id);
+
+    /**
+     * To get restaurants for the logged in owner
+     */
+    List<RestaurantResponseDTO> getRestaurantsForLoggedInOwner();
 }

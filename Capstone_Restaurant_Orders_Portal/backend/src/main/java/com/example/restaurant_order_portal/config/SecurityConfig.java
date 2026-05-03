@@ -74,6 +74,9 @@
                             .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/user/**").hasRole(AppConstants.ROLE_USER)
                             .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/restaurant/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
                             .requestMatchers(HttpMethod.PUT, AppConstants.BASE_ORDER_URL + "/cancel/**").hasRole(AppConstants.ROLE_USER)
+                            .requestMatchers(HttpMethod.GET, AppConstants.BASE_ORDER_URL + "/owner").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
+
+                            .requestMatchers(HttpMethod.PUT, AppConstants.BASE_ORDER_URL + "/status/**").hasRole(AppConstants.ROLE_RESTAURANT_OWNER)
 
                             .requestMatchers(HttpMethod.POST, AppConstants.BASE_CART_URL).hasRole(AppConstants.ROLE_USER)
                             .requestMatchers(HttpMethod.GET, AppConstants.BASE_CART_URL + "/**").hasRole(AppConstants.ROLE_USER)

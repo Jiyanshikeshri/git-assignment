@@ -36,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
     private final CartItemRepository cartItemRepository;
     private final OrderItemRepository orderItemRepository;
     private final AddressRepository addressRepository;
+    private final RestaurantRepository restaurantRepository;
 
     /**
      * Constructor-based dependency injection
@@ -45,13 +46,15 @@ public class OrderServiceImpl implements OrderService {
                             CartRepository cartRepository,
                             CartItemRepository cartItemRepository,
                             OrderItemRepository orderItemRepository,
-                            AddressRepository addressRepository) {
+                            AddressRepository addressRepository,
+                            RestaurantRepository restaurantRepository) {
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
         this.cartItemRepository = cartItemRepository;
         this.orderItemRepository = orderItemRepository;
         this.addressRepository = addressRepository;
+        this.restaurantRepository = restaurantRepository;
     }
 
     /**
@@ -274,5 +277,69 @@ public class OrderServiceImpl implements OrderService {
         return orders.stream()
                 .map(this::orderResponseDTO)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * Method to view orders by owner
+     */
+    @Override
+    public List<OrderResponseDTO> getOrdersForLoggedInOwner() {
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        log.info("Fetching orders for owner: {}", email);
+
+        User owner = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        List<Restaurant> restaurants = restaurantRepository.findByOwnerId(owner.getId());
+
+        if (restaurants.isEmpty()) {
+            throw new ResourceNotFoundException("No restaurants found for owner");
+        }
+
+        return restaurants.stream()
+                .flatMap(r -> orderRepository.findByRestaurantId(r.getId()).stream())
+                .map(this::orderResponseDTO)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Method to update the status of the orders
+     */
+    @Override
+    @Transactional
+    public void updateOrderStatus(Long orderId, String status) {
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        log.info("Updating order status for orderId: {} by {}", orderId, email);
+
+        User owner = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order not found"));
+
+        if (!order.getRestaurant().getOwner().getId().equals(owner.getId())) {
+            throw new ConflictException("You are not allowed to update this order");
+        }
+
+        OrderStatus newStatus = OrderStatus.valueOf(status);
+
+        if (order.getStatus() == OrderStatus.CANCELLED) {
+            throw new ConflictException("Cannot update cancelled order");
+        }
+
+        order.setStatus(newStatus);
+        orderRepository.save(order);
+
+        log.info("Order status updated to {} for orderId: {}", status, orderId);
     }
 }

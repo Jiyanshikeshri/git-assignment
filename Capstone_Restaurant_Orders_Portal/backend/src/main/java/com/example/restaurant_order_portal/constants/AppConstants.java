@@ -62,6 +62,21 @@ public class AppConstants {
     public static final String RESTAURANT_ID = "/{id}";
 
     /**
+     * Gets the specific restaurant of a specific owner
+     */
+    public static final String GET_RESTAURANTS_BY_OWNER = "/owner";
+
+    /**
+     * Endpoint to view orders of restaurants of any owner
+     */
+    public static final String GET_ORDERS_FOR_OWNER = "/owner";
+
+    /**
+     * Endpoint to update the status of order by owner of restaurant
+     */
+    public static final String UPDATE_ORDER_STATUS = "/status/{orderId}";
+
+    /**
      * Base URL for category-related APIs.
      */
     public static final String BASE_CATEGORY_URL = "/api/categories";

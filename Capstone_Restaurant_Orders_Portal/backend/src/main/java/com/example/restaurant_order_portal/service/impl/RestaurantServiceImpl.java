@@ -12,6 +12,7 @@ import com.example.restaurant_order_portal.service.RestaurantService;
 import com.example.restaurant_order_portal.validation.RestaurantValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -176,4 +177,34 @@ public class RestaurantServiceImpl implements RestaurantService {
             log.info("Restaurant deleted successfully with id: {}", id);
         }
 
+    /**
+     * To get restaurants of logged in owner
+     */
+    @Override
+    public List<RestaurantResponseDTO> getRestaurantsForLoggedInOwner() {
+
+        String email = SecurityContextHolder
+                .getContext()
+                .getAuthentication()
+                .getName();
+
+        log.info("Fetching restaurants for owner: {}", email);
+
+        User owner = userRepository.findByEmail(email)
+                .orElseThrow(() -> {
+                    log.error("Owner not found with email: {}", email);
+                    return new ResourceNotFoundException("User not found");
+                });
+
+        List<Restaurant> restaurants = restaurantRepository.findByOwnerId(owner.getId());
+
+        if (restaurants.isEmpty()) {
+            log.warn("No restaurants found for ownerId: {}", owner.getId());
+            return List.of(); // better than throwing exception
+        }
+
+        return restaurants.stream()
+                .map(this::restaurantResponseDTO)
+                .collect(Collectors.toList());
+    }
 }

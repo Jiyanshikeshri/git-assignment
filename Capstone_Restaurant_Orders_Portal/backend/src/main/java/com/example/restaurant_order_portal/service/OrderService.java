@@ -33,7 +33,17 @@ public interface OrderService {
     void cancelOrder(Long orderId);
 
     /**
-     * To view all the orders
+     * To view all the orders for user
      */
     List<OrderResponseDTO> getOrdersForLoggedInUser();
+
+    /**
+     * To view orders for owner
+     */
+    List<OrderResponseDTO> getOrdersForLoggedInOwner();
+
+    /**
+     * To update the status of order by owner
+     */
+    void updateOrderStatus(Long orderId, String status);
 }
