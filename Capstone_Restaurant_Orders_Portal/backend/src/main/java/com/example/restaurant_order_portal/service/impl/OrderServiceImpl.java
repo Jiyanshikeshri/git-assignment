@@ -235,6 +235,7 @@ public class OrderServiceImpl implements OrderService {
         orderResponseDTO.setId(order.getId());
         orderResponseDTO.setUserId(order.getUser().getId());
         orderResponseDTO.setRestaurantId(order.getRestaurant().getId());
+        orderResponseDTO.setRestaurantName(order.getRestaurant().getName());
         orderResponseDTO.setTotalAmount(order.getTotalAmount());
         orderResponseDTO.setStatus(order.getStatus());
         orderResponseDTO.setCreatedAt(order.getCreatedAt());

@@ -45,6 +45,11 @@
          */
         private String address;
 
+        /**
+         * restaurant name
+         */
+        private String restaurantName;
+
         public OrderResponseDTO() {
 
         }
@@ -113,5 +118,13 @@
 
         public void setAddress(String address) {
             this.address = address;
+        }
+
+        public String getRestaurantName() {
+            return restaurantName;
+        }
+
+        public void setRestaurantName(String restaurantName) {
+            this.restaurantName = restaurantName;
         }
     }

@@ -468,6 +468,7 @@ function displayOwnerOrders(orders) {
         card.innerHTML = `
             <p><b>Order ID:</b> ${order.id}</p>
             <p><b>User ID:</b> ${order.userId}</p>
+            <p><b>Restaurant:</b> ${order.restaurantName} (ID: ${order.restaurantId})</p>
             <p><b>Total:</b> ₹${order.totalAmount}</p>
             <p><b>Status:</b> <span style="color:${statusColor}">${order.status}</span></p>
             <p><b>Address:</b> ${order.address}</p>

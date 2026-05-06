@@ -51,7 +51,6 @@ function displayOrders(orders) {
             <p><b>Address:</b> ${order.address}</p>
             <p><b>Time:</b> ${order.createdAt}</p>
         `;
-
         container.appendChild(div);
     });
 }
