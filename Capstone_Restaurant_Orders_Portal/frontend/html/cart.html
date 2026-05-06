@@ -18,12 +18,23 @@
         <button onclick="showAddressForm()">Place Order</button>
     </div>
 
-    <div id="addressForm" style="display:none;">
-        <input type="text" id="street" placeholder="Street" />
-        <input type="text" id="city" placeholder="City" />
-        <input type="text" id="pincode" placeholder="Pincode" />
+        <div id="addressForm" style="display:none;">
 
-        <button onclick="confirmOrder()">Confirm Order</button>
+        <h3>Select Address</h3>
+        <div id="addressList"></div>
+
+        <button onclick="showNewAddressForm()">+ Add New Address</button>
+
+        <div id="newAddressForm" class="hidden">
+            <input type="text" id="street" placeholder="Street" />
+            <input type="text" id="city" placeholder="City" />
+            <input type="text" id="pincode" placeholder="Pincode" />
+
+            <button onclick="saveNewAddress()">Save Address</button>
+        </div>
+
+        <button onclick="placeOrderWithSelectedAddress()">Confirm Order</button>
+
     </div>
 
      <div id="orderSuccessBox" class="hidden">

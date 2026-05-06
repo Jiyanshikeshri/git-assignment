@@ -59,9 +59,66 @@ function placeOrder() {
 
 function showAddressForm() {
     document.getElementById("addressForm").style.display = "block";
+    loadAddresses();
 }
 
-function confirmOrder() {
+let selectedAddressId = null;
+
+function loadAddresses() {
+    fetch("http://localhost:8080/api/addresses/user", {
+        headers: {
+            "Authorization": "Bearer " + token
+        }
+    })
+    .then(res => res.json())
+    .then(addresses => {
+
+        const container = document.getElementById("addressList");
+        container.innerHTML = "";
+
+        if (!Array.isArray(addresses) || addresses.length === 0) {
+            container.innerHTML = "<p>No saved addresses</p>";
+            return;
+        }
+
+        const unique = [];
+        const seen = new Set();
+
+        addresses.forEach(addr => {
+            const key = addr.streetAddress + addr.city + addr.pincode;
+            if (!seen.has(key)) {
+                seen.add(key);
+                unique.push(addr);
+            }
+        });
+
+        const top2 = unique.slice(0, 2);
+
+        top2.forEach(addr => {
+            container.innerHTML += `
+                <div onclick="selectAddress(${addr.id}, this)" class="address-card">
+                    ${addr.streetAddress}, ${addr.city} - ${addr.pincode}
+                </div>
+            `;
+        });
+    });
+}
+
+function selectAddress(id, element) {
+    selectedAddressId = id;
+
+    document.querySelectorAll(".address-card").forEach(el => {
+        el.style.border = "1px solid #ccc";
+    });
+
+    element.style.border = "2px solid green";
+}
+
+function showNewAddressForm() {
+    document.getElementById("newAddressForm").classList.remove("hidden");
+}
+
+function saveNewAddress() {
 
     const addressData = {
         streetAddress: document.getElementById("street").value,
@@ -70,10 +127,10 @@ function confirmOrder() {
     };
 
     if (!addressData.streetAddress || !addressData.city || !addressData.pincode) {
-        showMessage("Please fill all address fields", "error");
+        showMessage("Fill all fields", "error");
         return;
     }
-    
+
     fetch("http://localhost:8080/api/addresses", {
         method: "POST",
         headers: {
@@ -83,28 +140,46 @@ function confirmOrder() {
         body: JSON.stringify(addressData)
     })
     .then(res => res.json())
-    .then(savedAddress => {
+    .then(saved => {
+        selectedAddressId = saved.id;
+        loadAddresses();
 
-        const orderRequest = {
-            addressId: savedAddress.id
-        };
+        document.getElementById("street").value = "";
+        document.getElementById("city").value = "";
+        document.getElementById("pincode").value = "";
+    });
+}
 
-        return fetch("http://localhost:8080/api/orders", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": "Bearer " + token
-            },
-            body: JSON.stringify(orderRequest)
-        });
+function placeOrderWithSelectedAddress() {
 
+    if (!selectedAddressId) {
+        showMessage("Please select address", "error");
+        return;
+    }
+
+    const orderRequest = {
+        addressId: selectedAddressId
+    };
+
+    fetch("http://localhost:8080/api/orders", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + token
+        },
+        body: JSON.stringify(orderRequest)
     })
     .then(res => {
-        if (!res.ok) throw new Error("Order failed");
-        return res.json();
+    if (!res.ok) {
+        return res.text().then(msg => {
+            throw new Error(msg || "Order failed");
+        });
+    }
+    return res.json();
     })
     .then(order => {
         showMessage("Order placed successfully", "success");
+
         document.getElementById("cartContainer").innerHTML = "";
         document.querySelector(".footer").style.display = "none";
         document.getElementById("addressForm").style.display = "none";
@@ -116,8 +191,8 @@ function confirmOrder() {
         startCountdown();
     })
     .catch(err => {
-        showMessage("Something went wrong while placing order", "error");
-    });
+            showMessage("Something went wrong while placing order", "error");
+        });
 }
 
 function startCountdown() {
