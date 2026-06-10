@@ -2,7 +2,6 @@
 
     import com.example.restaurant_order_portal.constants.AppConstants;
     import com.example.restaurant_order_portal.security.JwtAuthenticationFilter;
-    import jakarta.servlet.http.HttpServletResponse;
     import org.springframework.context.annotation.Bean;
     import org.springframework.context.annotation.Configuration;
     import org.springframework.security.config.annotation.web.builders.HttpSecurity;
