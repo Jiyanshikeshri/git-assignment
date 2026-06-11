@@ -5,6 +5,9 @@ Print their types using type().
 
 
 def display_variable_types():
+    """
+    Display the types of variables of different data types.
+    """
     integer_value = 22
     float_value = 22.5
     string_value = "Python"

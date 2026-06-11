@@ -4,6 +4,8 @@ Take two numbers and print sum, difference, multiplication, and division.
 
 
 def arithmetic_operations():
+    """
+    Take two numbers as input and perform arithmetic operations."""
     first_number = float(input("Enter first number: "))
     second_number = float(input("Enter second number: "))
 
