@@ -3,3 +3,6 @@ uvicorn
 pymongo
 python-dotenv
 mongoengine
+python-jose[cryptography]
+passlib[bcrypt]
+email-validator
