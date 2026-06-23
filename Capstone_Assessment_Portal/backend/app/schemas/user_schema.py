@@ -25,3 +25,11 @@ class UserResponse(BaseModel):
     name: str
     email: EmailStr
     role: str
+    
+
+class TokenResponse(BaseModel):
+    """
+    Response returned after a successful login.
+    """
+    access_token: str
+    token_type: str
