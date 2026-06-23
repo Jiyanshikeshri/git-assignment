@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Linking CSS file -->
+    <link rel="stylesheet" href="../css/owner.css">
+</head>
+<body>
+    <div class="layout">
+        <div class="sidebar">
+            <h2>Restaurant_Owner</h2>
+
+            <ul>
+                <li> <button onclick="loadDashboard()">Dashboard</li>
+                <li> <button onclick="loadRestaurants()">Restaurants</li>
+                <li> <button onclick="loadCategories()">Categories</li>
+                <li> <button onclick="loadMenu()">Menu</li>
+            </ul>
+        </div>
+
+        <div class="main">
+
+            <div class="navbar">
+                <span>Owner Panel</span>
+                <button onclick="loadOwnerOrders()">View Orders</button>
+                <button onclick="logout()">Logout</button>
+            </div>
+
+            <div id="content"></div>
+
+        </div>
+
+        <div id="messageBox" class="message-box"></div>
+
+    </div>
+    <script src="../js/owner.js"></script>
+</body>
+</html>
