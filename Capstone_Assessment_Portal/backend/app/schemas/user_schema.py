@@ -1,4 +1,5 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
+import re
 
 class UserRegister(BaseModel):
     """
@@ -8,7 +9,8 @@ class UserRegister(BaseModel):
         ...,
         min_length=3,
         max_length=30,
-        description="Unique username for the student"
+        pattern=r"^[a-zA-Z0-9_]+$", #eg Jiyanshi_Keshri or Jiyanshi123
+        description="Unique username for the student containing only letters, numbers, and underscores"
     )
     name: str = Field(
         ...,
@@ -26,6 +28,18 @@ class UserRegister(BaseModel):
         max_length=128,
         description="Account password"
     )
+
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, value: str) -> str:
+        """
+        Ensures the name contains only alphabets and spaces
+        """
+        if not re.fullmatch(r"[A-Za-z ]+", value):
+            raise ValueError(
+                "Name should contain only alphabets and spaces."
+            )
+        return value.strip()
 
 
 class UserLogin(BaseModel):
