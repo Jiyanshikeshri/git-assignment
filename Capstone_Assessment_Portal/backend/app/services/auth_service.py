@@ -35,6 +35,7 @@ def register_student(user: UserRegister):
         )
 
     user_data = {
+        "username": user.username,
         "name": user.name,
         "email": user.email,
         "password": hash_password(user.password),
