@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 
 from app.repositories.user_repository import (
     get_user_by_email,
+    get_user_by_username,
     create_user,
 )
 from app.schemas.user_schema import UserRegister
@@ -15,6 +16,15 @@ def register_student(user: UserRegister):
     """
     Register a new student after validating the email and hashing the password
     """
+
+    # Checking whether the username is already taken
+    existing_username = get_user_by_username(user.username)
+
+    if existing_username:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Username is already taken."
+        )
 
     existing_user = get_user_by_email(user.email)
 
