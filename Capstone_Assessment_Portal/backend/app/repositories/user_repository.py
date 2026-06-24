@@ -11,6 +11,13 @@ def get_user_by_email(email: str):
     """
     return users_collection.find_one({"email": email})
 
+def get_user_by_username(username: str):
+    """
+    Fetch a user by username
+    Returns None if no matching user exists
+    """
+    return users_collection.find_one({"username": username})
+
 
 def create_user(user_data: dict):
     """

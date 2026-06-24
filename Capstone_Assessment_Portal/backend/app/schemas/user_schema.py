@@ -1,12 +1,31 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, Field
 
 class UserRegister(BaseModel):
     """
     Schema used when a new student registers
     """
-    name: str
-    email: EmailStr
-    password: str
+    username: str = Field(
+        ...,
+        min_length=3,
+        max_length=30,
+        description="Unique username for the student"
+    )
+    name: str = Field(
+        ...,
+        min_length=2,
+        max_length=50,
+        description="Full name of the student"
+    )
+    email: EmailStr = Field(
+        ...,
+        description="Email address of the student"
+    )
+    password: str = Field(
+        ...,
+        min_length=8,
+        max_length=128,
+        description="Account password"
+    )
 
 
 class UserLogin(BaseModel):
@@ -22,6 +41,7 @@ class UserResponse(BaseModel):
     Schema returned in API responses after successful user-related operations
     """
     id: str
+    username: str
     name: str
     email: EmailStr
     role: str
