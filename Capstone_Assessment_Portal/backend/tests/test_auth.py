@@ -22,40 +22,6 @@ def test_register_student(client):
     assert response.json()["message"] == "Student registered successfully"
 
 
-def test_login_student(client):
-    """
-    Verify that a registered student can log in
-    and receive a JWT access token.
-    """
-
-    import time
-
-    unique_id = str(int(time.time()))
-
-    # Register a new student first
-    register_payload = {
-        "username": f"loginuser_{unique_id}",
-        "name": "Login Test User",
-        "email": f"login_{unique_id}@example.com",
-        "password": "Password123"
-    }
-
-    client.post("/auth/register", json=register_payload)
-
-    # Now attempt login
-    login_payload = {
-        "email": register_payload["email"],
-        "password": register_payload["password"]
-    }
-
-    response = client.post("/auth/login", json=login_payload)
-
-    assert response.status_code == 200
-
-    response_data = response.json()
-    assert "access_token" in response_data
-    assert response_data["token_type"] == "bearer"
-
 
 def test_login_admin(client):
     """
@@ -77,6 +43,9 @@ def test_login_admin(client):
 
 
 def test_login_student(client):
+    """
+    Verify that a registered student can log in and receive a JWT access token
+    """
     unique = str(int(time.time()))
 
     username = f"student_{unique}"
