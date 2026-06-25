@@ -1,5 +1,7 @@
 import time
-
+from datetime import datetime, timedelta, timezone
+from jose import jwt
+from app.config.security import SECRET_KEY, ALGORITHM
 
 def test_register_student(client):
     """
@@ -154,3 +156,30 @@ def test_access_protected_api_without_token(client):
     response = client.get("/auth/admin/dashboard")
 
     assert response.status_code == 401
+
+
+def test_access_protected_api_with_expired_token(client):
+    """
+    Verify that access is denied when using an expired JWT token
+    """
+
+    expired_token = jwt.encode(
+        {
+            "user_id": "dummy_user_id",
+            "email": "expired@example.com",
+            "role": "ADMIN",
+            "exp": datetime.now(timezone.utc) - timedelta(minutes=5),
+        },
+        SECRET_KEY,
+        algorithm=ALGORITHM,
+    )
+
+    response = client.get(
+        "/auth/admin/dashboard",
+        headers={
+            "Authorization": f"Bearer {expired_token}"
+        },
+    )
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid or expired token"
