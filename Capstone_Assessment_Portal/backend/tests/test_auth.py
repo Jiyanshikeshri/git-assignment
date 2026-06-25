@@ -144,3 +144,13 @@ def test_login_with_invalid_email(client):
 
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid email or password."
+
+
+def test_access_protected_api_without_token(client):
+    """
+    Verifies that a protected API cannot be accessed without a JWT token
+    """
+
+    response = client.get("/auth/admin/dashboard")
+
+    assert response.status_code == 401
