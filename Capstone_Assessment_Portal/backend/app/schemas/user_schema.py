@@ -50,6 +50,13 @@ class UserLogin(BaseModel):
     password: str
 
 
+class RefreshTokenRequest(BaseModel):
+    """
+    Schema used to request a new access token using a valid refresh token
+    """
+    refresh_token: str
+
+
 class UserResponse(BaseModel):
     """
     Schema returned in API responses after successful user-related operations
@@ -66,4 +73,5 @@ class TokenResponse(BaseModel):
     Response returned after a successful login.
     """
     access_token: str
+    refresh_token: str
     token_type: str

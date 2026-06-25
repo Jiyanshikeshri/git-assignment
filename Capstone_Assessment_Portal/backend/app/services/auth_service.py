@@ -7,7 +7,11 @@ from app.repositories.user_repository import (
 )
 from app.schemas.user_schema import UserRegister
 from app.utils.password import hash_password
-from app.config.security import create_access_token
+from app.config.security import (
+    create_access_token, 
+    create_refresh_token, 
+    decode_access_token,
+    )
 from app.schemas.user_schema import UserLogin
 from app.utils.password import verify_password
 
@@ -76,7 +80,44 @@ def login_user(user: UserLogin):
         }
     )
 
+    refresh_token = create_refresh_token(
+        {
+            "user_id": str(existing_user["_id"]),
+            "email": existing_user["email"],
+            "role": existing_user["role"]
+        }
+    )
+
     return {
         "access_token": token,
+        "refresh_token": refresh_token,
         "token_type": "bearer"
     }
+
+
+def refresh_access_token(refresh_token: str):
+    """
+    Validate the refresh token and issue a new access token.
+    """
+
+    try:
+        payload = decode_access_token(refresh_token)
+
+        new_access_token = create_access_token(
+            {
+                "user_id": payload["user_id"],
+                "email": payload["email"],
+                "role": payload["role"],
+            }
+        )
+
+        return {
+            "access_token": new_access_token,
+            "token_type": "bearer",
+        }
+
+    except Exception:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired refresh token",
+        )
