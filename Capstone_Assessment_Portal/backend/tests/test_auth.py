@@ -74,3 +74,39 @@ def test_login_admin(client):
     response_data = response.json()
     assert "access_token" in response_data
     assert response_data["token_type"] == "bearer"
+
+
+def test_login_student(client):
+    unique = str(int(time.time()))
+
+    username = f"student_{unique}"
+    email = f"student_{unique}@example.com"
+
+    # Register a student
+    register_response = client.post(
+        "/auth/register",
+        json={
+            "username": username,
+            "name": "Student Test",
+            "email": email,
+            "password": "Password123"
+        }
+    )
+
+    assert register_response.status_code == 201
+
+    # Login with the same credentials
+    login_response = client.post(
+        "/auth/login",
+        json={
+            "email": email,
+            "password": "Password123"
+        }
+    )
+
+    assert login_response.status_code == 200
+
+    data = login_response.json()
+
+    assert "access_token" in data
+    assert data["token_type"] == "bearer"
