@@ -111,3 +111,36 @@ def test_login_with_invalid_password(client):
 
     assert response.status_code == 401
     assert response.json()["detail"] == "Invalid email or password."
+
+
+def test_login_with_invalid_email(client):
+    """
+    Verify that login fails when the email is not registered.
+    """
+
+    response = client.post(
+        "/auth/login",
+        json={
+            "email": "doesnotexist@example.com",
+            "password": "Password123"
+        }
+    )
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid email or password."
+
+def test_login_with_invalid_email(client):
+    """
+    Verify that login fails when the email is not registered
+    """
+
+    response = client.post(
+        "/auth/login",
+        json={
+            "email": "doesnotexist@example.com",
+            "password": "Password123"
+        }
+    )
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid email or password."
