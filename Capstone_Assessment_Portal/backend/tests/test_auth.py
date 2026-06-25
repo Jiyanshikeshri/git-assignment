@@ -56,3 +56,21 @@ def test_login_student(client):
     assert "access_token" in response_data
     assert response_data["token_type"] == "bearer"
 
+
+def test_login_admin(client):
+    """
+    Verifies that the manually created admin can log in and receive a JWT access token
+    """
+
+    login_payload = {
+        "email": "admin@gmail.com",
+        "password": "Admin@123"
+    }
+
+    response = client.post("/auth/login", json=login_payload)
+
+    assert response.status_code == 200
+
+    response_data = response.json()
+    assert "access_token" in response_data
+    assert response_data["token_type"] == "bearer"
