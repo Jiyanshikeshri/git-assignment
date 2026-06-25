@@ -79,3 +79,35 @@ def test_login_student(client):
 
     assert "access_token" in data
     assert data["token_type"] == "bearer"
+
+
+def test_login_with_invalid_password(client):
+    """
+    Verify that login fails with an incorrect password
+    """
+
+    unique = str(int(time.time()))
+    email = f"invalid_pass_{unique}@example.com"
+
+    # Register a student
+    client.post(
+        "/auth/register",
+        json={
+            "username": f"user_{unique}",
+            "name": "Invalid Password Test",
+            "email": email,
+            "password": "Password123"
+        }
+    )
+
+    # Try logging in with the wrong password
+    response = client.post(
+        "/auth/login",
+        json={
+            "email": email,
+            "password": "WrongPassword123"
+        }
+    )
+
+    assert response.status_code == 401
+    assert response.json()["detail"] == "Invalid email or password."
