@@ -33,9 +33,6 @@ def get_all_categories():
     return db.categories.find().sort("name", 1)
 
 
-from bson import ObjectId
-
-
 def update_category(category_id: str, updated_data: dict):
     """
     Update an existing category by its ID
@@ -56,3 +53,12 @@ def get_category_by_name_except_id(name: str, category_id: str):
         "name": name,
         "_id": {"$ne": ObjectId(category_id)}
     })
+
+
+def delete_category(category_id: str):
+    """
+    Delete a category by its ID
+    """
+    return db.categories.delete_one(
+        {"_id": ObjectId(category_id)}
+    )
