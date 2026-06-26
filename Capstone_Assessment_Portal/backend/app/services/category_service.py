@@ -4,8 +4,14 @@ from app.repositories.category_repository import (
     get_category_by_name,
     create_category,
     get_all_categories,
+    get_category_by_id,
+    get_category_by_name_except_id,
+    update_category,
 )
-from app.schemas.category_schema import CategoryCreate
+from app.schemas.category_schema import (
+    CategoryCreate,
+    CategoryUpdate,
+)
 
 
 def create_new_category(category: CategoryCreate):
@@ -52,3 +58,44 @@ def fetch_all_categories():
         )
 
     return categories
+
+
+def update_existing_category(
+    category_id: str,
+    category: CategoryUpdate,
+):
+    """
+    Update an existing category after validating: Category exists and new name is unique
+    """
+
+    category_name = category.name.strip().lower()
+
+    existing_category = get_category_by_id(category_id)
+
+    if not existing_category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found."
+        )
+
+    duplicate_category = get_category_by_name_except_id(
+        category_name,
+        category_id,
+    )
+
+    if duplicate_category:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Category with this name already exists."
+        )
+
+    update_category(
+        category_id,
+        {
+            "name": category_name,
+        },
+    )
+
+    return {
+        "message": "Category updated successfully."
+    }
