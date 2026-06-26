@@ -12,6 +12,7 @@ from app.services.category_service import (
     create_new_category,
     fetch_all_categories,
     update_existing_category,
+    delete_existing_category,
 )
 
 router = APIRouter(
@@ -54,3 +55,14 @@ def update_category(
         category_id=category_id,
         category=category,
     )
+
+
+@router.delete("/{category_id}", status_code=status.HTTP_200_OK)
+def delete_category(
+    category_id: str,
+    current_user=Depends(require_admin),
+):
+    """
+    Delete an existing category
+    """
+    return delete_existing_category(category_id)
