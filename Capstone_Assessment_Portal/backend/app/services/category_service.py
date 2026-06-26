@@ -13,7 +13,7 @@ def create_new_category(category: CategoryCreate):
     """
 
     # Remove leading/trailing whitespace
-    category_name = category.name.strip()
+    category_name = category.name.strip().lower()
 
     # Check for duplicate category name
     existing_category = get_category_by_name(category_name)
