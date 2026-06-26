@@ -4,10 +4,14 @@ from app.middleware.auth_middleware import (
     require_admin,
     get_current_user,
 )
-from app.schemas.category_schema import CategoryCreate
+from app.schemas.category_schema import (
+    CategoryCreate,
+    CategoryUpdate,
+)
 from app.services.category_service import (
     create_new_category,
     fetch_all_categories,
+    update_existing_category,
 )
 
 router = APIRouter(
@@ -35,3 +39,18 @@ def get_categories(
     Retrieve all categories
     """
     return fetch_all_categories()
+
+
+@router.put("/{category_id}", status_code=status.HTTP_200_OK)
+def update_category(
+    category_id: str,
+    category: CategoryUpdate,
+    current_user=Depends(require_admin),
+):
+    """
+    Update an existing category
+    """
+    return update_existing_category(
+        category_id=category_id,
+        category=category,
+    )
