@@ -34,3 +34,28 @@ class CategoryResponse(BaseModel):
 
     id: str
     name: str
+
+
+class CategoryUpdate(BaseModel):
+    """
+    Schema used to update an existing category
+    """
+
+    name: str = Field(
+        ...,
+        min_length=2,
+        max_length=50,
+        description="Updated category name"
+    )
+
+    @field_validator("name")
+    @classmethod
+    def validate_name(cls, value: str) -> str:
+        value = value.strip()
+
+        if not value:
+            raise ValueError(
+                "Category name cannot be empty."
+            )
+
+        return value
