@@ -7,6 +7,7 @@ from app.repositories.category_repository import (
     get_category_by_id,
     get_category_by_name_except_id,
     update_category,
+    delete_category,
 )
 from app.schemas.category_schema import (
     CategoryCreate,
@@ -98,4 +99,24 @@ def update_existing_category(
 
     return {
         "message": "Category updated successfully."
+    }
+
+
+def delete_existing_category(category_id: str):
+    """
+    Delete an existing category
+    """
+
+    existing_category = get_category_by_id(category_id)
+
+    if not existing_category:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Category not found."
+        )
+
+    delete_category(category_id)
+
+    return {
+        "message": "Category deleted successfully."
     }
