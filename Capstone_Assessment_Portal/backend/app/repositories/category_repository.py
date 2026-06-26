@@ -24,3 +24,10 @@ def get_category_by_id(category_id: str):
     return db.categories.find_one(
         {"_id": ObjectId(category_id)}
     )
+
+
+def get_all_categories():
+    """
+    Retrieve all categories from the database
+    """
+    return db.categories.find().sort("name", 1)

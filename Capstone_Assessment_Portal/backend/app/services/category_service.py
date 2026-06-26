@@ -3,6 +3,7 @@ from fastapi import HTTPException, status
 from app.repositories.category_repository import (
     get_category_by_name,
     create_category,
+    get_all_categories,
 )
 from app.schemas.category_schema import CategoryCreate
 
@@ -33,3 +34,21 @@ def create_new_category(category: CategoryCreate):
     return {
         "message": "Category created successfully."
     }
+
+
+def fetch_all_categories():
+    """
+    Retrieve all categories
+    """
+
+    categories = []
+
+    for category in get_all_categories():
+        categories.append(
+            {
+                "id": str(category["_id"]),
+                "name": category["name"],
+            }
+        )
+
+    return categories
