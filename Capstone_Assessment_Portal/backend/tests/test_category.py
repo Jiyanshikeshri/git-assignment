@@ -153,3 +153,24 @@ def test_update_category(client, admin_token):
         update_response.json()["message"]
         == "Category updated successfully."
     )
+
+
+def test_update_non_existing_category(client, admin_token):
+    """
+    Verify that updating a non-existing category returns 404 Not Found
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    response = client.put(
+        "/categories/507f1f77bcf86cd799439011",
+        headers=headers,
+        json={
+            "name": "python"
+        }
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Category not found."
