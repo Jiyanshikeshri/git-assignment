@@ -1,4 +1,4 @@
-import time
+import uuid
 
 
 def test_create_category(client, admin_token):
@@ -6,7 +6,7 @@ def test_create_category(client, admin_token):
     Verifies that an admin can create a new category successfully
     """
 
-    unique = str(int(time.time()))
+    unique = uuid.uuid4().hex[:8]
 
     response = client.post(
         "/categories/",
@@ -28,7 +28,7 @@ def test_create_duplicate_category(client, admin_token):
     Verifies that duplicate category names are not allowed
     """
 
-    unique = str(int(time.time()))
+    unique = uuid.uuid4().hex[:8]
     category_name = f"python_{unique}"
 
     headers = {
@@ -72,7 +72,7 @@ def test_get_categories(client, admin_token):
     }
 
     #Instead of depending on categories created by previous tests, this test ensures there is at least one category before calling GET /categories
-    unique = str(int(time.time()))
+    unique = uuid.uuid4().hex[:8]
 
     client.post(
         "/categories/",
@@ -107,7 +107,7 @@ def test_update_category(client, admin_token):
         "Authorization": f"Bearer {admin_token}"
     }
 
-    unique = str(int(time.time()))
+    unique = uuid.uuid4().hex[:8]
 
     # Creates a category
     create_response = client.post(
@@ -186,7 +186,7 @@ def test_delete_category(client, admin_token):
         "Authorization": f"Bearer {admin_token}"
     }
 
-    unique = str(int(time.time()))
+    unique = uuid.uuid4().hex[:8]
 
     # Creates a category
     create_response = client.post(
@@ -229,3 +229,21 @@ def test_delete_category(client, admin_token):
         delete_response.json()["message"]
         == "Category deleted successfully."
     )
+
+
+def test_delete_non_existing_category(client, admin_token):
+    """
+    Verifies that deleting a non-existing category returns 404 Not Found
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    response = client.delete(
+        "/categories/507f1f77bcf86cd799439011",
+        headers=headers
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Category not found."
