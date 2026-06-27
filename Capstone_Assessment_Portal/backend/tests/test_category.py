@@ -96,3 +96,60 @@ def test_get_categories(client, admin_token):
 
     assert "id" in data[0]
     assert "name" in data[0]
+
+
+def test_update_category(client, admin_token):
+    """
+    Verifies that an admin can update an existing category successfully
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    unique = str(int(time.time()))
+
+    # Creates a category
+    create_response = client.post(
+        "/categories/",
+        headers=headers,
+        json={
+            "name": f"python_{unique}"
+        }
+    )
+
+    assert create_response.status_code == 201
+
+    # Fetching all categories to get the newly created category ID
+    categories_response = client.get(
+        "/categories/",
+        headers=headers
+    )
+
+    assert categories_response.status_code == 200
+
+    categories = categories_response.json()
+
+    category_id = None
+
+    for category in categories:
+        if category["name"] == f"python_{unique}".lower():
+            category_id = category["id"]
+            break
+
+    assert category_id is not None
+
+    # Updating the category
+    update_response = client.put(
+        f"/categories/{category_id}",
+        headers=headers,
+        json={
+            "name": f"advanced_python_{unique}"
+        }
+    )
+
+    assert update_response.status_code == 200
+    assert (
+        update_response.json()["message"]
+        == "Category updated successfully."
+    )
