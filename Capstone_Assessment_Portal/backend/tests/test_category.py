@@ -174,3 +174,58 @@ def test_update_non_existing_category(client, admin_token):
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Category not found."
+
+
+
+def test_delete_category(client, admin_token):
+    """
+    Verify that an admin can delete an existing category successfully
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    unique = str(int(time.time()))
+
+    # Creates a category
+    create_response = client.post(
+        "/categories/",
+        headers=headers,
+        json={
+            "name": f"delete_{unique}"
+        }
+    )
+
+    assert create_response.status_code == 201
+
+    # Fetching all categories
+    categories_response = client.get(
+        "/categories/",
+        headers=headers
+    )
+
+    assert categories_response.status_code == 200
+
+    categories = categories_response.json()
+
+    category_id = None
+
+    for category in categories:
+        if category["name"] == f"delete_{unique}".lower():
+            category_id = category["id"]
+            break
+
+    assert category_id is not None
+
+    # Delete the category
+    delete_response = client.delete(
+        f"/categories/{category_id}",
+        headers=headers
+    )
+
+    assert delete_response.status_code == 200
+    assert (
+        delete_response.json()["message"]
+        == "Category deleted successfully."
+    )
