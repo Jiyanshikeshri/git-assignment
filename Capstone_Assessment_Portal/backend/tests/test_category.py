@@ -60,3 +60,39 @@ def test_create_duplicate_category(client, admin_token):
         duplicate_response.json()["detail"]
         == "Category with this name already exists."
     )
+
+
+def test_get_categories(client, admin_token):
+    """
+    Verify that an authenticated user can retrieve the list of all categories.
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    #Instead of depending on categories created by previous tests, this test ensures there is at least one category before calling GET /categories
+    unique = str(int(time.time()))
+
+    client.post(
+        "/categories/",
+        headers=headers,
+        json={
+            "name": f"java_{unique}"
+        }
+    )
+
+    response = client.get(
+        "/categories/",
+        headers=headers
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert isinstance(data, list)
+    assert len(data) > 0
+
+    assert "id" in data[0]
+    assert "name" in data[0]
