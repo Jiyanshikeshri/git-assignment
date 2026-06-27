@@ -10,3 +10,22 @@ def client():
     Provides a TestClient instance for API tests
     """
     return TestClient(app)
+
+
+@pytest.fixture
+def admin_token(client):
+    """
+    Login as the admin user and returns a valid JWT access token
+    """
+
+    response = client.post(
+        "/auth/login",
+        json={
+            "email": "admin@gmail.com",
+            "password": "Admin@123"
+        }
+    )
+
+    assert response.status_code == 200
+
+    return response.json()["access_token"]
