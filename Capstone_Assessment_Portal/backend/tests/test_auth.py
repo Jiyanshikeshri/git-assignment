@@ -1,7 +1,17 @@
 import time
 from datetime import datetime, timedelta, timezone
+
 from jose import jwt
-from app.config.security import SECRET_KEY, ALGORITHM
+
+from app.config.security import (
+    SECRET_KEY, 
+    ALGORITHM,
+)
+from app.constants.constants import (
+    INVALID_EMAIL_OR_PASSWORD, 
+    INVALID_OR_EXPIRED_TOKEN,
+    STUDENT_REGISTERED_SUCCESSFULLY,
+)
 
 def test_register_student(client):
     """
@@ -21,7 +31,7 @@ def test_register_student(client):
     response = client.post("/auth/register", json=payload)
 
     assert response.status_code == 201
-    assert response.json()["message"] == "Student registered successfully"
+    assert response.json()["message"] == STUDENT_REGISTERED_SUCCESSFULLY
 
 
 
@@ -112,24 +122,8 @@ def test_login_with_invalid_password(client):
     )
 
     assert response.status_code == 401
-    assert response.json()["detail"] == "Invalid email or password."
+    assert response.json()["detail"] == INVALID_EMAIL_OR_PASSWORD
 
-
-def test_login_with_invalid_email(client):
-    """
-    Verify that login fails when the email is not registered.
-    """
-
-    response = client.post(
-        "/auth/login",
-        json={
-            "email": "doesnotexist@example.com",
-            "password": "Password123"
-        }
-    )
-
-    assert response.status_code == 401
-    assert response.json()["detail"] == "Invalid email or password."
 
 def test_login_with_invalid_email(client):
     """
@@ -145,7 +139,7 @@ def test_login_with_invalid_email(client):
     )
 
     assert response.status_code == 401
-    assert response.json()["detail"] == "Invalid email or password."
+    assert response.json()["detail"] == INVALID_EMAIL_OR_PASSWORD
 
 
 def test_access_protected_api_without_token(client):
@@ -182,4 +176,4 @@ def test_access_protected_api_with_expired_token(client):
     )
 
     assert response.status_code == 401
-    assert response.json()["detail"] == "Invalid or expired token"
+    assert response.json()["detail"] == INVALID_OR_EXPIRED_TOKEN
