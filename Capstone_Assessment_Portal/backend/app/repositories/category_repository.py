@@ -7,40 +7,45 @@ def get_category_by_name(name: str):
     """
     Retrieve a category by its name
     """
-    return db.categories.find_one({"name": name})
+    category = db.categories.find_one({"name": name})
+    return category
 
 
 def create_category(category_data: dict):
     """
     Insert a new category into the database
     """
-    return db.categories.insert_one(category_data)
+    result = db.categories.insert_one(category_data)
+    return result
 
 
 def get_category_by_id(category_id: str):
     """
     Retrieve a category using its MongoDB ObjectId
     """
-    return db.categories.find_one(
+    category = db.categories.find_one(
         {"_id": ObjectId(category_id)}
     )
+    return category
 
 
 def get_all_categories():
     """
     Retrieve all categories from the database
     """
-    return db.categories.find().sort("name", 1)
+    categories = db.categories.find().sort("name", 1)
+    return categories
 
 
 def update_category(category_id: str, updated_data: dict):
     """
     Update an existing category by its ID
     """
-    return db.categories.update_one(
+    result = db.categories.update_one(
         {"_id": ObjectId(category_id)},
         {"$set": updated_data}
     )
+    return result
 
 
 def get_category_by_name_except_id(name: str, category_id: str):
@@ -49,16 +54,18 @@ def get_category_by_name_except_id(name: str, category_id: str):
 
     This prevents renaming one category to the name of another existing category
     """
-    return db.categories.find_one({
+    category = db.categories.find_one({
         "name": name,
         "_id": {"$ne": ObjectId(category_id)}
     })
+    return category
 
 
 def delete_category(category_id: str):
     """
     Delete a category by its ID
     """
-    return db.categories.delete_one(
+    result = db.categories.delete_one(
         {"_id": ObjectId(category_id)}
     )
+    return result
