@@ -1,5 +1,12 @@
 import uuid
 
+from app.constants.constants import (
+    CATEGORY_ALREADY_EXISTS,
+    CATEGORY_CREATED_SUCCESSFULLY,
+    CATEGORY_UPDATED_SUCCESSFULLY,
+    CATEGORY_DELETED_SUCCESSFULLY,
+    CATEGORY_NOT_FOUND,
+)
 
 def test_create_category(client, admin_token):
     """
@@ -19,7 +26,7 @@ def test_create_category(client, admin_token):
     )
 
     assert response.status_code == 201
-    assert response.json()["message"] == "Category created successfully."
+    assert response.json()["message"] == CATEGORY_CREATED_SUCCESSFULLY
 
 
 
@@ -58,7 +65,7 @@ def test_create_duplicate_category(client, admin_token):
     assert duplicate_response.status_code == 400
     assert (
         duplicate_response.json()["detail"]
-        == "Category with this name already exists."
+        == CATEGORY_ALREADY_EXISTS
     )
 
 
@@ -151,7 +158,7 @@ def test_update_category(client, admin_token):
     assert update_response.status_code == 200
     assert (
         update_response.json()["message"]
-        == "Category updated successfully."
+        == CATEGORY_UPDATED_SUCCESSFULLY
     )
 
 
@@ -173,7 +180,7 @@ def test_update_non_existing_category(client, admin_token):
     )
 
     assert response.status_code == 404
-    assert response.json()["detail"] == "Category not found."
+    assert response.json()["detail"] == CATEGORY_NOT_FOUND
 
 
 
@@ -227,7 +234,7 @@ def test_delete_category(client, admin_token):
     assert delete_response.status_code == 200
     assert (
         delete_response.json()["message"]
-        == "Category deleted successfully."
+        == CATEGORY_DELETED_SUCCESSFULLY
     )
 
 
@@ -246,4 +253,4 @@ def test_delete_non_existing_category(client, admin_token):
     )
 
     assert response.status_code == 404
-    assert response.json()["detail"] == "Category not found."
+    assert response.json()["detail"] == CATEGORY_NOT_FOUND
