@@ -1,12 +1,21 @@
 from fastapi import FastAPI
 from app.config.database import db
 from app.routers.auth_router import router as auth_router
+<<<<<<< HEAD
 from app.routers.category_router import router as category_router
+=======
+from app.exceptions.exception_handler import (
+    register_exception_handlers,
+)
+from app.config.logger import logger
+>>>>>>> feature/authentication
 
 app = FastAPI(
     title="Assessment Portal API",
     version="1.0.0"
 )
+
+register_exception_handlers(app)
 
 # Register authentication routes
 app.include_router(auth_router)
@@ -27,7 +36,11 @@ def test_database():
             "message": "Connected to MongoDB successfully!"
         }
     except Exception as e:
+        logger.error(
+            "MongoDB connection test failed: %s",
+            e,
+        )
         return {
             "status": "error",
-            "message": str(e)
+            "message": "Unable to connect to the database"
         }

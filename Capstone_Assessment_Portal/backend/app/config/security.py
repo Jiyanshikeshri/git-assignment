@@ -29,7 +29,12 @@ def create_access_token(data: dict) -> str:
 
     token_data["exp"] = expire
 
-    return jwt.encode(token_data, SECRET_KEY, algorithm=ALGORITHM)
+    token = jwt.encode(
+        token_data,
+        SECRET_KEY,
+        algorithm=ALGORITHM,
+    )
+    return token
 
 
 def create_refresh_token(data: dict) -> str:
@@ -44,11 +49,12 @@ def create_refresh_token(data: dict) -> str:
 
     token_data["exp"] = expire
 
-    return jwt.encode(
+    refresh_token = jwt.encode(
         token_data,
         SECRET_KEY,
-        algorithm=ALGORITHM
+        algorithm=ALGORITHM,
     )
+    return refresh_token
 
 
 def decode_access_token(token: str) -> dict:
@@ -56,5 +62,10 @@ def decode_access_token(token: str) -> dict:
     It is used to validate requests and implement RBAC
     Decode the JWT token and return its payload
     """
-    return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    payload = jwt.decode(
+        token, 
+        SECRET_KEY, 
+        algorithms=[ALGORITHM],
+    )
+    return payload
 

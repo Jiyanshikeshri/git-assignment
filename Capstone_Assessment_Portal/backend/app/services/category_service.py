@@ -1,4 +1,15 @@
-from fastapi import HTTPException, status
+from app.constants.constants import (
+    CATEGORY_ALREADY_EXISTS,
+    CATEGORY_CREATED_SUCCESSFULLY,
+    CATEGORY_UPDATED_SUCCESSFULLY,
+    CATEGORY_DELETED_SUCCESSFULLY,
+    CATEGORY_NOT_FOUND,
+)
+
+from app.exceptions.custom_exceptions import(
+    BadRequestException,
+    NotFoundException,
+)
 
 from app.repositories.category_repository import (
     get_category_by_name,
@@ -27,9 +38,8 @@ def create_new_category(category: CategoryCreate):
     existing_category = get_category_by_name(category_name)
 
     if existing_category:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Category with this name already exists."
+        raise BadRequestException(
+            CATEGORY_ALREADY_EXISTS
         )
 
     category_data = {
@@ -39,7 +49,7 @@ def create_new_category(category: CategoryCreate):
     create_category(category_data)
 
     return {
-        "message": "Category created successfully."
+        "message": CATEGORY_CREATED_SUCCESSFULLY
     }
 
 
@@ -74,9 +84,8 @@ def update_existing_category(
     existing_category = get_category_by_id(category_id)
 
     if not existing_category:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Category not found."
+        raise NotFoundException(
+            CATEGORY_NOT_FOUND
         )
 
     duplicate_category = get_category_by_name_except_id(
@@ -85,9 +94,8 @@ def update_existing_category(
     )
 
     if duplicate_category:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Category with this name already exists."
+        raise BadRequestException(
+            CATEGORY_ALREADY_EXISTS
         )
 
     update_category(
@@ -98,7 +106,7 @@ def update_existing_category(
     )
 
     return {
-        "message": "Category updated successfully."
+        "message": CATEGORY_UPDATED_SUCCESSFULLY
     }
 
 
@@ -110,13 +118,12 @@ def delete_existing_category(category_id: str):
     existing_category = get_category_by_id(category_id)
 
     if not existing_category:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Category not found."
+        raise NotFoundException(
+            CATEGORY_NOT_FOUND
         )
 
     delete_category(category_id)
 
     return {
-        "message": "Category deleted successfully."
+        "message": CATEGORY_DELETED_SUCCESSFULLY
     }
