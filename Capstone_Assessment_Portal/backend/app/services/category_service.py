@@ -6,7 +6,7 @@ from app.constants.constants import (
     CATEGORY_NOT_FOUND,
 )
 
-from app.exceptions.custom_exceptions import(
+from app.exceptions.custom_exceptions import (
     BadRequestException,
     NotFoundException,
 )
@@ -25,11 +25,17 @@ from app.schemas.category_schema import (
     CategoryUpdate,
 )
 
+from app.config.logger import logger
 
 def create_new_category(category: CategoryCreate):
     """
     Creates a new category after validating that the category name does not already exist
     """
+
+    logger.info(
+        "Category creation request received. Name: %s",
+        category.name,
+    )
 
     # Remove leading/trailing whitespace
     category_name = category.name.strip().lower()
@@ -38,6 +44,10 @@ def create_new_category(category: CategoryCreate):
     existing_category = get_category_by_name(category_name)
 
     if existing_category:
+        logger.warning(
+            "Category creation failed. Category already exists: %s",
+            category_name,
+        )
         raise BadRequestException(
             CATEGORY_ALREADY_EXISTS
         )
@@ -47,6 +57,11 @@ def create_new_category(category: CategoryCreate):
     }
 
     create_category(category_data)
+
+    logger.info(
+        "Category created successfully: %s",
+        category_name,
+    )
 
     return {
         "message": CATEGORY_CREATED_SUCCESSFULLY
@@ -58,6 +73,10 @@ def fetch_all_categories():
     Retrieve all categories
     """
 
+    logger.info(
+        "Fetching all categories."
+    )
+
     categories = []
 
     for category in get_all_categories():
@@ -67,6 +86,12 @@ def fetch_all_categories():
                 "name": category["name"],
             }
         )
+
+
+    logger.info(
+        "Retrieved %d categories.",
+        len(categories),
+    )
 
     return categories
 
@@ -79,11 +104,20 @@ def update_existing_category(
     Update an existing category after validating: Category exists and new name is unique
     """
 
+    logger.info(
+        "Category update request received. ID: %s",
+        category_id,
+    )
+
     category_name = category.name.strip().lower()
 
     existing_category = get_category_by_id(category_id)
 
     if not existing_category:
+        logger.warning(
+            "Category update failed. Category not found: %s",
+            category_id,
+        )
         raise NotFoundException(
             CATEGORY_NOT_FOUND
         )
@@ -94,6 +128,10 @@ def update_existing_category(
     )
 
     if duplicate_category:
+        logger.warning(
+            "Category update failed. Category already exists: %s",
+            category_name,
+        )
         raise BadRequestException(
             CATEGORY_ALREADY_EXISTS
         )
@@ -103,6 +141,11 @@ def update_existing_category(
         {
             "name": category_name,
         },
+    )
+
+    logger.info(
+        "Category updated successfully. ID: %s",
+        category_id,
     )
 
     return {
@@ -115,14 +158,28 @@ def delete_existing_category(category_id: str):
     Delete an existing category
     """
 
+    logger.info(
+        "Category delete request received. ID: %s",
+        category_id,
+    )
+
     existing_category = get_category_by_id(category_id)
 
     if not existing_category:
+        logger.warning(
+            "Category deletion failed. Category not found: %s",
+            category_id,
+        )
         raise NotFoundException(
             CATEGORY_NOT_FOUND
         )
 
     delete_category(category_id)
+
+    logger.info(
+        "Category deleted successfully. ID: %s",
+        category_id,
+    )
 
     return {
         "message": CATEGORY_DELETED_SUCCESSFULLY
