@@ -5,6 +5,7 @@ from app.constants.constants import (
     QUIZ_NOT_FOUND,
     CATEGORY_NOT_FOUND,
     QUIZ_UPDATED_SUCCESSFULLY,
+    QUIZ_DELETED_SUCCESSFULLY,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -19,6 +20,7 @@ from app.repositories.quiz_repository import (
     get_quiz_by_id,
     update_quiz,
     get_quiz_by_title_except_id,
+    delete_quiz,
 )
 
 from app.repositories.category_repository import (
@@ -229,4 +231,37 @@ def update_existing_quiz(
 
     return {
         "message": QUIZ_UPDATED_SUCCESSFULLY
+    }
+
+
+def delete_existing_quiz(quiz_id: str):
+    """
+    Delete an existing quiz
+    """
+
+    logger.info(
+        "Quiz delete request received. ID: %s",
+        quiz_id,
+    )
+
+    existing_quiz = get_quiz_by_id(quiz_id)
+
+    if not existing_quiz:
+        logger.warning(
+            "Quiz deletion failed. Quiz not found: %s",
+            quiz_id,
+        )
+        raise NotFoundException(
+            QUIZ_NOT_FOUND
+        )
+
+    delete_quiz(quiz_id)
+
+    logger.info(
+        "Quiz deleted successfully. ID: %s",
+        quiz_id,
+    )
+
+    return {
+        "message": QUIZ_DELETED_SUCCESSFULLY
     }

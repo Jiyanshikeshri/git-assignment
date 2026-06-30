@@ -94,3 +94,17 @@ def get_quiz_by_title_except_id(
     )
 
     return quiz
+
+
+def delete_quiz(quiz_id: str):
+    """
+    Delete a quiz by its ID
+    """
+
+    result = db.quizzes.delete_one(
+        {
+            "_id": ObjectId(quiz_id)
+        }
+    )
+
+    return result

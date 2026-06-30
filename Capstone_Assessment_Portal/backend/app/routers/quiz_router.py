@@ -9,6 +9,7 @@ from app.services.quiz_service import (
     fetch_all_quizzes,
     fetch_quiz_by_id,
     update_existing_quiz,
+    delete_existing_quiz,
 )
 from app.middleware.auth_middleware import (
     require_admin,
@@ -85,3 +86,18 @@ def update_quiz_details(
         quiz_id,
         quiz,
     )
+
+
+@router.delete(
+    "/{quiz_id}",
+    status_code=status.HTTP_200_OK,
+)
+def remove_quiz(
+    quiz_id: str,
+    user=Depends(require_admin),
+):
+    """
+    Delete an existing quiz
+    """
+
+    return delete_existing_quiz(quiz_id)
