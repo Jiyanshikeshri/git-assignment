@@ -42,7 +42,6 @@ def test_create_duplicate_category(client, admin_token):
         "Authorization": f"Bearer {admin_token}"
     }
 
-    #Creates the Category for the first time
     response = client.post(
         "/categories/",
         headers=headers,
@@ -53,7 +52,6 @@ def test_create_duplicate_category(client, admin_token):
 
     assert response.status_code == 201
 
-    # Tries creating the same category again
     duplicate_response = client.post(
         "/categories/",
         headers=headers,
@@ -78,7 +76,6 @@ def test_get_categories(client, admin_token):
         "Authorization": f"Bearer {admin_token}"
     }
 
-    #Instead of depending on categories created by previous tests, this test ensures there is at least one category before calling GET /categories
     unique = uuid.uuid4().hex[:8]
 
     client.post(
@@ -116,7 +113,6 @@ def test_update_category(client, admin_token):
 
     unique = uuid.uuid4().hex[:8]
 
-    # Creates a category
     create_response = client.post(
         "/categories/",
         headers=headers,
@@ -127,7 +123,6 @@ def test_update_category(client, admin_token):
 
     assert create_response.status_code == 201
 
-    # Fetching all categories to get the newly created category ID
     categories_response = client.get(
         "/categories/",
         headers=headers
@@ -146,7 +141,6 @@ def test_update_category(client, admin_token):
 
     assert category_id is not None
 
-    # Updating the category
     update_response = client.put(
         f"/categories/{category_id}",
         headers=headers,
@@ -195,7 +189,6 @@ def test_delete_category(client, admin_token):
 
     unique = uuid.uuid4().hex[:8]
 
-    # Creates a category
     create_response = client.post(
         "/categories/",
         headers=headers,
@@ -206,7 +199,6 @@ def test_delete_category(client, admin_token):
 
     assert create_response.status_code == 201
 
-    # Fetching all categories
     categories_response = client.get(
         "/categories/",
         headers=headers
@@ -225,7 +217,6 @@ def test_delete_category(client, admin_token):
 
     assert category_id is not None
 
-    # Delete the category
     delete_response = client.delete(
         f"/categories/{category_id}",
         headers=headers
