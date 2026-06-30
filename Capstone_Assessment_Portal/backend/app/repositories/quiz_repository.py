@@ -52,3 +52,45 @@ def get_quiz_by_id(quiz_id: str):
     )
 
     return quiz
+
+
+def update_quiz(
+    quiz_id: str,
+    updated_data: dict,
+):
+    """
+    Update an existing quiz by its ID
+    """
+
+    result = db.quizzes.update_one(
+        {
+            "_id": ObjectId(quiz_id)
+        },
+        {
+            "$set": updated_data
+        }
+    )
+
+    return result
+
+
+
+def get_quiz_by_title_except_id(
+    title: str,
+    quiz_id: str,
+):
+    """
+    Retrieve a quiz with the given title excluding
+    the current quiz being updated.
+    """
+
+    quiz = db.quizzes.find_one(
+        {
+            "title": title,
+            "_id": {
+                "$ne": ObjectId(quiz_id)
+            }
+        }
+    )
+
+    return quiz

@@ -1,10 +1,14 @@
 from fastapi import APIRouter, Depends, status
 
-from app.schemas.quiz_schema import QuizCreate
+from app.schemas.quiz_schema import (
+    QuizCreate,
+    QuizUpdate,
+)
 from app.services.quiz_service import (
     create_new_quiz,
     fetch_all_quizzes,
     fetch_quiz_by_id,
+    update_existing_quiz,
 )
 from app.middleware.auth_middleware import (
     require_admin,
@@ -61,4 +65,23 @@ def get_quiz(
 
     return fetch_quiz_by_id(
         quiz_id
+    )
+
+
+@router.put(
+    "/{quiz_id}",
+    status_code=status.HTTP_200_OK,
+)
+def update_quiz_details(
+    quiz_id: str,
+    quiz: QuizUpdate,
+    user=Depends(require_admin),
+):
+    """
+    Updates an existing quiz
+    """
+
+    return update_existing_quiz(
+        quiz_id,
+        quiz,
     )
