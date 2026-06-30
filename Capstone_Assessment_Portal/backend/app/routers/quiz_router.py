@@ -4,6 +4,7 @@ from app.schemas.quiz_schema import QuizCreate
 from app.services.quiz_service import (
     create_new_quiz,
     fetch_all_quizzes,
+    fetch_quiz_by_id,
 )
 from app.middleware.auth_middleware import (
     require_admin,
@@ -44,3 +45,20 @@ def get_all_quizzes(
     """
 
     return fetch_all_quizzes()
+
+
+@router.get(
+    "/{quiz_id}",
+    status_code=status.HTTP_200_OK,
+)
+def get_quiz(
+    quiz_id: str,
+    user=Depends(get_current_user),
+):
+    """
+    Retrieve a quiz by its ID
+    """
+
+    return fetch_quiz_by_id(
+        quiz_id
+    )

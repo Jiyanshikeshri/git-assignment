@@ -2,6 +2,7 @@ from app.constants.constants import (
     QUIZ_ALREADY_EXISTS,
     QUIZ_CREATED_SUCCESSFULLY,
     CATEGORY_NOT_FOUND,
+    QUIZ_NOT_FOUND,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -13,6 +14,7 @@ from app.repositories.quiz_repository import (
     get_quiz_by_title,
     create_quiz,
     get_all_quizzes,
+    get_quiz_by_id,
 )
 
 from app.repositories.category_repository import (
@@ -111,3 +113,40 @@ def fetch_all_quizzes():
     )
 
     return quizzes
+
+
+def fetch_quiz_by_id(quiz_id: str):
+    """
+    Retrieve a quiz by its ID
+    """
+
+    logger.info(
+        "Fetching quiz. ID: %s",
+        quiz_id,
+    )
+
+    quiz = get_quiz_by_id(
+        quiz_id
+    )
+
+    if not quiz:
+        logger.warning(
+            "Quiz not found. ID: %s",
+            quiz_id,
+        )
+        raise NotFoundException(
+            QUIZ_NOT_FOUND
+        )
+
+    logger.info(
+        "Quiz retrieved successfully. ID: %s",
+        quiz_id,
+    )
+
+    return {
+        "id": str(quiz["_id"]),
+        "title": quiz["title"],
+        "description": quiz["description"],
+        "category_id": quiz["category_id"],
+        "duration": quiz["duration"],
+    }

@@ -1,5 +1,7 @@
 from app.config.database import db
 
+from bson import ObjectId
+
 
 def get_quiz_by_title(title: str):
     """
@@ -35,3 +37,18 @@ def get_all_quizzes():
     quizzes = db.quizzes.find().sort("title", 1)
 
     return quizzes
+
+
+
+def get_quiz_by_id(quiz_id: str):
+    """
+    Retrieve a quiz using its MongoDB ObjectId
+    """
+
+    quiz = db.quizzes.find_one(
+        {
+            "_id": ObjectId(quiz_id)
+        }
+    )
+
+    return quiz
