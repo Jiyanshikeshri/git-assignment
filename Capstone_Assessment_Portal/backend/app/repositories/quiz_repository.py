@@ -25,3 +25,13 @@ def create_quiz(quiz_data: dict):
     )
 
     return result
+
+
+def get_all_quizzes():
+    """
+    Retrieve all quizzes from the database
+    """
+
+    quizzes = db.quizzes.find().sort("title", 1)
+
+    return quizzes

@@ -12,6 +12,7 @@ from app.exceptions.custom_exceptions import (
 from app.repositories.quiz_repository import (
     get_quiz_by_title,
     create_quiz,
+    get_all_quizzes,
 )
 
 from app.repositories.category_repository import (
@@ -80,3 +81,33 @@ def create_new_quiz(quiz: QuizCreate):
     return {
         "message": QUIZ_CREATED_SUCCESSFULLY
     }
+
+
+def fetch_all_quizzes():
+    """
+    Retrieve all quizzes
+    """
+
+    logger.info(
+        "Fetching all quizzes."
+    )
+
+    quizzes = []
+
+    for quiz in get_all_quizzes():
+        quizzes.append(
+            {
+                "id": str(quiz["_id"]),
+                "title": quiz["title"],
+                "description": quiz["description"],
+                "category_id": quiz["category_id"],
+                "duration": quiz["duration"],
+            }
+        )
+
+    logger.info(
+        "Retrieved %d quizzes.",
+        len(quizzes),
+    )
+
+    return quizzes
