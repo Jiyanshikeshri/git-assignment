@@ -27,6 +27,9 @@ from app.schemas.category_schema import (
 
 from app.config.logger import logger
 
+from app.schemas.common_schema import MessageResponse
+
+
 def create_new_category(category: CategoryCreate):
     """
     Creates a new category after validating that the category name does not already exist
@@ -37,10 +40,8 @@ def create_new_category(category: CategoryCreate):
         category.name,
     )
 
-    # Remove leading/trailing whitespace
     category_name = category.name.strip().lower()
 
-    # Check for duplicate category name
     existing_category = get_category_by_name(category_name)
 
     if existing_category:
@@ -63,9 +64,10 @@ def create_new_category(category: CategoryCreate):
         category_name,
     )
 
-    return {
-        "message": CATEGORY_CREATED_SUCCESSFULLY
-    }
+    response = MessageResponse(
+        message=CATEGORY_CREATED_SUCCESSFULLY
+    )
+    return response
 
 
 def fetch_all_categories():
@@ -77,16 +79,13 @@ def fetch_all_categories():
         "Fetching all categories."
     )
 
-    categories = []
-
-    for category in get_all_categories():
-        categories.append(
-            {
-                "id": str(category["_id"]),
-                "name": category["name"],
-            }
-        )
-
+    categories = [
+        {
+            "id": str(category["_id"]),
+            "name": category["name"],
+        }
+        for category in get_all_categories()
+    ]
 
     logger.info(
         "Retrieved %d categories.",
@@ -148,9 +147,10 @@ def update_existing_category(
         category_id,
     )
 
-    return {
-        "message": CATEGORY_UPDATED_SUCCESSFULLY
-    }
+    response = MessageResponse(
+        message=CATEGORY_UPDATED_SUCCESSFULLY
+    )
+    return response
 
 
 def delete_existing_category(category_id: str):
@@ -181,6 +181,7 @@ def delete_existing_category(category_id: str):
         category_id,
     )
 
-    return {
-        "message": CATEGORY_DELETED_SUCCESSFULLY
-    }
+    response = MessageResponse(
+        message=CATEGORY_DELETED_SUCCESSFULLY
+    )
+    return response

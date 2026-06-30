@@ -29,7 +29,8 @@ def create_category(
     """
     Creates a new category
     """
-    return create_new_category(category)
+    response = create_new_category(category)
+    return response
 
 
 @router.get("/")
@@ -39,7 +40,8 @@ def get_categories(
     """
     Retrieve all categories
     """
-    return fetch_all_categories()
+    response = fetch_all_categories()
+    return response
 
 
 @router.put("/{category_id}", status_code=status.HTTP_200_OK)
@@ -51,10 +53,11 @@ def update_category(
     """
     Update an existing category
     """
-    return update_existing_category(
+    response = update_existing_category(
         category_id=category_id,
         category=category,
     )
+    return response
 
 
 @router.delete("/{category_id}", status_code=status.HTTP_200_OK)
@@ -65,4 +68,5 @@ def delete_category(
     """
     Delete an existing category
     """
-    return delete_existing_category(category_id)
+    response = delete_existing_category(category_id)
+    return response
