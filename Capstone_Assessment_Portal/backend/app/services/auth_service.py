@@ -7,14 +7,17 @@ from app.repositories.user_repository import (
     get_user_by_username,
     create_user,
 )
-from app.schemas.user_schema import UserRegister
+from app.schemas.user_schema import (
+    UserRegister,
+    UserLogin,
+    TokenResponse,
+)   
 from app.utils.password import hash_password
 from app.config.security import (
     create_access_token, 
     create_refresh_token, 
     decode_access_token,
-    )
-from app.schemas.user_schema import UserLogin
+)
 from app.utils.password import verify_password
 from app.constants.constants import (
     INVALID_OR_EXPIRED_REFRESH_TOKEN,
@@ -132,11 +135,11 @@ def login_user(user: UserLogin):
         existing_user["role"],
     )
 
-    return {
-        "access_token": token,
-        "refresh_token": refresh_token,
-        "token_type": "bearer"
-    }
+    return TokenResponse(
+        access_token=token,
+        refresh_token=refresh_token,
+        token_type="bearer",
+    )
 
 
 def refresh_access_token(refresh_token: str):
