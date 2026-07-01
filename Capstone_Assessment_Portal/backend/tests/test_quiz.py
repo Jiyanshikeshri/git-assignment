@@ -273,3 +273,83 @@ def test_get_non_existing_quiz(client, admin_token):
 
     assert response.status_code == 404
     assert response.json()["detail"] == QUIZ_NOT_FOUND
+
+
+def test_update_quiz(client, admin_token):
+    """
+    Verifies that an admin can update an existing quiz successfully
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    unique = uuid.uuid4().hex[:8]
+
+    category_response = client.post(
+        "/categories/",
+        headers=headers,
+        json={
+            "name": f"category_{unique}"
+        }
+    )
+
+    assert category_response.status_code == 201
+
+    categories = client.get(
+        "/categories/",
+        headers=headers,
+    ).json()
+
+    category_id = None
+
+    for category in categories:
+        if category["name"] == f"category_{unique}".lower():
+            category_id = category["id"]
+            break
+
+    assert category_id is not None
+
+    create_response = client.post(
+        "/quizzes/",
+        headers=headers,
+        json={
+            "title": f"quiz_{unique}",
+            "description": "Python Basics Quiz",
+            "category_id": category_id,
+            "duration": 30
+        }
+    )
+
+    assert create_response.status_code == 201
+
+    quizzes = client.get(
+        "/quizzes/",
+        headers=headers,
+    ).json()
+
+    quiz_id = None
+
+    for quiz in quizzes:
+        if quiz["title"] == f"quiz_{unique}".lower():
+            quiz_id = quiz["id"]
+            break
+
+    assert quiz_id is not None
+
+    update_response = client.put(
+        f"/quizzes/{quiz_id}",
+        headers=headers,
+        json={
+            "title": f"updated_quiz_{unique}",
+            "description": "Updated Python Quiz",
+            "category_id": category_id,
+            "duration": 45
+        }
+    )
+
+    assert update_response.status_code == 200
+    assert (
+        update_response.json()["message"]
+        == QUIZ_UPDATED_SUCCESSFULLY
+    )
