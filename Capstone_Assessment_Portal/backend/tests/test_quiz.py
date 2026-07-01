@@ -1,0 +1,10 @@
+import uuid
+
+from app.constants.constants import (
+    QUIZ_ALREADY_EXISTS,
+    QUIZ_CREATED_SUCCESSFULLY,
+    QUIZ_UPDATED_SUCCESSFULLY,
+    QUIZ_DELETED_SUCCESSFULLY,
+    QUIZ_NOT_FOUND,
+    CATEGORY_NOT_FOUND,
+)
