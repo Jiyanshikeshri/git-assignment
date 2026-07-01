@@ -171,3 +171,87 @@ def test_get_all_quizzes(client, admin_token):
     assert quiz["description"] == "Python fundamentals quiz"
     assert quiz["category_id"] == category_id
     assert quiz["duration"] == 30
+
+
+def test_get_quiz_by_id(client, admin_token):
+    """
+    Verifies that a quiz can be retrieved by its ID
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    unique = uuid.uuid4().hex[:8]
+
+    category_name = f"python_{unique}"
+
+    client.post(
+        "/categories/",
+        headers=headers,
+        json={
+            "name": category_name
+        }
+    )
+
+    categories = client.get(
+        "/categories/",
+        headers=headers
+    ).json()
+
+    category_id = next(
+        (
+            category["id"]
+            for category in categories
+            if category["name"] == category_name.lower()
+        ),
+        None,
+    )
+
+    assert category_id is not None
+
+    title = f"quiz_{unique}"
+
+    create_response = client.post(
+        "/quizzes/",
+        headers=headers,
+        json={
+            "title": title,
+            "description": "Python basics quiz",
+            "category_id": category_id,
+            "duration": 30
+        }
+    )
+
+    assert create_response.status_code == 201
+
+    quizzes = client.get(
+        "/quizzes/",
+        headers=headers
+    ).json()
+
+    quiz_id = next(
+        (
+            quiz["id"]
+            for quiz in quizzes
+            if quiz["title"] == title.lower()
+        ),
+        None,
+    )
+
+    assert quiz_id is not None
+
+    response = client.get(
+        f"/quizzes/{quiz_id}",
+        headers=headers
+    )
+
+    assert response.status_code == 200
+
+    quiz = response.json()
+
+    assert quiz["id"] == quiz_id
+    assert quiz["title"] == title.lower()
+    assert quiz["description"] == "Python basics quiz"
+    assert quiz["category_id"] == category_id
+    assert quiz["duration"] == 30
