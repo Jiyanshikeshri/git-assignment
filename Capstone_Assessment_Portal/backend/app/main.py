@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.config.database import db
 from app.routers.auth_router import router as auth_router
+from app.routers.category_router import router as category_router
 from app.exceptions.exception_handler import (
     register_exception_handlers,
 )
@@ -15,6 +16,7 @@ register_exception_handlers(app)
 
 # Register authentication routes
 app.include_router(auth_router)
+app.include_router(category_router)
 
 @app.get("/")
 def root():
