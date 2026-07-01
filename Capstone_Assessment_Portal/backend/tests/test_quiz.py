@@ -255,3 +255,21 @@ def test_get_quiz_by_id(client, admin_token):
     assert quiz["description"] == "Python basics quiz"
     assert quiz["category_id"] == category_id
     assert quiz["duration"] == 30
+
+
+def test_get_non_existing_quiz(client, admin_token):
+    """
+    Verifies that requesting a non-existing quiz returns 404
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    response = client.get(
+        "/quizzes/507f1f77bcf86cd799439011",
+        headers=headers,
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == QUIZ_NOT_FOUND
