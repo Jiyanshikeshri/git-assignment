@@ -3,7 +3,6 @@ from app.constants.constants import (
     QUIZ_CREATED_SUCCESSFULLY,
     CATEGORY_NOT_FOUND,
     QUIZ_NOT_FOUND,
-    CATEGORY_NOT_FOUND,
     QUIZ_UPDATED_SUCCESSFULLY,
     QUIZ_DELETED_SUCCESSFULLY,
 )
@@ -30,9 +29,12 @@ from app.repositories.category_repository import (
 from app.schemas.quiz_schema import (
     QuizCreate,
     QuizUpdate,
+    QuizResponse,
 )
 
 from app.config.logger import logger
+
+from app.schemas.common_schema import MessageResponse
 
 
 def create_new_quiz(quiz: QuizCreate):
@@ -89,9 +91,10 @@ def create_new_quiz(quiz: QuizCreate):
         title,
     )
 
-    return {
-        "message": QUIZ_CREATED_SUCCESSFULLY
-    }
+    response = MessageResponse(
+        message=QUIZ_CREATED_SUCCESSFULLY
+    )
+    return response
 
 
 def fetch_all_quizzes():
@@ -103,18 +106,16 @@ def fetch_all_quizzes():
         "Fetching all quizzes."
     )
 
-    quizzes = []
-
-    for quiz in get_all_quizzes():
-        quizzes.append(
-            {
-                "id": str(quiz["_id"]),
-                "title": quiz["title"],
-                "description": quiz["description"],
-                "category_id": quiz["category_id"],
-                "duration": quiz["duration"],
-            }
+    quizzes = [
+        QuizResponse(
+            id=str(quiz["_id"]),
+            title=quiz["title"],
+            description=quiz["description"],
+            category_id=quiz["category_id"],
+            duration=quiz["duration"],
         )
+        for quiz in get_all_quizzes()
+    ]
 
     logger.info(
         "Retrieved %d quizzes.",
@@ -152,13 +153,13 @@ def fetch_quiz_by_id(quiz_id: str):
         quiz_id,
     )
 
-    return {
-        "id": str(quiz["_id"]),
-        "title": quiz["title"],
-        "description": quiz["description"],
-        "category_id": quiz["category_id"],
-        "duration": quiz["duration"],
-    }
+    return QuizResponse(
+        id=str(quiz["_id"]),
+        title=quiz["title"],
+        description=quiz["description"],
+        category_id=quiz["category_id"],
+        duration=quiz["duration"],
+    )
 
 
 def update_existing_quiz(
@@ -199,9 +200,11 @@ def update_existing_quiz(
         raise NotFoundException(
             CATEGORY_NOT_FOUND
         )
+    
+    title = quiz.title.strip().lower()
 
     duplicate_quiz = get_quiz_by_title_except_id(
-        quiz.title.strip(),
+        title,
         quiz_id,
     )
 
@@ -217,7 +220,7 @@ def update_existing_quiz(
     update_quiz(
         quiz_id,
         {
-            "title": quiz.title.strip(),
+            "title": title,
             "description": quiz.description.strip(),
             "category_id": quiz.category_id,
             "duration": quiz.duration,
@@ -229,9 +232,10 @@ def update_existing_quiz(
         quiz_id,
     )
 
-    return {
-        "message": QUIZ_UPDATED_SUCCESSFULLY
-    }
+    response = MessageResponse(
+        message=QUIZ_UPDATED_SUCCESSFULLY
+    )
+    return response
 
 
 def delete_existing_quiz(quiz_id: str):
@@ -262,6 +266,7 @@ def delete_existing_quiz(quiz_id: str):
         quiz_id,
     )
 
-    return {
-        "message": QUIZ_DELETED_SUCCESSFULLY
-    }
+    response = MessageResponse(
+        message=QUIZ_DELETED_SUCCESSFULLY
+    )
+    return response

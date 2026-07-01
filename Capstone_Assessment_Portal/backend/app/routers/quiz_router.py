@@ -35,7 +35,8 @@ def create_quiz(
     Only admins are allowed to create quizzes
     """
 
-    return create_new_quiz(quiz)
+    response = create_new_quiz(quiz)
+    return response
 
 
 @router.get(
@@ -49,7 +50,8 @@ def get_all_quizzes(
     Retrieve all quizzes
     """
 
-    return fetch_all_quizzes()
+    response = fetch_all_quizzes()
+    return response
 
 
 @router.get(
@@ -64,9 +66,10 @@ def get_quiz(
     Retrieve a quiz by its ID
     """
 
-    return fetch_quiz_by_id(
+    response = fetch_quiz_by_id(
         quiz_id
     )
+    return response
 
 
 @router.put(
@@ -82,10 +85,11 @@ def update_quiz_details(
     Updates an existing quiz
     """
 
-    return update_existing_quiz(
+    response = update_existing_quiz(
         quiz_id,
         quiz,
     )
+    return response
 
 
 @router.delete(
@@ -100,4 +104,5 @@ def remove_quiz(
     Delete an existing quiz
     """
 
-    return delete_existing_quiz(quiz_id)
+    response = delete_existing_quiz(quiz_id)
+    return response
