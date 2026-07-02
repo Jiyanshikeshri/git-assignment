@@ -72,3 +72,24 @@ QUIZ_DELETED_SUCCESSFULLY = (
 QUIZ_NOT_FOUND = (
     "Quiz not found."
 )
+
+#Question Messages
+QUESTION_ALREADY_EXISTS = (
+    "Question already exists in this quiz."
+)
+
+QUESTION_CREATED_SUCCESSFULLY = (
+    "Question created successfully."
+)
+
+QUESTION_UPDATED_SUCCESSFULLY = (
+    "Question updated successfully."
+)
+
+QUESTION_DELETED_SUCCESSFULLY = (
+    "Question deleted successfully."
+)
+
+QUESTION_NOT_FOUND = (
+    "Question not found."
+)
