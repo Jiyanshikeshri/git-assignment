@@ -31,3 +31,17 @@ def create_question(question_data: dict):
     )
 
     return result
+
+
+def get_questions_by_quiz_id(quiz_id: str):
+    """
+    Retrieves all questions belonging to a quiz
+    """
+
+    questions = db.questions.find(
+        {
+            "quiz_id": quiz_id
+        }
+    )
+
+    return questions

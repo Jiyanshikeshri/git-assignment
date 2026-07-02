@@ -60,3 +60,54 @@ class QuestionCreate(BaseModel):
             )
 
         return value
+    
+
+class QuestionResponse(BaseModel):
+    """
+    Schema returned while fetching questions
+    """
+
+    id: str
+    quiz_id: str
+    question_text: str
+    question_type: str
+    options: list[str] | None
+    correct_answer: str
+    difficulty: str
+    tags: list[str]
+
+
+class QuestionUpdate(BaseModel):
+    """
+    Schema used while updating a question
+    """
+
+    quiz_id: str
+
+    question_text: str = Field(
+        ...,
+        min_length=5,
+        max_length=500,
+    )
+
+    question_type: QuestionType
+
+    options: list[str] | None = None
+
+    correct_answer: str
+
+    difficulty: DifficultyLevel
+
+    tags: list[str] = []
+
+    @field_validator("question_text")
+    @classmethod
+    def validate_question_text(cls, value: str) -> str:
+        value = value.strip()
+
+        if not value:
+            raise ValueError(
+                "Question text cannot be empty."
+            )
+
+        return value

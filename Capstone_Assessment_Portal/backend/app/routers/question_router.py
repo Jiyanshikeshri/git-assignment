@@ -6,10 +6,12 @@ from app.schemas.question_schema import (
 
 from app.services.question_service import (
     create_new_question,
+    fetch_questions_by_quiz,
 )
 
 from app.middleware.auth_middleware import (
     require_admin,
+    get_current_user,
 )
 
 router = APIRouter(
@@ -32,6 +34,25 @@ def create_question(
 
     response = create_new_question(
         question
+    )
+
+    return response
+
+
+@router.get(
+    "/quiz/{quiz_id}",
+    status_code=status.HTTP_200_OK,
+)
+def get_questions(
+    quiz_id: str,
+    user=Depends(get_current_user),
+):
+    """
+    Retrieve all questions belonging to a quiz
+    """
+
+    response = fetch_questions_by_quiz(
+        quiz_id
     )
 
     return response
