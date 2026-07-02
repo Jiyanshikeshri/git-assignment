@@ -4,6 +4,7 @@ from pydantic import (
     BaseModel,
     Field,
     field_validator,
+    model_validator,
 )
 
 
@@ -61,6 +62,40 @@ class QuestionCreate(BaseModel):
 
         return value
     
+    @model_validator(mode="after")
+    def validate_question(self):
+        """
+        Validate question based on question type
+        """
+
+        if self.question_type == QuestionType.MCQ:
+
+            if not self.options or len(self.options) != 4:
+                raise ValueError(
+                    "MCQ questions must have exactly 4 options."
+                )
+
+            if self.correct_answer not in self.options:
+                raise ValueError(
+                    "Correct answer must be one of the provided options."
+                )
+
+        elif self.question_type == QuestionType.TRUE_FALSE:
+
+            expected_options = ["True", "False"]
+
+            if self.options != expected_options:
+                raise ValueError(
+                    'TRUE_FALSE questions must have options ["True", "False"].'
+                )
+
+            if self.correct_answer not in expected_options:
+                raise ValueError(
+                    'Correct answer must be either "True" or "False".'
+                )
+
+        return self
+    
 
 class QuestionResponse(BaseModel):
     """
@@ -111,3 +146,37 @@ class QuestionUpdate(BaseModel):
             )
 
         return value
+    
+    @model_validator(mode="after")
+    def validate_question(self):
+        """
+        Validate question based on question type
+        """
+
+        if self.question_type == QuestionType.MCQ:
+
+            if not self.options or len(self.options) != 4:
+                raise ValueError(
+                    "MCQ questions must have exactly 4 options."
+                )
+
+            if self.correct_answer not in self.options:
+                raise ValueError(
+                    "Correct answer must be one of the provided options."
+                )
+
+        elif self.question_type == QuestionType.TRUE_FALSE:
+
+            expected_options = ["True", "False"]
+
+            if self.options != expected_options:
+                raise ValueError(
+                    'TRUE_FALSE questions must have options ["True", "False"].'
+                )
+
+            if self.correct_answer not in expected_options:
+                raise ValueError(
+                    'Correct answer must be either "True" or "False".'
+                )
+
+        return self

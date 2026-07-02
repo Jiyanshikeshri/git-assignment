@@ -1,5 +1,3 @@
-from bson import ObjectId
-
 from app.config.database import db
 
 
