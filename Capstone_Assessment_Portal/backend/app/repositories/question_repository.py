@@ -101,3 +101,17 @@ def get_question_by_text_except_id(
     )
 
     return question
+
+
+def delete_question(question_id: str):
+    """
+    Delete a question by its ID
+    """
+
+    result = db.questions.delete_one(
+        {
+            "_id": ObjectId(question_id)
+        }
+    )
+
+    return result

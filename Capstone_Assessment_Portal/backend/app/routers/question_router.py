@@ -9,6 +9,7 @@ from app.services.question_service import (
     create_new_question,
     fetch_questions_by_quiz,
     update_existing_question,
+    delete_existing_question,
 )
 
 from app.middleware.auth_middleware import (
@@ -76,6 +77,25 @@ def update_question_details(
     response = update_existing_question(
         question_id,
         question,
+    )
+
+    return response
+
+
+@router.delete(
+    "/{question_id}",
+    status_code=status.HTTP_200_OK,
+)
+def remove_question(
+    question_id: str,
+    user=Depends(require_admin),
+):
+    """
+    Delete an existing question
+    """
+
+    response = delete_existing_question(
+        question_id
     )
 
     return response

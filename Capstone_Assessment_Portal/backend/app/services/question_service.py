@@ -4,6 +4,7 @@ from app.constants.constants import (
     QUIZ_NOT_FOUND,
     QUESTION_UPDATED_SUCCESSFULLY,
     QUESTION_NOT_FOUND,
+    QUESTION_DELETED_SUCCESSFULLY,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -18,6 +19,7 @@ from app.repositories.question_repository import (
     get_question_by_id,
     update_question,
     get_question_by_text_except_id,
+    delete_question,
 )
 
 from app.repositories.quiz_repository import (
@@ -226,3 +228,42 @@ def update_existing_question(
     return MessageResponse(
         message=QUESTION_UPDATED_SUCCESSFULLY
     )
+
+
+def delete_existing_question(question_id: str):
+    """
+    Delete an existing question
+    """
+
+    logger.info(
+        "Question delete request received. ID: %s",
+        question_id,
+    )
+
+    existing_question = get_question_by_id(
+        question_id
+    )
+
+    if not existing_question:
+        logger.warning(
+            "Question deletion failed. Question not found: %s",
+            question_id,
+        )
+        raise NotFoundException(
+            QUESTION_NOT_FOUND
+        )
+
+    delete_question(
+        question_id
+    )
+
+    logger.info(
+        "Question deleted successfully. ID: %s",
+        question_id,
+    )
+
+    response = MessageResponse(
+        message=QUESTION_DELETED_SUCCESSFULLY
+    )
+
+    return response
