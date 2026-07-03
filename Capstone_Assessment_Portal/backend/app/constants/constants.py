@@ -54,3 +54,21 @@ CATEGORY_DELETED_SUCCESSFULLY = (
 CATEGORY_NOT_FOUND = (
     "Category not found."
 )
+
+
+# Quiz Messages
+QUIZ_ALREADY_EXISTS = (
+    "Quiz with this title already exists."
+)
+QUIZ_CREATED_SUCCESSFULLY = (
+    "Quiz created successfully."
+)
+QUIZ_UPDATED_SUCCESSFULLY = (
+    "Quiz updated successfully."
+)
+QUIZ_DELETED_SUCCESSFULLY = (
+    "Quiz deleted successfully."
+)
+QUIZ_NOT_FOUND = (
+    "Quiz not found."
+)
