@@ -385,3 +385,26 @@ def test_get_questions_by_quiz(client, admin_token):
     assert question["question_type"] == "MCQ"
     assert question["correct_answer"] == "Language"
     assert question["difficulty"] == "EASY"
+
+
+from app.constants.constants import (
+    QUIZ_NOT_FOUND,
+)
+
+
+def test_get_questions_invalid_quiz(client, admin_token):
+    """
+    Verifies that fetching questions for a non-existing quiz returns 404
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    response = client.get(
+        "/questions/quiz/507f1f77bcf86cd799439011",
+        headers=headers,
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == QUIZ_NOT_FOUND
