@@ -408,3 +408,135 @@ def test_get_questions_invalid_quiz(client, admin_token):
 
     assert response.status_code == 404
     assert response.json()["detail"] == QUIZ_NOT_FOUND
+
+
+from app.constants.constants import (
+    QUESTION_UPDATED_SUCCESSFULLY,
+)
+
+
+def test_update_question(client, admin_token):
+    """
+    Verifies that an admin can update an existing question successfully
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    unique = uuid.uuid4().hex[:8]
+
+    category_response = client.post(
+        "/categories/",
+        headers=headers,
+        json={
+            "name": f"category_{unique}"
+        }
+    )
+
+    assert category_response.status_code == 201
+
+    categories = client.get(
+        "/categories/",
+        headers=headers,
+    ).json()
+
+    category_id = None
+
+    for category in categories:
+        if category["name"] == f"category_{unique}".lower():
+            category_id = category["id"]
+            break
+
+    assert category_id is not None
+
+    quiz_response = client.post(
+        "/quizzes/",
+        headers=headers,
+        json={
+            "title": f"quiz_{unique}",
+            "description": "Python Quiz",
+            "category_id": category_id,
+            "duration": 30
+        }
+    )
+
+    assert quiz_response.status_code == 201
+
+    quizzes = client.get(
+        "/quizzes/",
+        headers=headers,
+    ).json()
+
+    quiz_id = None
+
+    for quiz in quizzes:
+        if quiz["title"] == f"quiz_{unique}".lower():
+            quiz_id = quiz["id"]
+            break
+
+    assert quiz_id is not None
+
+    create_response = client.post(
+        "/questions/",
+        headers=headers,
+        json={
+            "quiz_id": quiz_id,
+            "question_text": f"What is Python {unique}?",
+            "question_type": "MCQ",
+            "options": [
+                "Language",
+                "Animal",
+                "Car",
+                "City"
+            ],
+            "correct_answer": "Language",
+            "difficulty": "EASY",
+            "tags": [
+                "python"
+            ]
+        }
+    )
+
+    assert create_response.status_code == 201
+
+    questions = client.get(
+        f"/questions/quiz/{quiz_id}",
+        headers=headers,
+    ).json()
+
+    question_id = None
+
+    for question in questions:
+        if question["question_text"] == f"What is Python {unique}?".lower():
+            question_id = question["id"]
+            break
+
+    assert question_id is not None
+
+    update_response = client.put(
+        f"/questions/{question_id}",
+        headers=headers,
+        json={
+            "quiz_id": quiz_id,
+            "question_text": f"Updated Question {unique}",
+            "question_type": "MCQ",
+            "options": [
+                "Java",
+                "Python",
+                "C++",
+                "Go"
+            ],
+            "correct_answer": "Python",
+            "difficulty": "MEDIUM",
+            "tags": [
+                "updated"
+            ]
+        }
+    )
+
+    assert update_response.status_code == 200
+    assert (
+        update_response.json()["message"]
+        == QUESTION_UPDATED_SUCCESSFULLY
+    )
