@@ -540,3 +540,42 @@ def test_update_question(client, admin_token):
         update_response.json()["message"]
         == QUESTION_UPDATED_SUCCESSFULLY
     )
+
+
+from app.constants.constants import (
+    QUESTION_NOT_FOUND,
+)
+
+
+def test_update_non_existing_question(client, admin_token):
+    """
+    Verifies that updating a non-existing question returns 404
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    response = client.put(
+        "/questions/507f1f77bcf86cd799439011",
+        headers=headers,
+        json={
+            "quiz_id": "507f1f77bcf86cd799439011",
+            "question_text": "Updated Question",
+            "question_type": "MCQ",
+            "options": [
+                "A",
+                "B",
+                "C",
+                "D"
+            ],
+            "correct_answer": "A",
+            "difficulty": "EASY",
+            "tags": [
+                "python"
+            ]
+        }
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == QUESTION_NOT_FOUND
