@@ -695,3 +695,26 @@ def test_delete_question(client, admin_token):
         delete_response.json()["message"]
         == QUESTION_DELETED_SUCCESSFULLY
     )
+
+
+from app.constants.constants import (
+    QUESTION_NOT_FOUND,
+)
+
+
+def test_delete_non_existing_question(client, admin_token):
+    """
+    Verifies that deleting a non-existing question returns 404
+    """
+
+    headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    response = client.delete(
+        "/questions/507f1f77bcf86cd799439011",
+        headers=headers,
+    )
+
+    assert response.status_code == 404
+    assert response.json()["detail"] == QUESTION_NOT_FOUND
