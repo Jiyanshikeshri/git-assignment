@@ -93,3 +93,42 @@ QUESTION_DELETED_SUCCESSFULLY = (
 QUESTION_NOT_FOUND = (
     "Question not found."
 )
+
+# Attempt Status
+
+ATTEMPT_STATUS_IN_PROGRESS = "IN_PROGRESS"
+
+ATTEMPT_STATUS_SUBMITTED = "SUBMITTED"
+
+ATTEMPT_STATUS_EXPIRED = "EXPIRED"
+
+
+# Attempt Messages
+
+ATTEMPT_STARTED_SUCCESSFULLY = (
+    "Quiz attempt started successfully."
+)
+
+ATTEMPT_ALREADY_EXISTS = (
+    "An active quiz attempt already exists."
+)
+
+ATTEMPT_NOT_FOUND = (
+    "Quiz attempt not found."
+)
+
+ATTEMPT_ALREADY_SUBMITTED = (
+    "Quiz has already been submitted."
+)
+
+ATTEMPT_EXPIRED = (
+    "Quiz attempt has expired."
+)
+
+MAX_ATTEMPT_LIMIT_REACHED = (
+    "Maximum attempt limit reached for this quiz."
+)
+
+QUIZ_HAS_NO_QUESTIONS = (
+    "Cannot start attempt. Quiz has no questions."
+)
