@@ -5,10 +5,12 @@ from app.config.logger import logger
 from app.constants.constants import (
     QUIZ_NOT_FOUND,
     QUIZ_HAS_NO_QUESTIONS,
+    MAX_ATTEMPT_LIMIT_REACHED,
 )
 
 from app.exceptions.custom_exceptions import (
     NotFoundException,
+    BadRequestException,
 )
 
 from app.repositories.quiz_repository import (
@@ -21,6 +23,7 @@ from app.repositories.question_repository import (
 
 from app.repositories.attempt_repository import (
     create_attempt,
+    get_attempt_count,
 )
 
 from app.schemas.attempt_schema import (
@@ -94,6 +97,22 @@ def start_quiz_attempt(
 
         raise NotFoundException(
             QUIZ_HAS_NO_QUESTIONS
+        )
+    
+    attempt_count = get_attempt_count(
+        student_id=student_id,
+        quiz_id=attempt.quiz_id,
+    )
+
+    if attempt_count >= 2:
+        logger.warning(
+            "Maximum attempt limit reached. Student ID: %s, Quiz ID: %s",
+            student_id,
+            attempt.quiz_id,
+        )
+
+        raise BadRequestException(
+            MAX_ATTEMPT_LIMIT_REACHED
         )
 
     started_at = datetime.now(

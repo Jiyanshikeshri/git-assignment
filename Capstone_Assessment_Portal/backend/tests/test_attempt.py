@@ -4,6 +4,7 @@ from app.constants.constants import (
     ATTEMPT_STARTED_SUCCESSFULLY,
     QUIZ_NOT_FOUND,
     QUIZ_HAS_NO_QUESTIONS,
+    MAX_ATTEMPT_LIMIT_REACHED,
 )
 
 
@@ -223,4 +224,129 @@ def test_start_attempt_without_questions(
     assert (
         response.json()["detail"]
         == QUIZ_HAS_NO_QUESTIONS
+    )
+
+
+def test_attempt_limit_exceeded(
+    client,
+    admin_token,
+    student_token,
+):
+    """
+    Verifies that a student cannot start more than two attempts for the same quiz
+    """
+
+    admin_headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    student_headers = {
+        "Authorization": f"Bearer {student_token}"
+    }
+
+    unique = uuid.uuid4().hex[:8]
+
+    client.post(
+        "/categories/",
+        headers=admin_headers,
+        json={
+            "name": f"category_{unique}"
+        },
+    )
+
+    categories = client.get(
+        "/categories/",
+        headers=admin_headers,
+    ).json()
+
+    category_id = next(
+        (
+            category["id"]
+            for category in categories
+            if category["name"] == f"category_{unique}".lower()
+        ),
+        None,
+    )
+
+    assert category_id is not None
+
+    client.post(
+        "/quizzes/",
+        headers=admin_headers,
+        json={
+            "title": f"quiz_{unique}",
+            "description": "Python Quiz",
+            "category_id": category_id,
+            "duration": 30,
+        },
+    )
+
+    quizzes = client.get(
+        "/quizzes/",
+        headers=admin_headers,
+    ).json()
+
+    quiz_id = next(
+        (
+            quiz["id"]
+            for quiz in quizzes
+            if quiz["title"] == f"quiz_{unique}".lower()
+        ),
+        None,
+    )
+
+    assert quiz_id is not None
+
+    client.post(
+        "/questions/",
+        headers=admin_headers,
+        json={
+            "quiz_id": quiz_id,
+            "question_text": f"What is Python? {unique}",
+            "question_type": "MCQ",
+            "options": [
+                "Language",
+                "Animal",
+                "Car",
+                "City",
+            ],
+            "correct_answer": "Language",
+            "difficulty": "EASY",
+            "tags": [],
+        },
+    )
+
+    response = client.post(
+        "/attempts/start",
+        headers=student_headers,
+        json={
+            "quiz_id": quiz_id,
+        },
+    )
+
+    assert response.status_code == 201
+
+    response = client.post(
+        "/attempts/start",
+        headers=student_headers,
+        json={
+            "quiz_id": quiz_id,
+        },
+    )
+
+    assert response.status_code == 201
+
+    response = client.post(
+        "/attempts/start",
+        headers=student_headers,
+        json={
+            "quiz_id": quiz_id,
+        },
+    )
+
+    assert response.status_code == 400
+
+    assert (
+        response.json()["detail"]
+        == MAX_ATTEMPT_LIMIT_REACHED
     )
