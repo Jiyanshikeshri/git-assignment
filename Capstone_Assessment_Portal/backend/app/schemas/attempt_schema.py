@@ -86,3 +86,41 @@ class StartAttemptResponse(BaseModel):
     expires_at: datetime
 
     total_questions: int
+
+
+class SaveAnswerRequest(BaseModel):
+    """
+    Schema used for saving a student's answer for a question
+    """
+
+    question_id: str = Field(
+        ...,
+        description="Question ID from the quiz attempt snapshot.",
+    )
+
+    selected_answer: str = Field(
+        ...,
+        description="Answer selected by the student.",
+    )
+
+    @field_validator(
+        "question_id",
+        "selected_answer",
+    )
+    @classmethod
+    def validate_fields(
+        cls,
+        value: str,
+    ) -> str:
+        """
+        Validate request fields
+        """
+
+        value = value.strip()
+
+        if not value:
+            raise ValueError(
+                "Field cannot be empty."
+            )
+
+        return value
