@@ -6,6 +6,12 @@ from app.constants.constants import (
     QUIZ_NOT_FOUND,
     QUIZ_HAS_NO_QUESTIONS,
     MAX_ATTEMPT_LIMIT_REACHED,
+    ANSWER_SAVED_SUCCESSFULLY,
+    ATTEMPT_ALREADY_SUBMITTED,
+    ATTEMPT_EXPIRED,
+    ATTEMPT_NOT_FOUND,
+    QUESTION_NOT_FOUND_IN_ATTEMPT,
+    INVALID_SELECTED_ANSWER,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -24,12 +30,19 @@ from app.repositories.question_repository import (
 from app.repositories.attempt_repository import (
     create_attempt,
     get_attempt_count,
+    get_attempt_by_id,
+    update_attempt_answers,
 )
 
 from app.schemas.attempt_schema import (
     StartAttemptRequest,
     StartAttemptResponse,
     AttemptStatus,
+    SaveAnswerRequest,
+)
+
+from app.schemas.common_schema import (
+    MessageResponse,
 )
 
 
@@ -152,4 +165,139 @@ def start_quiz_attempt(
         started_at=started_at,
         expires_at=expires_at,
         total_questions=len(snapshot),
+    )
+
+
+def save_partial_answer(
+    attempt_id: str,
+    answer: SaveAnswerRequest,
+    student_id: str,
+):
+    """
+    Save or update a student's answer for a quiz attempt
+    """
+
+    logger.info(
+        "Save answer request received. Attempt ID: %s",
+        attempt_id,
+    )
+
+    attempt = get_attempt_by_id(
+        attempt_id
+    )
+
+    if not attempt:
+        logger.warning(
+            "Attempt not found. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise NotFoundException(
+            ATTEMPT_NOT_FOUND
+        )
+
+    if attempt["student_id"] != student_id:
+        logger.warning(
+            "Unauthorized access to attempt. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_NOT_FOUND
+        )
+
+    if (
+        attempt["status"]
+        == AttemptStatus.SUBMITTED.value
+    ):
+        logger.warning(
+            "Attempt already submitted. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_ALREADY_SUBMITTED
+        )
+
+    if datetime.now(UTC) > attempt["expires_at"]:
+        logger.warning(
+            "Attempt expired. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_EXPIRED
+        )
+
+    snapshot_question = next(
+        (
+            question
+            for question in attempt["question_snapshot"]
+            if question["question_id"] == answer.question_id
+        ),
+        None,
+    )
+
+    if not snapshot_question:
+        logger.warning(
+            "Question not found in snapshot. Question ID: %s",
+            answer.question_id,
+        )
+
+        raise NotFoundException(
+            QUESTION_NOT_FOUND_IN_ATTEMPT
+        )
+    
+    if answer.selected_answer not in snapshot_question["options"]:
+        logger.warning(
+            "Invalid selected answer. Question ID: %s",
+            answer.question_id,
+        )
+
+        raise BadRequestException(
+            INVALID_SELECTED_ANSWER
+        )
+
+    answers = attempt.get(
+        "answers",
+        [],
+    )
+
+    answer_updated = False
+
+    for saved_answer in answers:
+
+        if (
+            saved_answer["question_id"]
+            == answer.question_id
+        ):
+            saved_answer[
+                "selected_answer"
+            ] = answer.selected_answer
+
+            answer_updated = True
+
+            break
+
+    if not answer_updated:
+
+        answers.append(
+            {
+                "question_id": answer.question_id,
+                "selected_answer": answer.selected_answer,
+            }
+        )
+
+    update_attempt_answers(
+        attempt_id,
+        answers,
+    )
+
+    logger.info(
+        "Answer saved successfully. Attempt ID: %s",
+        attempt_id,
+    )
+
+    return MessageResponse(
+        message=ANSWER_SAVED_SUCCESSFULLY
     )

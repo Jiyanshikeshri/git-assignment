@@ -140,3 +140,7 @@ ANSWER_SAVED_SUCCESSFULLY = (
 QUESTION_NOT_FOUND_IN_ATTEMPT = (
     "Question not found in attempt."
 )
+
+INVALID_SELECTED_ANSWER = (
+    "Selected answer is not valid for this question."
+)
