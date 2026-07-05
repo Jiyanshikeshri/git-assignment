@@ -132,3 +132,11 @@ MAX_ATTEMPT_LIMIT_REACHED = (
 QUIZ_HAS_NO_QUESTIONS = (
     "Cannot start attempt. Quiz has no questions."
 )
+
+ANSWER_SAVED_SUCCESSFULLY = (
+    "Answer saved successfully."
+)
+
+QUESTION_NOT_FOUND_IN_ATTEMPT = (
+    "Question not found in attempt."
+)
