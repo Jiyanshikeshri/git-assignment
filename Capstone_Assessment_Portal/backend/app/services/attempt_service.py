@@ -218,8 +218,16 @@ def save_partial_answer(
         raise BadRequestException(
             ATTEMPT_ALREADY_SUBMITTED
         )
+    
 
-    if datetime.now(UTC) > attempt["expires_at"]:
+    expires_at = attempt["expires_at"]
+
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(
+            tzinfo=UTC
+        )
+
+    if datetime.now(UTC) > expires_at:
         logger.warning(
             "Attempt expired. Attempt ID: %s",
             attempt_id,
