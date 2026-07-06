@@ -150,8 +150,18 @@ QUIZ_SUBMITTED_SUCCESSFULLY = (
 )
 
 #Result Messages
+PASSING_PERCENTAGE = 40
+
+RESULT_GENERATED_SUCCESSFULLY = (
+    "Result generated successfully."
+)
+
 RESULT_NOT_FOUND = (
     "Result not found."
+)
+
+NO_RESULTS_FOUND = (
+    "No results found."
 )
 
 RESULT_FETCHED_SUCCESSFULLY = (

@@ -1,0 +1,150 @@
+from app.config.logger import logger
+
+from app.constants.constants import (
+    PASSING_PERCENTAGE,
+)
+
+from app.repositories.result_repository import (
+    create_result,
+)
+
+from app.schemas.result_schema import (
+    ResultStatus,
+)
+
+
+def calculate_percentage(
+    score: int,
+    total_questions: int,
+):
+    """
+    Calculate the percentage score obtained in the quiz
+    """
+
+    if total_questions == 0:
+        return 0.0
+
+    return round(
+        (score / total_questions) * 100,
+        2,
+    )
+
+
+def get_result_status(
+    percentage: float,
+):
+    """
+    Determine whether the student has passed or failed
+    """
+
+    if percentage >= PASSING_PERCENTAGE:
+        return ResultStatus.PASS.value
+
+    return ResultStatus.FAIL.value
+
+
+def build_question_result(
+    attempt: dict,
+):
+    """
+    Build per-question result breakdown
+    """
+
+    submitted_answers = {
+        answer["question_id"]: answer["selected_answer"]
+        for answer in attempt.get(
+            "answers",
+            [],
+        )
+    }
+
+    question_results = []
+
+    for question in attempt[
+        "question_snapshot"
+    ]:
+
+        selected_answer = submitted_answers.get(
+            question["question_id"]
+        )
+
+        is_correct = (
+            selected_answer
+            == question["correct_answer"]
+        )
+
+        question_results.append(
+            {
+                "question_id": question[
+                    "question_id"
+                ],
+                "selected_answer": selected_answer,
+                "correct_answer": question[
+                    "correct_answer"
+                ],
+                "is_correct": is_correct,
+                "score": 1 if is_correct else 0,
+            }
+        )
+
+    return question_results
+
+
+def generate_result(
+    attempt: dict,
+    score: int,
+    correct_answers: int,
+    total_questions: int,
+    submitted_at,
+):
+    """
+    Generate and store the quiz result after a successful submission
+    """
+
+    logger.info(
+        "Generating result for attempt ID: %s",
+        attempt["_id"],
+    )
+
+    percentage = calculate_percentage(
+        score,
+        total_questions,
+    )
+
+    result_status = get_result_status(
+        percentage,
+    )
+
+    question_results = build_question_result(
+        attempt,
+    )
+
+    result_data = {
+        "attempt_id": str(
+            attempt["_id"]
+        ),
+        "student_id": attempt[
+            "student_id"
+        ],
+        "quiz_id": attempt[
+            "quiz_id"
+        ],
+        "score": score,
+        "correct_answers": correct_answers,
+        "total_questions": total_questions,
+        "percentage": percentage,
+        "result_status": result_status,
+        "submitted_at": submitted_at,
+        "questions": question_results,
+    }
+
+    result = create_result(
+        result_data
+    )
+
+    logger.info(
+        "Result generated successfully. Result ID: %s",
+        result.inserted_id,
+    )
+
+    return result
