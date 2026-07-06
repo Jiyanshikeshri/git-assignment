@@ -582,34 +582,6 @@ def submit_quiz_attempt(
             attempt_id,
         )
 
-        return SubmitAttemptResponse(
-            attempt_id=attempt_id,
-            quiz_id=attempt["quiz_id"],
-            score=score,
-            total_questions=total_questions,
-            correct_answers=correct_answers,
-            status=AttemptStatus.SUBMITTED,
-            submitted_at=current_time,
-        )
-
-    update_data = {
-        "status": AttemptStatus.SUBMITTED.value,
-        "submitted_at": current_time,
-        "score": score,
-        "correct_answers": correct_answers,
-        "total_questions": total_questions,
-    }
-
-    submit_attempt(
-        attempt_id,
-        update_data,
-    )
-
-    logger.info(
-        "Quiz submitted successfully. Attempt ID: %s",
-        attempt_id,
-    )
-
     return SubmitAttemptResponse(
         attempt_id=attempt_id,
         quiz_id=attempt["quiz_id"],
