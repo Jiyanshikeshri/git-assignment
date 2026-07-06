@@ -9,6 +9,7 @@ from app.schemas.attempt_schema import (
     StartAttemptRequest,
     StartAttemptResponse,
     SaveAnswerRequest,
+    ResumeAttemptResponse,
 )
 
 from app.schemas.common_schema import (
@@ -18,6 +19,7 @@ from app.schemas.common_schema import (
 from app.services.attempt_service import (
     start_quiz_attempt,
     save_partial_answer,
+    resume_quiz_attempt,
 )
 
 from app.middleware.auth_middleware import (
@@ -70,4 +72,26 @@ def save_answer(
         attempt_id=attempt_id,
         answer=answer,
         student_id=current_user["user_id"],
+    )
+
+
+@router.get(
+    "/{attempt_id}",
+    response_model=ResumeAttemptResponse,
+    status_code=status.HTTP_200_OK,
+)
+def resume_attempt(
+    attempt_id: str = Path(
+        ...,
+        description="Quiz attempt ID",
+    ),
+    user=Depends(require_student),
+):
+    """
+    Resume an existing quiz attempt
+    """
+
+    return resume_quiz_attempt(
+        attempt_id=attempt_id,
+        student_id=user["user_id"],
     )

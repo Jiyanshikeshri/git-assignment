@@ -125,3 +125,41 @@ class SaveAnswerRequest(BaseModel):
             )
 
         return value
+    
+
+class ResumeQuestionResponse(BaseModel):
+    """
+    Question returned while resuming an attempt
+    """
+
+    question_id: str
+
+    question_text: str
+
+    question_type: str
+
+    options: list[str]
+
+    difficulty: str
+
+    selected_answer: str | None = None
+
+
+class ResumeAttemptResponse(BaseModel):
+    """
+    Response returned when resuming an existing quiz attempt
+    """
+
+    attempt_id: str
+
+    quiz_id: str
+
+    status: AttemptStatus
+
+    started_at: datetime
+
+    expires_at: datetime
+
+    remaining_time: int
+
+    questions: list[ResumeQuestionResponse]

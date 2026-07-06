@@ -39,6 +39,8 @@ from app.schemas.attempt_schema import (
     StartAttemptResponse,
     AttemptStatus,
     SaveAnswerRequest,
+    ResumeAttemptResponse,
+    ResumeQuestionResponse,
 )
 
 from app.schemas.common_schema import (
@@ -308,4 +310,137 @@ def save_partial_answer(
 
     return MessageResponse(
         message=ANSWER_SAVED_SUCCESSFULLY
+    )
+
+
+def resume_quiz_attempt(
+    attempt_id: str,
+    student_id: str,
+):
+    """
+    Resume an existing quiz attempt for a student
+    """
+
+    logger.info(
+        "Resume attempt request received. Attempt ID: %s",
+        attempt_id,
+    )
+
+    attempt = get_attempt_by_id(
+        attempt_id
+    )
+
+    if not attempt:
+        logger.warning(
+            "Attempt not found. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise NotFoundException(
+            ATTEMPT_NOT_FOUND
+        )
+
+    if attempt["student_id"] != student_id:
+        logger.warning(
+            "Unauthorized access to attempt. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_NOT_FOUND
+        )
+
+    if (
+        attempt["status"]
+        == AttemptStatus.SUBMITTED.value
+    ):
+        logger.warning(
+            "Attempt already submitted. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_ALREADY_SUBMITTED
+        )
+
+    if (
+        datetime.now(UTC).replace(
+            tzinfo=None
+        ) > attempt["expires_at"]
+    ):
+        logger.warning(
+            "Attempt expired. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_EXPIRED
+        )
+
+    remaining_time = int(
+        (
+            attempt["expires_at"]
+            - datetime.now(UTC).replace(
+                tzinfo=None
+            )
+        ).total_seconds()
+    )
+
+    saved_answers = {
+        answer["question_id"]: answer["selected_answer"]
+        for answer in attempt.get(
+            "answers",
+            [],
+        )
+    }
+
+    questions = []
+
+    for question in attempt[
+        "question_snapshot"
+    ]:
+        questions.append(
+            ResumeQuestionResponse(
+                question_id=question[
+                    "question_id"
+                ],
+                question_text=question[
+                    "question_text"
+                ],
+                question_type=question[
+                    "question_type"
+                ],
+                options=question[
+                    "options"
+                ],
+                difficulty=question[
+                    "difficulty"
+                ],
+                selected_answer=saved_answers.get(
+                    question[
+                        "question_id"
+                    ]
+                ),
+            )
+        )
+
+    logger.info(
+        "Quiz attempt resumed successfully. Attempt ID: %s",
+        attempt_id,
+    )
+
+    return ResumeAttemptResponse(
+        attempt_id=attempt_id,
+        quiz_id=attempt["quiz_id"],
+        status=AttemptStatus(
+            attempt["status"]
+        ),
+        started_at=attempt[
+            "started_at"
+        ],
+        expires_at=attempt[
+            "expires_at"
+        ],
+        remaining_time=remaining_time,
+        questions=questions,
     )
