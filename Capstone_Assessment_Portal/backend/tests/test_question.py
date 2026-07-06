@@ -390,11 +390,6 @@ def test_get_questions_by_quiz(client, admin_token):
     assert question["difficulty"] == "EASY"
 
 
-from app.constants.constants import (
-    QUIZ_NOT_FOUND,
-)
-
-
 def test_get_questions_invalid_quiz(client, admin_token):
     """
     Verifies that fetching questions for a non-existing quiz returns 404
@@ -411,11 +406,6 @@ def test_get_questions_invalid_quiz(client, admin_token):
 
     assert response.status_code == 404
     assert response.json()["detail"] == QUIZ_NOT_FOUND
-
-
-from app.constants.constants import (
-    QUESTION_UPDATED_SUCCESSFULLY,
-)
 
 
 def test_update_question(client, admin_token):
@@ -545,11 +535,6 @@ def test_update_question(client, admin_token):
     )
 
 
-from app.constants.constants import (
-    QUESTION_NOT_FOUND,
-)
-
-
 def test_update_non_existing_question(client, admin_token):
     """
     Verifies that updating a non-existing question returns 404
@@ -582,11 +567,6 @@ def test_update_non_existing_question(client, admin_token):
 
     assert response.status_code == 404
     assert response.json()["detail"] == QUESTION_NOT_FOUND
-
-
-from app.constants.constants import (
-    QUESTION_DELETED_SUCCESSFULLY,
-)
 
 
 def test_delete_question(client, admin_token):
@@ -698,11 +678,6 @@ def test_delete_question(client, admin_token):
         delete_response.json()["message"]
         == QUESTION_DELETED_SUCCESSFULLY
     )
-
-
-from app.constants.constants import (
-    QUESTION_NOT_FOUND,
-)
 
 
 def test_delete_non_existing_question(client, admin_token):

@@ -107,7 +107,6 @@ class QuestionResponse(BaseModel):
     question_text: str
     question_type: str
     options: list[str] | None
-    correct_answer: str
     difficulty: str
     tags: list[str]
 
