@@ -163,3 +163,23 @@ class ResumeAttemptResponse(BaseModel):
     remaining_time: int
 
     questions: list[ResumeQuestionResponse]
+
+
+class SubmitAttemptResponse(BaseModel):
+    """
+    Response returned after submitting a quiz attempt
+    """
+
+    attempt_id: str
+
+    quiz_id: str
+
+    score: int
+
+    total_questions: int
+
+    correct_answers: int
+
+    status: AttemptStatus
+
+    submitted_at: datetime

@@ -144,3 +144,7 @@ QUESTION_NOT_FOUND_IN_ATTEMPT = (
 INVALID_SELECTED_ANSWER = (
     "Selected answer is not valid for this question."
 )
+
+QUIZ_SUBMITTED_SUCCESSFULLY = (
+    "Quiz submitted successfully."
+)

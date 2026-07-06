@@ -67,3 +67,21 @@ def update_attempt_answers(
     )
 
     return result
+
+
+def submit_attempt(
+    attempt_id: str,
+    update_data: dict,
+):
+    """
+    Update the attempt after submission
+    """
+
+    return db.attempts.update_one(
+        {
+            "_id": ObjectId(attempt_id),
+        },
+        {
+            "$set": update_data,
+        },
+    )

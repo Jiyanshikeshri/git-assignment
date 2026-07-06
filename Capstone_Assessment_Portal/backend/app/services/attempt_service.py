@@ -12,6 +12,7 @@ from app.constants.constants import (
     ATTEMPT_NOT_FOUND,
     QUESTION_NOT_FOUND_IN_ATTEMPT,
     INVALID_SELECTED_ANSWER,
+    QUIZ_SUBMITTED_SUCCESSFULLY,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -32,6 +33,7 @@ from app.repositories.attempt_repository import (
     get_attempt_count,
     get_attempt_by_id,
     update_attempt_answers,
+    submit_attempt,
 )
 
 from app.schemas.attempt_schema import (
@@ -41,6 +43,7 @@ from app.schemas.attempt_schema import (
     SaveAnswerRequest,
     ResumeAttemptResponse,
     ResumeQuestionResponse,
+    SubmitAttemptResponse,
 )
 
 from app.schemas.common_schema import (
@@ -443,4 +446,137 @@ def resume_quiz_attempt(
         ],
         remaining_time=remaining_time,
         questions=questions,
+    )
+
+
+def submit_quiz_attempt(
+    attempt_id: str,
+    student_id: str,
+):
+    """
+    Submit a quiz attempt and calculate the final score
+    """
+
+    logger.info(
+        "Quiz submission request received. Attempt ID: %s",
+        attempt_id,
+    )
+
+    attempt = get_attempt_by_id(
+        attempt_id
+    )
+
+    if not attempt:
+        logger.warning(
+            "Attempt not found. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise NotFoundException(
+            ATTEMPT_NOT_FOUND
+        )
+
+    if attempt["student_id"] != student_id:
+        logger.warning(
+            "Unauthorized attempt access. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_NOT_FOUND
+        )
+
+    if (
+        attempt["status"]
+        == AttemptStatus.SUBMITTED.value
+    ):
+        logger.warning(
+            "Attempt already submitted. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_ALREADY_SUBMITTED
+        )
+    
+
+    expires_at = attempt["expires_at"]
+
+    if expires_at.tzinfo is None:
+        expires_at = expires_at.replace(
+            tzinfo=UTC
+        )
+
+    if datetime.now(
+        UTC
+    ) > expires_at:
+        logger.warning(
+            "Attempt expired. Attempt ID: %s",
+            attempt_id,
+        )
+
+        raise BadRequestException(
+            ATTEMPT_EXPIRED
+        )
+
+    answers = attempt.get(
+        "answers",
+        [],
+    )
+
+    submitted_answers = {
+        answer["question_id"]: answer["selected_answer"]
+        for answer in answers
+    }
+
+    correct_answers = 0
+
+    for question in attempt[
+        "question_snapshot"
+    ]:
+
+        if (
+            submitted_answers.get(
+                question["question_id"]
+            )
+            == question["correct_answer"]
+        ):
+            correct_answers += 1
+
+    total_questions = len(
+        attempt["question_snapshot"]
+    )
+
+    score = correct_answers
+
+    submitted_at = datetime.now(
+        UTC
+    )
+
+    update_data = {
+        "status": AttemptStatus.SUBMITTED.value,
+        "submitted_at": submitted_at,
+        "score": score,
+        "correct_answers": correct_answers,
+        "total_questions": total_questions,
+    }
+
+    submit_attempt(
+        attempt_id,
+        update_data,
+    )
+
+    logger.info(
+        "Quiz submitted successfully. Attempt ID: %s",
+        attempt_id,
+    )
+
+    return SubmitAttemptResponse(
+        attempt_id=attempt_id,
+        quiz_id=attempt["quiz_id"],
+        score=score,
+        total_questions=total_questions,
+        correct_answers=correct_answers,
+        status=AttemptStatus.SUBMITTED,
+        submitted_at=submitted_at,
     )
