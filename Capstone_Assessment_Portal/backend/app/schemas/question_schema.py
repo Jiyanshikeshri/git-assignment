@@ -97,9 +97,9 @@ class QuestionCreate(BaseModel):
         return self
     
 
-class QuestionResponse(BaseModel):
+class QuestionResponseStudent(BaseModel):
     """
-    Schema returned while fetching questions
+    Schema returned while fetching questions for students
     """
 
     id: str
@@ -107,6 +107,21 @@ class QuestionResponse(BaseModel):
     question_text: str
     question_type: str
     options: list[str] | None
+    difficulty: str
+    tags: list[str]
+
+
+class QuestionResponseAdmin(BaseModel):
+    """
+    Schema returned while fetching questions for admins
+    """
+
+    id: str
+    quiz_id: str
+    question_text: str
+    question_type: str
+    options: list[str] | None
+    correct_answer: str
     difficulty: str
     tags: list[str]
 

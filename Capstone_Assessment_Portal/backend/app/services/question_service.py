@@ -5,6 +5,7 @@ from app.constants.constants import (
     QUESTION_UPDATED_SUCCESSFULLY,
     QUESTION_NOT_FOUND,
     QUESTION_DELETED_SUCCESSFULLY,
+    ROLE_ADMIN
 )
 
 from app.exceptions.custom_exceptions import (
@@ -28,7 +29,8 @@ from app.repositories.quiz_repository import (
 
 from app.schemas.question_schema import (
     QuestionCreate,
-    QuestionResponse,
+    QuestionResponseStudent,
+    QuestionResponseAdmin,
     QuestionUpdate,
 )
 
@@ -103,6 +105,7 @@ def create_new_question(question: QuestionCreate):
 
 def fetch_questions_by_quiz(
     quiz_id: str,
+    user: dict,
 ):
     """
     Retrieve all questions for a given quiz
@@ -125,21 +128,40 @@ def fetch_questions_by_quiz(
         raise NotFoundException(
             QUIZ_NOT_FOUND
         )
+    
+    if user["role"] == ROLE_ADMIN:
 
-    questions = [
-        QuestionResponse(
-            id=str(question["_id"]),
-            quiz_id=question["quiz_id"],
-            question_text=question["question_text"],
-            question_type=question["question_type"],
-            options=question["options"],
-            difficulty=question["difficulty"],
-            tags=question["tags"],
-        )
-        for question in get_questions_by_quiz_id(
-            quiz_id
-        )
-    ]
+        questions = [
+            QuestionResponseAdmin(
+                id=str(question["_id"]),
+                quiz_id=question["quiz_id"],
+                question_text=question["question_text"],
+                question_type=question["question_type"],
+                options=question["options"],
+                correct_answer=question["correct_answer"],
+                difficulty=question["difficulty"],
+                tags=question["tags"],
+            )
+            for question in get_questions_by_quiz_id(
+                quiz_id
+            )
+        ]
+
+    else:
+        questions = [
+            QuestionResponseStudent(
+                id=str(question["_id"]),
+                quiz_id=question["quiz_id"],
+                question_text=question["question_text"],
+                question_type=question["question_type"],
+                options=question["options"],
+                difficulty=question["difficulty"],
+                tags=question["tags"],
+            )
+            for question in get_questions_by_quiz_id(
+                quiz_id
+            )
+        ]
 
     logger.info(
         "Retrieved %d questions for quiz ID: %s",
