@@ -55,7 +55,8 @@ def get_questions(
     """
 
     response = fetch_questions_by_quiz(
-        quiz_id
+        quiz_id,
+        user,
     )
 
     return response
