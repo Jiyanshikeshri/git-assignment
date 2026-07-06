@@ -1,7 +1,10 @@
 import uuid
 
+from bson import ObjectId
+
 from app.constants.constants import (
     ANSWER_SAVED_SUCCESSFULLY,
+    ATTEMPT_NOT_FOUND,
 )
 
 
@@ -26,7 +29,6 @@ def test_save_partial_answer_success(
 
     category_name = f"category_{unique}"
 
-    # Create Category
     client.post(
         "/categories/",
         headers=admin_headers,
@@ -51,7 +53,6 @@ def test_save_partial_answer_success(
 
     assert category_id is not None
 
-    # Create Quiz
     client.post(
         "/quizzes/",
         headers=admin_headers,
@@ -79,7 +80,6 @@ def test_save_partial_answer_success(
 
     assert quiz_id is not None
 
-    # Create Question
     client.post(
         "/questions/",
         headers=admin_headers,
@@ -99,7 +99,6 @@ def test_save_partial_answer_success(
         },
     )
 
-    # Fetch Question ID
     questions = client.get(
         f"/questions/quiz/{quiz_id}",
         headers=admin_headers,
@@ -117,7 +116,6 @@ def test_save_partial_answer_success(
 
     assert question_id is not None
 
-    # Start Attempt
     attempt = client.post(
         "/attempts/start",
         headers=student_headers,
@@ -128,7 +126,6 @@ def test_save_partial_answer_success(
 
     attempt_id = attempt["attempt_id"]
 
-    # Save Answer
     response = client.patch(
         f"/attempts/{attempt_id}/answer",
         headers=student_headers,
@@ -143,4 +140,37 @@ def test_save_partial_answer_success(
     assert (
         response.json()["message"]
         == ANSWER_SAVED_SUCCESSFULLY
+    )
+
+
+def test_save_partial_answer_attempt_not_found(
+    client,
+    student_token,
+):
+    """
+    Verify that saving an answer for a non-existent attempt returns 404
+    """
+
+    student_headers = {
+        "Authorization": f"Bearer {student_token}"
+    }
+
+    fake_attempt_id = str(
+        ObjectId()
+    )
+
+    response = client.patch(
+        f"/attempts/{fake_attempt_id}/answer",
+        headers=student_headers,
+        json={
+            "question_id": str(ObjectId()),
+            "selected_answer": "Language",
+        },
+    )
+
+    assert response.status_code == 404
+
+    assert (
+        response.json()["detail"]
+        == ATTEMPT_NOT_FOUND
     )
