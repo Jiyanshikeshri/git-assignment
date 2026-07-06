@@ -11,6 +11,7 @@ from app.constants.constants import (
     ATTEMPT_NOT_FOUND,
     ATTEMPT_ALREADY_SUBMITTED,
     ATTEMPT_EXPIRED,
+    QUESTION_NOT_FOUND_IN_ATTEMPT,
 )
 
 def test_save_partial_answer_success(
@@ -426,4 +427,114 @@ def test_save_partial_answer_attempt_expired(
     assert (
         response.json()["detail"]
         == ATTEMPT_EXPIRED
+    )
+
+
+def test_save_partial_answer_question_not_found(
+    client,
+    admin_token,
+    student_token,
+):
+    """
+    Verify that saving an answer for a question not present in the attempt snapshot returns 404
+    """
+
+    admin_headers = {
+        "Authorization": f"Bearer {admin_token}"
+    }
+
+    student_headers = {
+        "Authorization": f"Bearer {student_token}"
+    }
+
+    unique = uuid.uuid4().hex[:8]
+
+    client.post(
+        "/categories/",
+        headers=admin_headers,
+        json={
+            "name": f"category_{unique}",
+        },
+    )
+
+    categories = client.get(
+        "/categories/",
+        headers=admin_headers,
+    ).json()
+
+    category_id = next(
+        category["id"]
+        for category in categories
+        if category["name"] == f"category_{unique}".lower()
+    )
+
+    client.post(
+        "/quizzes/",
+        headers=admin_headers,
+        json={
+            "title": f"quiz_{unique}",
+            "description": "Python Quiz",
+            "category_id": category_id,
+            "duration": 30,
+        },
+    )
+
+    quizzes = client.get(
+        "/quizzes/",
+        headers=admin_headers,
+    ).json()
+
+    quiz_id = next(
+        quiz["id"]
+        for quiz in quizzes
+        if quiz["title"] == f"quiz_{unique}".lower()
+    )
+
+    client.post(
+        "/questions/",
+        headers=admin_headers,
+        json={
+            "quiz_id": quiz_id,
+            "question_text": f"What is Python? {unique}",
+            "question_type": "MCQ",
+            "options": [
+                "Language",
+                "Animal",
+                "Car",
+                "City",
+            ],
+            "correct_answer": "Language",
+            "difficulty": "EASY",
+            "tags": [],
+        },
+    )
+
+    attempt = client.post(
+        "/attempts/start",
+        headers=student_headers,
+        json={
+            "quiz_id": quiz_id,
+        },
+    ).json()
+
+    attempt_id = attempt["attempt_id"]
+
+    fake_question_id = str(
+        ObjectId()
+    )
+
+    response = client.patch(
+        f"/attempts/{attempt_id}/answer",
+        headers=student_headers,
+        json={
+            "question_id": fake_question_id,
+            "selected_answer": "Language",
+        },
+    )
+
+    assert response.status_code == 404
+
+    assert (
+        response.json()["detail"]
+        == QUESTION_NOT_FOUND_IN_ATTEMPT
     )
