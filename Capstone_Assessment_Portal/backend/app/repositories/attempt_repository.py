@@ -85,3 +85,21 @@ def submit_attempt(
             "$set": update_data,
         },
     )
+
+
+def expire_attempt(
+    attempt_id: str,
+    update_data: dict,
+):
+    """
+    Mark an attempt as expired and store evaluation details
+    """
+
+    return db.attempts.update_one(
+        {
+            "_id": ObjectId(attempt_id),
+        },
+        {
+            "$set": update_data,
+        },
+    )

@@ -73,6 +73,45 @@ def build_question_snapshot(questions):
     return snapshot
 
 
+def evaluate_attempt(
+    attempt: dict,
+):
+    """
+    Evaluate the saved answers against the question snapshot
+    """
+
+    answers = attempt.get(
+        "answers",
+        [],
+    )
+
+    submitted_answers = {
+        answer["question_id"]: answer["selected_answer"]
+        for answer in answers
+    }
+
+    correct_answers = 0
+
+    for question in attempt["question_snapshot"]:
+
+        if (
+            submitted_answers.get(
+                question["question_id"]
+            )
+            == question["correct_answer"]
+        ):
+            correct_answers += 1
+
+    total_questions = len(
+        attempt["question_snapshot"]
+    )
+
+    return (
+        correct_answers,
+        total_questions,
+    )
+
+
 def start_quiz_attempt(
     attempt: StartAttemptRequest,
     student_id: str,
@@ -454,7 +493,8 @@ def submit_quiz_attempt(
     student_id: str,
 ):
     """
-    Submit a quiz attempt and calculate the final score
+    Submit a quiz attempt and calculate the final score.
+    If the quiz has already expired, automatically submit it.
     """
 
     logger.info(
@@ -507,55 +547,54 @@ def submit_quiz_attempt(
             tzinfo=UTC
         )
 
-    if datetime.now(
+    current_time = datetime.now(
         UTC
-    ) > expires_at:
-        logger.warning(
-            "Attempt expired. Attempt ID: %s",
-            attempt_id,
-        )
-
-        raise BadRequestException(
-            ATTEMPT_EXPIRED
-        )
-
-    answers = attempt.get(
-        "answers",
-        [],
     )
 
-    submitted_answers = {
-        answer["question_id"]: answer["selected_answer"]
-        for answer in answers
-    }
-
-    correct_answers = 0
-
-    for question in attempt[
-        "question_snapshot"
-    ]:
-
-        if (
-            submitted_answers.get(
-                question["question_id"]
-            )
-            == question["correct_answer"]
-        ):
-            correct_answers += 1
-
-    total_questions = len(
-        attempt["question_snapshot"]
+    correct_answers, total_questions = evaluate_attempt(
+        attempt
     )
 
     score = correct_answers
 
-    submitted_at = datetime.now(
-        UTC
+    
+    update_data = {
+        "status": AttemptStatus.SUBMITTED.value,
+        "submitted_at": current_time,
+        "score": score,
+        "correct_answers": correct_answers,
+        "total_questions": total_questions,
+    }
+
+    submit_attempt(
+        attempt_id,
+        update_data,
     )
+
+    if current_time > expires_at:
+        logger.info(
+            "Attempt auto submitted after expiry. Attempt ID: %s",
+            attempt_id,
+        )
+    else:
+        logger.info(
+            "Quiz submitted successfully. Attempt ID: %s",
+            attempt_id,
+        )
+
+        return SubmitAttemptResponse(
+            attempt_id=attempt_id,
+            quiz_id=attempt["quiz_id"],
+            score=score,
+            total_questions=total_questions,
+            correct_answers=correct_answers,
+            status=AttemptStatus.SUBMITTED,
+            submitted_at=current_time,
+        )
 
     update_data = {
         "status": AttemptStatus.SUBMITTED.value,
-        "submitted_at": submitted_at,
+        "submitted_at": current_time,
         "score": score,
         "correct_answers": correct_answers,
         "total_questions": total_questions,
@@ -578,5 +617,7 @@ def submit_quiz_attempt(
         total_questions=total_questions,
         correct_answers=correct_answers,
         status=AttemptStatus.SUBMITTED,
-        submitted_at=submitted_at,
+        submitted_at=current_time,
     )
+
+
