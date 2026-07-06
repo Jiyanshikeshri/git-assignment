@@ -133,7 +133,6 @@ def fetch_questions_by_quiz(
             question_text=question["question_text"],
             question_type=question["question_type"],
             options=question["options"],
-            correct_answer=question["correct_answer"],
             difficulty=question["difficulty"],
             tags=question["tags"],
         )
