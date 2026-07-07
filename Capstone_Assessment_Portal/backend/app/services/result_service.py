@@ -8,6 +8,7 @@ from app.constants.constants import (
 from app.repositories.result_repository import (
     create_result,
     get_latest_result,
+    get_student_results,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -18,6 +19,7 @@ from app.schemas.result_schema import (
     ResultStatus,
     ResultResponse,
     QuestionResultResponse,
+    ResultHistoryResponse,
 )
 
 
@@ -228,3 +230,68 @@ def get_latest_student_result(
         submitted_at=result["submitted_at"],
         questions=questions,
     )
+
+
+def get_student_result_history(
+    student_id: str,
+):
+    """
+    Retrieve the complete quiz result history for a student
+    """
+
+    logger.info(
+        "Fetching result history for student ID: %s",
+        student_id,
+    )
+
+    results = list(
+        get_student_results(
+            student_id
+        )
+    )
+
+    if not results:
+
+        logger.warning(
+            "No results found for student ID: %s",
+            student_id,
+        )
+
+        raise NotFoundException(
+            RESULT_NOT_FOUND
+        )
+
+    history = []
+
+    for result in results:
+
+        history.append(
+            ResultHistoryResponse(
+                id=str(
+                    result["_id"]
+                ),
+                quiz_id=result[
+                    "quiz_id"
+                ],
+                score=result[
+                    "score"
+                ],
+                percentage=result[
+                    "percentage"
+                ],
+                result_status=ResultStatus(
+                    result[
+                        "result_status"
+                    ]
+                ),
+                submitted_at=result[
+                    "submitted_at"
+                ],
+            )
+        )
+
+    logger.info(
+        "Result history fetched successfully."
+    )
+
+    return history
