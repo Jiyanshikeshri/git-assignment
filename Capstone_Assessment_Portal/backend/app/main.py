@@ -4,6 +4,7 @@ from app.routers.auth_router import router as auth_router
 from app.routers.category_router import router as category_router
 from app.routers.quiz_router import router as quiz_router
 from app.routers.question_router import router as question_router
+from app.routers.attempt_router import router as attempt_router
 from app.exceptions.exception_handler import (
     register_exception_handlers,
 )
@@ -20,6 +21,7 @@ app.include_router(auth_router)
 app.include_router(category_router)
 app.include_router(quiz_router)
 app.include_router(question_router)
+app.include_router(attempt_router)
 
 @app.get("/")
 def root():

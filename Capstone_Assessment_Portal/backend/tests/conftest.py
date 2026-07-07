@@ -29,3 +29,22 @@ def admin_token(client):
     assert response.status_code == 200
 
     return response.json()["access_token"]
+
+
+@pytest.fixture
+def student_token(client):
+    """
+    Login as a student user and return a valid JWT access token
+    """
+
+    response = client.post(
+        "/auth/login",
+        json={
+            "email": "test2@gmail.com",
+            "password": "12345678",
+        },
+    )
+
+    assert response.status_code == 200
+
+    return response.json()["access_token"]
