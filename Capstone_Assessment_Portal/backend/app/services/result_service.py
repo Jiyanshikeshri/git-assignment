@@ -3,6 +3,7 @@ from app.config.logger import logger
 from app.constants.constants import (
     PASSING_PERCENTAGE,
     RESULT_NOT_FOUND,
+    ROLE_ADMIN,
 )
 
 from app.repositories.result_repository import (
@@ -10,6 +11,7 @@ from app.repositories.result_repository import (
     get_latest_result,
     get_student_results,
     get_all_results,
+    get_result_by_id,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -22,6 +24,7 @@ from app.schemas.result_schema import (
     QuestionResultResponse,
     ResultHistoryResponse,
     AdminResultResponse,
+    ResultBreakdownResponse,
 )
 
 
@@ -362,3 +365,79 @@ def get_admin_results():
     )
 
     return dashboard_results
+
+
+def get_result_breakdown(
+    result_id: str,
+    current_user: dict,
+):
+    """
+    Retrieve the detailed breakdown of a quiz result
+    """
+
+    logger.info(
+        "Fetching result breakdown. Result ID: %s",
+        result_id,
+    )
+
+    result = get_result_by_id(
+        result_id
+    )
+
+    if not result:
+
+        logger.warning(
+            "Result not found. Result ID: %s",
+            result_id,
+        )
+
+        raise NotFoundException(
+            RESULT_NOT_FOUND
+        )
+
+    if (
+        current_user["role"] != ROLE_ADMIN
+        and result["student_id"] != current_user["user_id"]
+    ):
+
+        logger.warning(
+            "Unauthorized access to result. Result ID: %s",
+            result_id,
+        )
+
+        raise NotFoundException(
+            RESULT_NOT_FOUND
+        )
+
+    questions = []
+
+    for question in result["questions"]:
+
+        questions.append(
+            QuestionResultResponse(
+                question_id=question["question_id"],
+                selected_answer=question["selected_answer"],
+                correct_answer=question["correct_answer"],
+                is_correct=question["is_correct"],
+                score=question["score"],
+            )
+        )
+
+    logger.info(
+        "Result breakdown fetched successfully."
+    )
+
+    return ResultBreakdownResponse(
+        id=str(result["_id"]),
+        attempt_id=result["attempt_id"],
+        quiz_id=result["quiz_id"],
+        score=result["score"],
+        correct_answers=result["correct_answers"],
+        total_questions=result["total_questions"],
+        percentage=result["percentage"],
+        result_status=ResultStatus(
+            result["result_status"]
+        ),
+        submitted_at=result["submitted_at"],
+        questions=questions,
+    )

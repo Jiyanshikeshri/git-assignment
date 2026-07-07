@@ -2,23 +2,27 @@ from fastapi import (
     APIRouter,
     Depends,
     status,
+    Path,
 )
 
 from app.middleware.auth_middleware import (
     require_student,
     require_admin,
+    get_current_user,
 )
 
 from app.schemas.result_schema import (
     ResultResponse,
     ResultHistoryResponse,
     AdminResultResponse,
+    ResultBreakdownResponse,
 )
 
 from app.services.result_service import (
     get_latest_student_result,
     get_student_result_history,
     get_admin_results,
+    get_result_breakdown,
 )
 
 router = APIRouter(
@@ -74,3 +78,25 @@ def get_results(
     """
 
     return get_admin_results()
+
+
+@router.get(
+    "/{result_id}",
+    response_model=ResultBreakdownResponse,
+    status_code=status.HTTP_200_OK,
+)
+def result_breakdown(
+    result_id: str = Path(
+        ...,
+        description="Result ID",
+    ),
+    current_user=Depends(get_current_user),
+):
+    """
+    Retrieve the detailed breakdown of a quiz result
+    """
+
+    return get_result_breakdown(
+        result_id=result_id,
+        current_user=current_user,
+    )

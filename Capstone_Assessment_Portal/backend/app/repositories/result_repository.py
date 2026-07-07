@@ -1,5 +1,7 @@
 from app.config.database import db
 
+from bson import ObjectId
+
 
 def create_result(
     result_data: dict,
@@ -83,3 +85,21 @@ def get_all_results():
     )
 
     return results
+
+
+def get_result_by_id(
+    result_id: str,
+):
+    """
+    Retrieve a result using its MongoDB ObjectId
+    """
+
+    result = db.results.find_one(
+        {
+            "_id": ObjectId(
+                result_id
+            )
+        }
+    )
+
+    return result
