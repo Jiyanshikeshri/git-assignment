@@ -65,6 +65,23 @@ class ResultHistoryResponse(
     submitted_at: datetime
 
 
+class AdminResultResponse(
+    BaseModel,
+):
+    """
+    Response schema for the admin dashboard showing all quiz results
+    """
+
+    id: str
+    attempt_id: str
+    student_id: str
+    quiz_id: str
+    score: int
+    percentage: float
+    result_status: ResultStatus
+    submitted_at: datetime
+
+
 class ResultBreakdownResponse(
     BaseModel,
 ):

@@ -9,6 +9,7 @@ from app.repositories.result_repository import (
     create_result,
     get_latest_result,
     get_student_results,
+    get_all_results,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -20,6 +21,7 @@ from app.schemas.result_schema import (
     ResultResponse,
     QuestionResultResponse,
     ResultHistoryResponse,
+    AdminResultResponse,
 )
 
 
@@ -295,3 +297,68 @@ def get_student_result_history(
     )
 
     return history
+
+
+def get_admin_results():
+    """
+    Retrieve all quiz results for the admin dashboard
+    """
+
+    logger.info(
+        "Fetching all quiz results for admin dashboard."
+    )
+
+    results = list(
+        get_all_results()
+    )
+
+    if not results:
+
+        logger.warning(
+            "No quiz results found."
+        )
+
+        raise NotFoundException(
+            RESULT_NOT_FOUND
+        )
+
+    dashboard_results = []
+
+    for result in results:
+
+        dashboard_results.append(
+            AdminResultResponse(
+                id=str(
+                    result["_id"]
+                ),
+                attempt_id=result[
+                    "attempt_id"
+                ],
+                student_id=result[
+                    "student_id"
+                ],
+                quiz_id=result[
+                    "quiz_id"
+                ],
+                score=result[
+                    "score"
+                ],
+                percentage=result[
+                    "percentage"
+                ],
+                result_status=ResultStatus(
+                    result[
+                        "result_status"
+                    ]
+                ),
+                submitted_at=result[
+                    "submitted_at"
+                ],
+            )
+        )
+
+    logger.info(
+        "Admin dashboard results fetched successfully."
+    )
+
+    return dashboard_results

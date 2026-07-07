@@ -6,16 +6,19 @@ from fastapi import (
 
 from app.middleware.auth_middleware import (
     require_student,
+    require_admin,
 )
 
 from app.schemas.result_schema import (
     ResultResponse,
     ResultHistoryResponse,
+    AdminResultResponse,
 )
 
 from app.services.result_service import (
     get_latest_student_result,
     get_student_result_history,
+    get_admin_results,
 )
 
 router = APIRouter(
@@ -56,3 +59,18 @@ def get_result_history(
     return get_student_result_history(
         current_user["user_id"],
     )
+
+
+@router.get(
+    "/",
+    response_model=list[AdminResultResponse],
+    status_code=status.HTTP_200_OK,
+)
+def get_results(
+    current_user=Depends(require_admin),
+):
+    """
+    Retrieve all quiz results for the admin dashboard
+    """
+
+    return get_admin_results()
