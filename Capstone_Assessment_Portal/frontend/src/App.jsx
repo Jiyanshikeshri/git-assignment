@@ -3,12 +3,10 @@
  * Description: Main application component for Assessment Portal
  */
 
+import AppRoutes from "./routes/AppRoutes";
+
 function App() {
-    return (
-        <div>
-            <h1>Assessment Portal</h1>
-        </div>
-    );
+    return <AppRoutes />;
 }
 
 export default App;
