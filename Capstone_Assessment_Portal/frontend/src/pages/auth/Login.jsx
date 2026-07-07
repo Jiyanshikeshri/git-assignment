@@ -2,11 +2,16 @@
  * Login page for Assessment Portal
  */
 
+import AuthLayout from "../../components/auth/AuthLayout";
+
 function Login() {
     return (
-        <div>
-            Login Page
-        </div>
+        <AuthLayout
+            title="Welcome Back!"
+            subtitle="Please login to continue."
+        >
+
+        </AuthLayout>
     );
 }
 

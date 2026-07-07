@@ -1,0 +1,78 @@
+/* Authentication Layout Styles */
+
+.auth-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.auth-left {
+    flex: 1;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: white;
+    padding: 40px;
+}
+
+.branding-content {
+    max-width: 450px;
+}
+
+.branding-content h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+}
+
+.branding-content p {
+    font-size: 20px;
+    line-height: 1.7;
+}
+
+.auth-right {
+    flex: 1;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: #f8fafc;
+}
+
+.auth-card {
+
+    width: 420px;
+
+    background: white;
+
+    padding: 40px;
+
+    border-radius: 12px;
+
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.auth-card h2 {
+    margin-bottom: 10px;
+}
+
+.auth-subtitle {
+    color: gray;
+    margin-bottom: 30px;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 900px) {
+
+    .auth-left {
+        display: none;
+    }
+
+    .auth-right {
+        flex: 1;
+    }
+
+}
