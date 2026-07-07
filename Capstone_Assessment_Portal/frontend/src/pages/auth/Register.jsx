@@ -3,12 +3,14 @@
  */
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import AuthLayout from "../../components/auth/AuthLayout";
 import AuthInput from "../../components/auth/AuthInput";
 import AuthButton from "../../components/auth/AuthButton";
+
 import { validateRegisterForm } from "../../utils/validators";
+import { registerUser } from "../../services/authService";
 
 function Register() {
     // Registration Form State
@@ -20,6 +22,9 @@ function Register() {
     });
 
     const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+    const [apiError, setApiError] = useState("");
+    const navigate = useNavigate();
     
     const handleChange = (event) => {
 
@@ -29,9 +34,16 @@ function Register() {
             ...previousData,
             [name]: value,
         }));
+
+        setErrors((previousErrors) => ({
+            ...previousErrors,
+            [name]: "",
+        }));
+
+        setApiError("");
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
 
         event.preventDefault();
 
@@ -44,7 +56,33 @@ function Register() {
 
         setErrors({});
 
-        console.log(formData);
+        setApiError("");
+
+        try {
+            setLoading(true);
+            const response = await registerUser(formData);
+            console.log(response);
+            alert("Registration Successful!");
+            navigate("/login");
+
+        }
+        catch (error) {
+            if (error.response) {
+                setApiError(
+                    error.response.data.detail ||
+                    "Registration failed."
+                );
+            }
+            else {
+
+                setApiError(
+                    "Unable to connect to server."
+                );
+            }
+        }
+        finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -91,9 +129,18 @@ function Register() {
                     error={errors.password}
                 />
 
+                {
+                    apiError && (
+                        <p className="api-error">
+                            {apiError}
+                        </p>
+                    )
+                }
+
                 <AuthButton
                     type="submit"
                     text="Register"
+                    loading={loading}
                 />
 
                 <p className="auth-footer">
