@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import AuthLayout from "../../components/auth/AuthLayout";
 import AuthInput from "../../components/auth/AuthInput";
 import AuthButton from "../../components/auth/AuthButton";
+import { validateRegisterForm } from "../../utils/validators";
 
 function Register() {
     // Registration Form State
@@ -17,6 +18,8 @@ function Register() {
         email: "",
         password: "",
     });
+
+    const [errors, setErrors] = useState({});
     
     const handleChange = (event) => {
 
@@ -31,6 +34,15 @@ function Register() {
     const handleSubmit = (event) => {
 
         event.preventDefault();
+
+        const validationErrors = validateRegisterForm(formData);
+
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+
+        setErrors({});
 
         console.log(formData);
     };
@@ -47,6 +59,7 @@ function Register() {
                     value={formData.username}
                     placeholder="Enter your username"
                     onChange={handleChange}
+                    error={errors.username}
                 />
 
                 <AuthInput
@@ -55,6 +68,7 @@ function Register() {
                     value={formData.name}
                     placeholder="Enter your full name"
                     onChange={handleChange}
+                    error={errors.name}
                 />
 
                 <AuthInput
@@ -64,6 +78,7 @@ function Register() {
                     value={formData.email}
                     placeholder="Enter your email"
                     onChange={handleChange}
+                    error={errors.email}
                 />
 
                 <AuthInput
@@ -73,6 +88,7 @@ function Register() {
                     value={formData.password}
                     placeholder="Enter your password"
                     onChange={handleChange}
+                    error={errors.password}
                 />
 
                 <AuthButton
