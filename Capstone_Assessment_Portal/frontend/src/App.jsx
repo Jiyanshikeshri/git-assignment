@@ -1,3 +1,8 @@
+/**
+ * File: App.jsx
+ * Description: Main application component for Assessment Portal
+ */
+
 function App() {
     return (
         <div>
