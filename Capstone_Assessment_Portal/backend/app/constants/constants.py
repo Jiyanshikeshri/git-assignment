@@ -55,6 +55,10 @@ CATEGORY_NOT_FOUND = (
     "Category not found."
 )
 
+CATEGORY_HAS_ACTIVE_ATTEMPTS = (
+    "Category cannot be deleted while students are attempting its quizzes."
+)
+
 
 # Quiz Messages
 QUIZ_ALREADY_EXISTS = (
@@ -71,6 +75,9 @@ QUIZ_DELETED_SUCCESSFULLY = (
 )
 QUIZ_NOT_FOUND = (
     "Quiz not found."
+)
+QUIZ_HAS_ACTIVE_ATTEMPTS = (
+    "Quiz cannot be deleted while students are attempting it."
 )
 
 #Question Messages

@@ -5,6 +5,7 @@ from app.constants.constants import (
     QUIZ_NOT_FOUND,
     QUIZ_UPDATED_SUCCESSFULLY,
     QUIZ_DELETED_SUCCESSFULLY,
+    QUIZ_HAS_ACTIVE_ATTEMPTS,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -26,6 +27,19 @@ from app.repositories.category_repository import (
     get_category_by_id,
 )
 
+from app.repositories.attempt_repository import (
+    has_active_attempts,
+    delete_attempts_by_quiz_id,
+)
+
+from app.repositories.question_repository import (
+    delete_questions_by_quiz_id,
+)
+
+from app.repositories.result_repository import (
+    delete_results_by_quiz_id,
+)
+
 from app.schemas.quiz_schema import (
     QuizCreate,
     QuizUpdate,
@@ -33,6 +47,8 @@ from app.schemas.quiz_schema import (
 )
 
 from app.config.logger import logger
+
+from app.config.database import client
 
 from app.schemas.common_schema import MessageResponse
 
@@ -258,8 +274,62 @@ def delete_existing_quiz(quiz_id: str):
         raise NotFoundException(
             QUIZ_NOT_FOUND
         )
+    
+    if has_active_attempts(
+        quiz_id
+    ):
+        logger.warning(
+            "Quiz deletion blocked. Active attempts found for quiz ID: %s",
+            quiz_id,
+        )
 
-    delete_quiz(quiz_id)
+        raise BadRequestException(
+            QUIZ_HAS_ACTIVE_ATTEMPTS
+        )
+
+    with client.start_session() as session:
+
+        with session.start_transaction():
+
+            logger.info(
+                "Deleting all results for quiz ID: %s",
+                quiz_id,
+            )
+
+            delete_results_by_quiz_id(
+                quiz_id,
+                session=session,
+            )
+
+            logger.info(
+                "Deleting all attempts for quiz ID: %s",
+                quiz_id,
+            )
+
+            delete_attempts_by_quiz_id(
+                quiz_id,
+                session=session,
+            )
+
+            logger.info(
+                "Deleting all questions for quiz ID: %s",
+                quiz_id,
+            )
+
+            delete_questions_by_quiz_id(
+                quiz_id,
+                session=session,
+            )
+
+            logger.info(
+                "Deleting quiz. ID: %s",
+                quiz_id,
+            )
+
+            delete_quiz(
+                quiz_id,
+                session=session,
+            )
 
     logger.info(
         "Quiz deleted successfully. ID: %s",

@@ -103,3 +103,21 @@ def get_result_by_id(
     )
 
     return result
+
+
+def delete_results_by_quiz_id(
+    quiz_id: str,
+    session=None,
+):
+    """
+    Delete all results belonging to a quiz
+    """
+
+    result = db.results.delete_many(
+        {
+            "quiz_id": quiz_id
+        },
+        session=session,
+    )
+
+    return result
