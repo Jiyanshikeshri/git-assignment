@@ -47,10 +47,12 @@ def start_attempt(
     Start a new quiz attempt
     """
 
-    return start_quiz_attempt(
+    response = start_quiz_attempt(
         attempt,
         current_user["user_id"],
     )
+
+    return response
 
 
 @router.patch(
@@ -70,11 +72,13 @@ def save_answer(
     Save or update a student's answer during an ongoing quiz attempt
     """
 
-    return save_partial_answer(
+    response = save_partial_answer(
         attempt_id=attempt_id,
         answer=answer,
         student_id=current_user["user_id"],
     )
+
+    return response
 
 
 @router.get(
@@ -93,10 +97,12 @@ def resume_attempt(
     Resume an existing quiz attempt
     """
 
-    return resume_quiz_attempt(
+    response = resume_quiz_attempt(
         attempt_id=attempt_id,
         student_id=user["user_id"],
     )
+
+    return response
 
 
 @router.patch(
@@ -115,7 +121,9 @@ def submit_attempt(
     Submit a quiz attempt
     """
 
-    return submit_quiz_attempt(
+    response = submit_quiz_attempt(
         attempt_id=attempt_id,
         student_id=user["user_id"],
     )
+
+    return response

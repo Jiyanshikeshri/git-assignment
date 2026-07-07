@@ -125,6 +125,8 @@ ATTEMPT_EXPIRED = (
     "Quiz attempt has expired."
 )
 
+MAX_ATTEMPTS_PER_QUIZ = 2
+
 MAX_ATTEMPT_LIMIT_REACHED = (
     "Maximum attempt limit reached for this quiz."
 )

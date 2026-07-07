@@ -77,7 +77,7 @@ def submit_attempt(
     Update the attempt after submission
     """
 
-    return db.attempts.update_one(
+    result = db.attempts.update_one(
         {
             "_id": ObjectId(attempt_id),
         },
@@ -85,6 +85,8 @@ def submit_attempt(
             "$set": update_data,
         },
     )
+
+    return result
 
 
 def expire_attempt(
@@ -95,7 +97,7 @@ def expire_attempt(
     Mark an attempt as expired and store evaluation details
     """
 
-    return db.attempts.update_one(
+    result = db.attempts.update_one(
         {
             "_id": ObjectId(attempt_id),
         },
@@ -103,3 +105,5 @@ def expire_attempt(
             "$set": update_data,
         },
     )
+
+    return result
