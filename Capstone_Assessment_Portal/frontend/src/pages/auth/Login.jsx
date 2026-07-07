@@ -1,6 +1,5 @@
 /**
- * File: Login.jsx
- * Description: Login page for Assessment Portal
+ * Login page for Assessment Portal
  */
 
 function Login() {
