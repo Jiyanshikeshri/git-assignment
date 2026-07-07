@@ -6,6 +6,7 @@ from app.constants.constants import (
     QUIZ_NOT_FOUND,
     QUIZ_HAS_NO_QUESTIONS,
     MAX_ATTEMPT_LIMIT_REACHED,
+    MAX_ATTEMPTS_PER_QUIZ,
     ANSWER_SAVED_SUCCESSFULLY,
     ATTEMPT_ALREADY_SUBMITTED,
     ATTEMPT_EXPIRED,
@@ -161,7 +162,7 @@ def start_quiz_attempt(
         quiz_id=attempt.quiz_id,
     )
 
-    if attempt_count >= 2:
+    if attempt_count >= MAX_ATTEMPTS_PER_QUIZ:
         logger.warning(
             "Maximum attempt limit reached. Student ID: %s, Quiz ID: %s",
             student_id,
