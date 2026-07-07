@@ -2,14 +2,22 @@ from app.config.logger import logger
 
 from app.constants.constants import (
     PASSING_PERCENTAGE,
+    RESULT_NOT_FOUND,
 )
 
 from app.repositories.result_repository import (
     create_result,
+    get_latest_result,
+)
+
+from app.exceptions.custom_exceptions import (
+    NotFoundException,
 )
 
 from app.schemas.result_schema import (
     ResultStatus,
+    ResultResponse,
+    QuestionResultResponse,
 )
 
 
@@ -148,3 +156,75 @@ def generate_result(
     )
 
     return result
+
+
+def get_latest_student_result(
+    student_id: str,
+):
+    """
+    Retrieve the latest quiz result for a student
+    """
+
+    logger.info(
+        "Fetching latest result for student ID: %s",
+        student_id,
+    )
+
+    result = get_latest_result(
+        student_id
+    )
+
+    if not result:
+
+        logger.warning(
+            "No result found for student ID: %s",
+            student_id,
+        )
+
+        raise NotFoundException(
+            RESULT_NOT_FOUND
+        )
+
+    questions = []
+
+    for question in result[
+        "questions"
+    ]:
+
+        questions.append(
+            QuestionResultResponse(
+                question_id=question[
+                    "question_id"
+                ],
+                selected_answer=question[
+                    "selected_answer"
+                ],
+                correct_answer=question[
+                    "correct_answer"
+                ],
+                is_correct=question[
+                    "is_correct"
+                ],
+                score=question[
+                    "score"
+                ],
+            )
+        )
+
+    logger.info(
+        "Latest result fetched successfully."
+    )
+
+    return ResultResponse(
+        id=str(result["_id"]),
+        attempt_id=result["attempt_id"],
+        quiz_id=result["quiz_id"],
+        student_id=result["student_id"],
+        score=result["score"],
+        correct_answers=result["correct_answers"],
+        total_questions=result["total_questions"],
+        percentage=result["percentage"],
+        result_status=ResultStatus(result["result_status"]),
+        submitted_at=result["submitted_at"],
+        questions=questions,
+    )

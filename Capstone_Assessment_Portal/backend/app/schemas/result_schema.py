@@ -47,6 +47,7 @@ class ResultResponse(
     percentage: float
     result_status: ResultStatus
     submitted_at: datetime
+    questions: list[QuestionResultResponse]
 
 
 class ResultHistoryResponse(
