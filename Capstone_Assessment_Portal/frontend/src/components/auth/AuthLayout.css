@@ -75,6 +75,13 @@
     text-decoration: underline;
 }
 
+.api-error {
+    color: #dc2626;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 14px;
+}
+
 /* Responsive */
 
 @media screen and (max-width: 900px) {

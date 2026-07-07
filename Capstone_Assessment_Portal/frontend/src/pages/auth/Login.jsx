@@ -3,12 +3,14 @@
  */
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import AuthLayout from "../../components/auth/AuthLayout";
 import AuthInput from "../../components/auth/AuthInput";
 import AuthButton from "../../components/auth/AuthButton";
+
 import { validateLoginForm } from "../../utils/validators";
+import { loginUser } from "../../services/authService";
 
 function Login() {
     // Login Form State
@@ -18,6 +20,14 @@ function Login() {
     });
 
     const [errors, setErrors] = useState({});
+    // API Loading State
+    const [loading, setLoading] = useState(false);
+
+    // API Error Message
+    const [apiError, setApiError] = useState("");
+
+    // Navigation Hook
+    const navigate = useNavigate();
 
     /**
      * Handles input field changes
@@ -30,12 +40,19 @@ function Login() {
             ...previousData,
             [name]: value,
         }));
+
+        setErrors((previousErrors) => ({
+            ...previousErrors,
+            [name]: "",
+        }));
+
+        setApiError("");
     };
 
     /**
      * Handles login form submission
      */
-    const handleSubmit = (event) => {
+    const handleSubmit = async(event) => {
 
         event.preventDefault();
 
@@ -47,8 +64,37 @@ function Login() {
         }
 
         setErrors({});
+        setApiError("");
 
-        console.log(formData);
+        try {
+            setLoading(true);
+            const response = await loginUser(formData);
+            console.log(response);
+
+            /*
+                Backend Response will give access token, refresh token and token type
+            */
+            alert("Login Successful!");
+
+            navigate("/");
+
+        }
+        catch (error) {
+            if (error.response) {
+                setApiError(
+                    error.response.data.detail ||
+                    "Invalid email or password."
+                );
+            }
+            else {
+                setApiError(
+                    "Unable to connect to server."
+                );
+            }
+        }
+        finally {   
+            setLoading(false);
+        }
     };
 
     return (
@@ -77,10 +123,15 @@ function Login() {
                     onChange={handleChange}
                     error={errors.password}
                 />
-
+                {apiError && (
+                    <p className="api-error">
+                        {apiError}
+                    </p>
+                )}
                 <AuthButton
                     type="submit"
                     text="Login"
+                    loading={loading}
                 />
 
                 <p className="auth-footer">
