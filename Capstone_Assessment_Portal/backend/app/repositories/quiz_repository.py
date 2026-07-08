@@ -96,7 +96,10 @@ def get_quiz_by_title_except_id(
     return quiz
 
 
-def delete_quiz(quiz_id: str):
+def delete_quiz(
+        quiz_id: str,
+        session=None,
+    ):
     """
     Delete a quiz by its ID
     """
@@ -104,7 +107,42 @@ def delete_quiz(quiz_id: str):
     result = db.quizzes.delete_one(
         {
             "_id": ObjectId(quiz_id)
+        },
+        session=session,
+    )
+
+    return result
+
+
+def get_quizzes_by_category_id(
+    category_id: str,
+):
+    """
+    Retrieve all quizzes belonging to a category
+    """
+
+    quizzes = db.quizzes.find(
+        {
+            "category_id": category_id
         }
+    )
+
+    return quizzes
+
+
+def delete_quizzes_by_category_id(
+    category_id: str,
+    session=None,
+):
+    """
+    Delete all quizzes belonging to a category
+    """
+
+    result = db.quizzes.delete_many(
+        {
+            "category_id": category_id
+        },
+        session=session,
     )
 
     return result

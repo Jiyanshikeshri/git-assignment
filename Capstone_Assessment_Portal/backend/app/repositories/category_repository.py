@@ -61,11 +61,15 @@ def get_category_by_name_except_id(name: str, category_id: str):
     return category
 
 
-def delete_category(category_id: str):
+def delete_category(
+        category_id: str,
+        session=None,
+    ):
     """
     Delete a category by its ID
     """
     result = db.categories.delete_one(
-        {"_id": ObjectId(category_id)}
+        {"_id": ObjectId(category_id)},
+        session=session,
     )
     return result

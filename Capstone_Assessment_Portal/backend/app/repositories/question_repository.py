@@ -103,7 +103,10 @@ def get_question_by_text_except_id(
     return question
 
 
-def delete_question(question_id: str):
+def delete_question(
+        question_id: str,
+        session=None,
+    ):
     """
     Delete a question by its ID
     """
@@ -111,7 +114,45 @@ def delete_question(question_id: str):
     result = db.questions.delete_one(
         {
             "_id": ObjectId(question_id)
-        }
+        },
+        session=session,
+    )
+
+    return result
+
+def delete_questions_by_quiz_id(
+    quiz_id: str,
+    session=None,   
+):
+    """
+    Delete all questions belonging to a quiz
+    """
+
+    result = db.questions.delete_many(
+        {
+            "quiz_id": quiz_id
+        },
+        session=session,
+    )
+
+    return result
+
+
+def delete_questions_by_quiz_ids(
+    quiz_ids: list[str],
+    session=None,
+):
+    """
+    Delete questions belonging to multiple quizzes
+    """
+
+    result = db.questions.delete_many(
+        {
+            "quiz_id": {
+                "$in": quiz_ids
+            }
+        },
+        session=session,
     )
 
     return result

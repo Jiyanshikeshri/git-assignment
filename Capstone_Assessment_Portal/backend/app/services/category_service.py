@@ -4,6 +4,7 @@ from app.constants.constants import (
     CATEGORY_UPDATED_SUCCESSFULLY,
     CATEGORY_DELETED_SUCCESSFULLY,
     CATEGORY_NOT_FOUND,
+    CATEGORY_HAS_ACTIVE_ATTEMPTS,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -20,12 +21,33 @@ from app.repositories.category_repository import (
     update_category,
     delete_category,
 )
+
+from app.repositories.quiz_repository import (
+    get_quizzes_by_category_id,
+    delete_quizzes_by_category_id,
+)
+
+from app.repositories.question_repository import (
+    delete_questions_by_quiz_ids,
+)
+
+from app.repositories.attempt_repository import (
+    has_active_attempts,
+    delete_attempts_by_quiz_id,
+)
+
+from app.repositories.result_repository import (
+    delete_results_by_quiz_id,
+)
+
 from app.schemas.category_schema import (
     CategoryCreate,
     CategoryUpdate,
 )
 
 from app.config.logger import logger
+
+from app.config.database import client
 
 from app.schemas.common_schema import MessageResponse
 
@@ -174,7 +196,64 @@ def delete_existing_category(category_id: str):
             CATEGORY_NOT_FOUND
         )
 
-    delete_category(category_id)
+    quizzes = list(
+        get_quizzes_by_category_id(
+            category_id
+        )
+    )
+
+    for quiz in quizzes:
+
+        if has_active_attempts(
+            str(quiz["_id"])
+        ):
+
+            logger.warning(
+                "Category deletion blocked. Active attempts found."
+            )
+
+            raise BadRequestException(
+                CATEGORY_HAS_ACTIVE_ATTEMPTS
+            )
+        
+
+    with client.start_session() as session:
+
+        with session.start_transaction():
+
+            for quiz in quizzes:
+
+                quiz_id = str(
+                    quiz["_id"]
+                )
+
+                delete_results_by_quiz_id(
+                    quiz_id,
+                    session=session,
+                )
+
+                delete_attempts_by_quiz_id(
+                    quiz_id,
+                    session=session,
+                )
+
+            delete_questions_by_quiz_ids(
+                [
+                    str(quiz["_id"])
+                    for quiz in quizzes
+                ],
+                session=session,
+            )
+
+            delete_quizzes_by_category_id(
+                category_id,
+                session=session,
+            )
+
+            delete_category(
+                category_id,
+                session=session,
+            )
 
     logger.info(
         "Category deleted successfully. ID: %s",

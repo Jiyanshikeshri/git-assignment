@@ -1,6 +1,8 @@
 from app.config.database import db
 from bson import ObjectId
+from datetime import datetime, timezone
 
+from app.schemas.attempt_schema import AttemptStatus
 
 def create_attempt(attempt_data: dict):
     """
@@ -104,6 +106,46 @@ def expire_attempt(
         {
             "$set": update_data,
         },
+    )
+
+    return result
+
+
+def has_active_attempts(
+    quiz_id: str,
+):
+    """
+    Check whether the quiz has any active attempts
+    """
+
+    count = db.attempts.count_documents(
+        {
+            "quiz_id": quiz_id,
+            "status": AttemptStatus.IN_PROGRESS.value,
+            "expires_at": {
+                "$gt": datetime.now(timezone.utc)
+            },
+        }
+    )
+
+    is_active_attempt_present = count > 0
+
+    return is_active_attempt_present
+
+
+def delete_attempts_by_quiz_id(
+    quiz_id: str,
+    session=None,
+):
+    """
+    Delete all attempts belonging to a quiz
+    """
+
+    result = db.attempts.delete_many(
+        {
+            "quiz_id": quiz_id
+        },
+        session=session,
     )
 
     return result
