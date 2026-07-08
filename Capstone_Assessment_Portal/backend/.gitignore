@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 .coverage
 .coverage.*
+keys/private.pem
+keys/public.pem

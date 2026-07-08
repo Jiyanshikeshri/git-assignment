@@ -6,14 +6,27 @@
 
 import api from "./api";
 
+import { getPublicKey } from "./publicKeyService";
+import { encryptPassword } from "../utils/encryption";
+
 /**
  * Register a new student
  */
 export const registerUser = async (userData) => {
 
+    const publicKey = await getPublicKey();
+
+    const encryptedPassword = encryptPassword(
+        userData.password,
+        publicKey
+    );
+
     const response = await api.post(
         "/auth/register",
-        userData
+        {
+            ...userData,
+            password: encryptedPassword,
+        }
     );
 
     return response.data;
@@ -24,9 +37,19 @@ export const registerUser = async (userData) => {
  */
 export const loginUser = async (credentials) => {
 
+    const publicKey = await getPublicKey();
+
+    const encryptedPassword = encryptPassword(
+        credentials.password,
+        publicKey
+    );
+
     const response = await api.post(
         "/auth/login",
-        credentials
+        {
+            ...credentials,
+            password: encryptedPassword,
+        }
     );
 
     return response.data;

@@ -6,6 +6,7 @@ from app.schemas.user_schema import UserLogin
 from app.services.auth_service import login_user
 from app.schemas.user_schema import RefreshTokenRequest
 from app.services.auth_service import refresh_access_token
+from app.services.auth_service import get_public_key
 
 from app.middleware.auth_middleware import (
     require_admin,
@@ -59,3 +60,11 @@ def student_dashboard(current_user=Depends(require_student)):
         "message": "Welcome to the Student Dashboard",
         "user": current_user
     }
+
+
+@router.get("/public-key")
+def public_key():
+    """
+    Returns the RSA public key for frontend password encryption
+    """
+    return get_public_key()
