@@ -102,11 +102,11 @@ function Login() {
             title="Welcome Back!"
             subtitle="Please login to continue."
         >
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
 
                 <AuthInput
                     label="Email Address"
-                    type="email"
+                    type="text"
                     name="email"
                     value={formData.email}
                     placeholder="Enter your email"

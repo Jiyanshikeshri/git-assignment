@@ -35,3 +35,35 @@
     font-size: 13px;
     margin-top: 5px;
 }
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper .auth-input {
+    padding-right: 45px;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 14px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #6b7280;
+    font-size: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.password-toggle:hover {
+    color: #2563eb;
+}
+
+.password-toggle:focus {
+    outline: none;
+}

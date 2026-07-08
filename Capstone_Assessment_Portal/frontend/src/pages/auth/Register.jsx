@@ -90,7 +90,7 @@ function Register() {
             title="Create Account"
             subtitle="Register to start attempting quizzes."
         >
-             <form onSubmit={handleSubmit}>
+             <form onSubmit={handleSubmit} noValidate>
                 <AuthInput
                     label="Username"
                     name="username"
@@ -111,7 +111,7 @@ function Register() {
 
                 <AuthInput
                     label="Email Address"
-                    type="email"
+                    type="text"
                     name="email"
                     value={formData.email}
                     placeholder="Enter your email"
