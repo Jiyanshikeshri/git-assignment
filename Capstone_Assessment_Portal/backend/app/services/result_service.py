@@ -53,9 +53,11 @@ def get_result_status(
     """
 
     if percentage >= PASSING_PERCENTAGE:
-        return ResultStatus.PASS.value
+        result_status = ResultStatus.PASS.value
+    else:
+        result_status = ResultStatus.FAIL.value
 
-    return ResultStatus.FAIL.value
+    return result_status
 
 
 def build_question_result(
