@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/auth/AuthLayout";
 import AuthInput from "../../components/auth/AuthInput";
 import AuthButton from "../../components/auth/AuthButton";
+import SuccessMessage from "../../components/common/SuccessMessage";
 
 import { validateLoginForm } from "../../utils/validators";
 import { loginUser } from "../../services/authService";
@@ -25,6 +26,8 @@ function Login() {
 
     // API Error Message
     const [apiError, setApiError] = useState("");
+
+    const [successMessage, setSuccessMessage] = useState("");
 
     // Navigation Hook
     const navigate = useNavigate();
@@ -47,6 +50,7 @@ function Login() {
         }));
 
         setApiError("");
+        setSuccessMessage("");
     };
 
     /**
@@ -65,6 +69,7 @@ function Login() {
 
         setErrors({});
         setApiError("");
+        setSuccessMessage("");
 
         try {
             setLoading(true);
@@ -74,10 +79,11 @@ function Login() {
             /*
                 Backend Response will give access token, refresh token and token type
             */
-            alert("Login Successful!");
+            setSuccessMessage("Login successful. Redirecting...");
 
-            navigate("/");
-
+            setTimeout(() => {
+                navigate("/");
+            }, 1500);
         }
         catch (error) {
             if (error.response) {
@@ -128,6 +134,9 @@ function Login() {
                         {apiError}
                     </p>
                 )}
+                <SuccessMessage
+                    message={successMessage}
+                />
                 <AuthButton
                     type="submit"
                     text="Login"

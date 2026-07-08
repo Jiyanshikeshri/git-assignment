@@ -8,6 +8,7 @@ import { Link, useNavigate } from "react-router-dom";
 import AuthLayout from "../../components/auth/AuthLayout";
 import AuthInput from "../../components/auth/AuthInput";
 import AuthButton from "../../components/auth/AuthButton";
+import SuccessMessage from "../../components/common/SuccessMessage";
 
 import { validateRegisterForm } from "../../utils/validators";
 import { registerUser } from "../../services/authService";
@@ -24,6 +25,7 @@ function Register() {
     const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
     const [apiError, setApiError] = useState("");
+    const [successMessage, setSuccessMessage] = useState("");
     const navigate = useNavigate();
     
     const handleChange = (event) => {
@@ -41,6 +43,7 @@ function Register() {
         }));
 
         setApiError("");
+        setSuccessMessage("");
     };
 
     const handleSubmit = async (event) => {
@@ -55,15 +58,20 @@ function Register() {
         }
 
         setErrors({});
-
         setApiError("");
+        setSuccessMessage("");
 
         try {
             setLoading(true);
             const response = await registerUser(formData);
             console.log(response);
-            alert("Registration Successful!");
-            navigate("/login");
+            setSuccessMessage(
+                "Registration successful. Redirecting to Login..."
+            );
+
+            setTimeout(() => {
+                navigate("/login");
+            }, 1500);
 
         }
         catch (error) {
@@ -136,6 +144,10 @@ function Register() {
                         </p>
                     )
                 }
+
+                <SuccessMessage
+                    message={successMessage}
+                />
 
                 <AuthButton
                     type="submit"
