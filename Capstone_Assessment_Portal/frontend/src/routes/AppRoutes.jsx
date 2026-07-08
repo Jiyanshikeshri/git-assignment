@@ -8,6 +8,11 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 
+import ProtectedRoute from "./ProtectedRoute";
+
+import AdminDashboard from "../pages/admin/AdminDashboard";
+import StudentDashboard from "../pages/student/StudentDashboard";
+
 function AppRoutes() {
     return (
         <>
@@ -29,6 +34,26 @@ function AppRoutes() {
                     <Route
                         path="/register"
                         element={<Register />}
+                    />
+
+                    {/* Protected Admin Route */}
+                    <Route
+                        path="/admin/dashboard"
+                        element={
+                            <ProtectedRoute allowedRole="ADMIN">
+                                <AdminDashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    {/* Protected Student Route */}
+                    <Route
+                        path="/student/dashboard"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <StudentDashboard />
+                            </ProtectedRoute>
+                        }
                     />
 
                 </Routes>

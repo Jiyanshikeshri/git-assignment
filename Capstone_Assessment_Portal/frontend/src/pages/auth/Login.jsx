@@ -81,7 +81,7 @@ function Login() {
             /*
                 Decode access token to get user details
             */
-            const user = decodeToken(
+            const decodedUser = decodeToken(
                 response.access_token
             );
 
@@ -91,16 +91,22 @@ function Login() {
             login({
                 accessToken: response.access_token,
                 refreshToken: response.refresh_token,
-                user,
+                user: decodedUser,
             });
 
+            console.log(decodedUser);
             /*
                 Backend Response will give access token, refresh token and token type
             */
             setSuccessMessage("Login successful. Redirecting...");
 
             setTimeout(() => {
-                navigate("/");
+                if (decodedUser.role === "ADMIN") {
+                    navigate("/admin/dashboard");
+                }
+                else {
+                    navigate("/student/dashboard");
+                }
             }, 1500);
         }
         catch (error) {
