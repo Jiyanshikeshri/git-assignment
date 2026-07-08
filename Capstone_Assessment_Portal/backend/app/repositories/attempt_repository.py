@@ -128,7 +128,9 @@ def has_active_attempts(
         }
     )
 
-    return count > 0
+    is_active_attempt_present = count > 0
+
+    return is_active_attempt_present
 
 
 def delete_attempts_by_quiz_id(
