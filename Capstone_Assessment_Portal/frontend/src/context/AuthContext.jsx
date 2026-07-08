@@ -2,13 +2,14 @@
  * Global Authentication Context for the Assessment Portal
  */
 
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import {
     saveTokens,
     removeTokens,
     getAccessToken,
     getRefreshToken,
 } from "../utils/auth";
+import { decodeToken } from "../utils/jwt";
 
 /**
  * Global Authentication Context
@@ -60,6 +61,24 @@ export function AuthProvider({ children }) {
         setRefreshToken(null);
         setUser(null);
     };
+
+    /**
+     * Restore authentication state when application loads
+     */
+    useEffect(() => {
+        if (!accessToken) {
+            return;
+        }
+        const decodedUser = decodeToken(
+            accessToken
+        );
+        if (decodedUser) {
+            setUser(decodedUser);
+        }
+        else {
+            logout();
+        }
+    }, [accessToken]);
 
     /**
      * Context Value

@@ -12,6 +12,8 @@ import SuccessMessage from "../../components/common/SuccessMessage";
 
 import { validateLoginForm } from "../../utils/validators";
 import { loginUser } from "../../services/authService";
+import { useAuth } from "../../context/AuthContext";
+import { decodeToken } from "../../utils/jwt";
 
 function Login() {
     // Login Form State
@@ -31,6 +33,8 @@ function Login() {
 
     // Navigation Hook
     const navigate = useNavigate();
+
+    const { login } = useAuth();
 
     /**
      * Handles input field changes
@@ -74,7 +78,21 @@ function Login() {
         try {
             setLoading(true);
             const response = await loginUser(formData);
-            console.log(response);
+            /*
+                Decode access token to get user details
+            */
+            const user = decodeToken(
+                response.access_token
+            );
+
+            /*
+                Store authentication data globally
+            */
+            login({
+                accessToken: response.access_token,
+                refreshToken: response.refresh_token,
+                user,
+            });
 
             /*
                 Backend Response will give access token, refresh token and token type
