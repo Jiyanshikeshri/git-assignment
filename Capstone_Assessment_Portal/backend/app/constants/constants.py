@@ -150,3 +150,34 @@ INVALID_SELECTED_ANSWER = (
 QUIZ_SUBMITTED_SUCCESSFULLY = (
     "Quiz submitted successfully."
 )
+
+#Result Messages
+PASSING_PERCENTAGE = 40
+
+RESULT_GENERATED_SUCCESSFULLY = (
+    "Result generated successfully."
+)
+
+RESULT_NOT_FOUND = (
+    "Result not found."
+)
+
+NO_RESULTS_FOUND = (
+    "No results found."
+)
+
+RESULT_FETCHED_SUCCESSFULLY = (
+    "Result fetched successfully."
+)           
+
+RESULT_HISTORY_NOT_FOUND = (
+    "No result history found."
+)
+
+RESULT_HISTORY_FETCHED_SUCCESSFULLY = (
+    "Result history fetched successfully."
+)
+
+RESULTS_FETCHED_SUCCESSFULLY = (
+    "Results fetched successfully."
+)

@@ -51,6 +51,10 @@ from app.schemas.common_schema import (
     MessageResponse,
 )
 
+from app.services.result_service import (
+    generate_result,
+)
+
 
 def build_question_snapshot(questions):
     """
@@ -570,6 +574,14 @@ def submit_quiz_attempt(
     submit_attempt(
         attempt_id,
         update_data,
+    )
+
+    generate_result(
+        attempt=attempt,
+        score=score,
+        correct_answers=correct_answers,
+        total_questions=total_questions,
+        submitted_at=current_time,
     )
 
     if current_time > expires_at:
