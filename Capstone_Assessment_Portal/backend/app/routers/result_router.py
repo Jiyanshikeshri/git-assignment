@@ -43,9 +43,10 @@ def get_latest_result(
     Retrieve the latest quiz result of the logged-in student
     """
 
-    return get_latest_student_result(
+    result = get_latest_student_result(
         current_user["user_id"],
     )
+    return result
 
 
 @router.get(
@@ -60,9 +61,10 @@ def get_result_history(
     Retrieve the complete quiz result history of the logged-in student
     """
 
-    return get_student_result_history(
+    result = get_student_result_history(
         current_user["user_id"],
     )
+    return result
 
 
 @router.get(
@@ -77,7 +79,8 @@ def get_results(
     Retrieve all quiz results for the admin dashboard
     """
 
-    return get_admin_results()
+    result = get_admin_results()
+    return result
 
 
 @router.get(
@@ -96,7 +99,8 @@ def result_breakdown(
     Retrieve the detailed breakdown of a quiz result
     """
 
-    return get_result_breakdown(
+    result = get_result_breakdown(
         result_id=result_id,
         current_user=current_user,
     )
+    return result
