@@ -4,12 +4,19 @@
  */
 
 import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 import "../../styles/dashboard/Navbar.css";
 
 function Navbar() {
 
-    const { user } = useAuth();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
 
     return (
         <header className="dashboard-navbar">
@@ -31,6 +38,12 @@ function Navbar() {
                         {user?.role}
                     </span>
                 </div>
+                <button
+                    className="navbar-logout"
+                    onClick={handleLogout}
+                >
+                    Logout
+                </button>
             </div>
         </header>
     );

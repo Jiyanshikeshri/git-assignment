@@ -3,20 +3,14 @@
  * Displays navigation links based on user role
  */
 
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink} from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
 
 import "../../styles/dashboard/Sidebar.css";
 
 function Sidebar() {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
-
-    const handleLogout = () => {
-                logout();
-                navigate("/login");
-    };
+    const { user } = useAuth();
 
     const adminMenu = [
         {
@@ -84,13 +78,6 @@ function Sidebar() {
                     ))
                 }
             </nav>
-
-            <button
-                className="sidebar-logout"
-                onClick={handleLogout}
-            >
-                Logout
-            </button>
         </aside>
     );
 }

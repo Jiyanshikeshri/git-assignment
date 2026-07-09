@@ -27,6 +27,7 @@
 .navbar-right {
     display: flex;
     align-items: center;
+    gap: 20px;
 }
 
 .navbar-user {
@@ -48,4 +49,20 @@
     color: #6b7280;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.navbar-logout {
+    padding: 10px 22px;
+    border: none;
+    border-radius: 8px;
+    background: #2563eb;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.navbar-logout:hover {
+    background: #1d4ed8;
 }
