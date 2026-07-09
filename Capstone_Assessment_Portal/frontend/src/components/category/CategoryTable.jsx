@@ -12,6 +12,7 @@ import {
 function CategoryTable({
     categories,
     onEdit,
+    onDelete,
 }) {
     return (
         <div className="category-table-container">
@@ -43,6 +44,7 @@ function CategoryTable({
 
                                             <button
                                                 className="delete-btn"
+                                                onClick={() => onDelete(category)}
                                             >
                                                 <FaTrash />
                                                 Delete

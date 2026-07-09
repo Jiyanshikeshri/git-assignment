@@ -1,0 +1,27 @@
+/**
+ * Delete Category Modal Styles
+ */
+
+.delete-modal {
+    width: 420px;
+    background: white;
+    border-radius: 12px;
+    padding: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.delete-modal h2 {
+    margin-bottom: 16px;
+}
+
+.delete-modal p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.delete-modal-actions {
+    margin-top: 28px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}

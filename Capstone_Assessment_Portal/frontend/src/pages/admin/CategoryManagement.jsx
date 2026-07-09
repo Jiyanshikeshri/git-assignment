@@ -7,8 +7,10 @@ import { useEffect, useState } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import CategoryTable from "../../components/category/CategoryTable";
 import CategoryFormModal from "../../components/category/CategoryFormModal";
+import DeleteCategoryModal from "../../components/category/DeleteCategoryModal";
 
 import { getCategories } from "../../services/categoryService";
+import { deleteCategory } from "../../services/categoryService";
 
 import "../../styles/category/CategoryManagement.css";
 
@@ -16,6 +18,7 @@ function CategoryManagement() {
     const [categories, setCategories] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     useEffect(() => {
         fetchCategories();
@@ -54,6 +57,33 @@ function CategoryManagement() {
         setIsModalOpen(true);
     };
 
+    const handleDeleteCategory = (category) => {
+        setSelectedCategory(category);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        try {
+            await deleteCategory(
+                selectedCategory.id
+            );
+            setIsDeleteModalOpen(false);
+            setSelectedCategory(null);
+            fetchCategories();
+        }
+        catch (error) {
+            console.error(
+                "Failed to delete category:",
+                error,
+            );
+        }
+    };
+
+    const handleCloseDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+        setSelectedCategory(null);
+    };
+
     return (
         <DashboardLayout>
 
@@ -78,6 +108,7 @@ function CategoryManagement() {
                 <CategoryTable
                     categories={categories}
                     onEdit={handleEditCategory}
+                    onDelete={handleDeleteCategory}
                 />
 
                 <CategoryFormModal
@@ -85,6 +116,12 @@ function CategoryManagement() {
                     onClose={handleCloseModal}
                     onCategoryCreated={handleCategoryCreated}
                     selectedCategory={selectedCategory}
+                />
+
+                <DeleteCategoryModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={handleCloseDeleteModal}
+                    onConfirm={handleConfirmDelete}
                 />
 
             </div>
