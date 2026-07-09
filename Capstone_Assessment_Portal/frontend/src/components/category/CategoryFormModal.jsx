@@ -4,6 +4,7 @@
  */
 
 import { useState } from "react";
+import { createCategory } from "../../services/categoryService";
 
 import "../../styles/category/CategoryFormModal.css";
 
@@ -11,11 +12,14 @@ function CategoryFormModal({
 
     isOpen,
     onClose,
+    onCategoryCreated,
 
 }) {
 
     const [categoryName, setCategoryName] = useState("");
     const [errors, setErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [serverError, setServerError] = useState("");
 
     /**
      * Validates category form fields
@@ -48,17 +52,32 @@ function CategoryFormModal({
         return Object.keys(validationErrors).length === 0;
     };
 
-    /**
-     * Handles category form submission.
-     */
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         if (!validateForm()) {
             return;
         }
-        console.log({
-            categoryName,
-        });
+        try {
+            setIsSubmitting(true);
+            setServerError("");
+            await createCategory({
+                name: categoryName.trim(),
+            });
+            setCategoryName("");
+            setErrors({});
+            onCategoryCreated();
+
+        }
+
+        catch (error) {
+            setServerError(
+                error.response?.data?.detail ||
+                "Unable to create category."
+            );
+        }
+        finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleCancel = () => {
@@ -102,6 +121,13 @@ function CategoryFormModal({
                                 </p>
                             )
                         }
+                        {
+                            serverError && (
+                                <p className="server-error">
+                                    {serverError}
+                                </p>
+                            )
+                        }
                     </div>
                     
                     <div className="modal-actions">
@@ -109,14 +135,20 @@ function CategoryFormModal({
                             type="button"
                             className="cancel-btn"
                             onClick={handleCancel}
+                            disabled={isSubmitting}
                         >
                             Cancel
                         </button>
                         <button
                             type="submit"
                             className="save-btn"
+                            disabled={isSubmitting}
                         >
-                            Save
+                            {
+                                isSubmitting
+                                    ? "Saving..."
+                                    : "Save"
+                            }
                         </button>
                     </div>
                 </form>

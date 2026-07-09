@@ -41,6 +41,11 @@ function CategoryManagement() {
         setIsModalOpen(false);
     };
 
+    const handleCategoryCreated = async () => {
+        await fetchCategories();
+        handleCloseModal();
+    };
+
     return (
         <DashboardLayout>
 
@@ -69,6 +74,7 @@ function CategoryManagement() {
                 <CategoryFormModal
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
+                    onCategoryCreated={handleCategoryCreated}
                 />
 
             </div>

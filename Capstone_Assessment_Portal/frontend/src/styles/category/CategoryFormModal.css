@@ -88,3 +88,16 @@
     font-size: 14px;
     font-weight: 500;
 }
+
+.server-error {
+    margin-top: 10px;
+    color: #dc2626;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.save-btn:disabled,
+.cancel-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
