@@ -12,6 +12,7 @@ import ProtectedRoute from "./ProtectedRoute";
 
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import StudentDashboard from "../pages/student/StudentDashboard";
+import CategoryManagement from "../pages/admin/CategoryManagement";
 
 function AppRoutes() {
     return (
@@ -42,6 +43,15 @@ function AppRoutes() {
                         element={
                             <ProtectedRoute allowedRole="ADMIN">
                                 <AdminDashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/categories"
+                        element={
+                            <ProtectedRoute allowedRole="ADMIN">
+                                <CategoryManagement />
                             </ProtectedRoute>
                         }
                     />

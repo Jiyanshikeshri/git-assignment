@@ -1,0 +1,40 @@
+/*
+* Category Management layout styles
+*/
+.category-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category-header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.category-description {
+    color: #64748b;
+    font-size: 16px;
+}
+
+.add-category-btn {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.add-category-btn:hover {
+    background: #1d4ed8;
+}
