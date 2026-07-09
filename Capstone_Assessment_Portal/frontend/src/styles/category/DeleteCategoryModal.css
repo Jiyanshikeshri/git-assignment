@@ -20,8 +20,37 @@
 }
 
 .delete-modal-actions {
-    margin-top: 28px;
+    margin-top: 32px;
     display: flex;
     justify-content: flex-end;
     gap: 12px;
+}
+
+.delete-modal-actions button {
+    min-width: 120px;
+    height: 46px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cancel-btn {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.cancel-btn:hover {
+    background: #e5e7eb;
+}
+
+.delete-btn {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.delete-btn:hover {
+    background: #dc2626;
 }
