@@ -1,0 +1,59 @@
+/**
+ * Student Category Card Styles
+ */
+
+.category-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    transition: all 0.25s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+
+}
+
+.category-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+.category-card-icon {
+    font-size: 40px;
+    color: #2563eb;
+}
+
+.category-card-content h3 {
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.category-card-content p {
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.view-quizzes-btn {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 12px 18px;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.view-quizzes-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}

@@ -13,6 +13,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminDashboard from "../pages/admin/AdminDashboard";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import CategoryManagement from "../pages/admin/CategoryManagement";
+import StudentCategories from "../pages/student/StudentCategories";
 
 function AppRoutes() {
     return (
@@ -65,7 +66,28 @@ function AppRoutes() {
                             </ProtectedRoute>
                         }
                     />
-
+                    <Route
+                        path="/student/categories"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <StudentCategories />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/student/categories/:categoryId/quizzes"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <h2
+                                    style={{
+                                        padding: "40px",
+                                    }}
+                                >
+                                    Quiz Listing Coming Soon...
+                                </h2>
+                            </ProtectedRoute>
+                        }
+                    />
                 </Routes>
             </BrowserRouter>
         </>
