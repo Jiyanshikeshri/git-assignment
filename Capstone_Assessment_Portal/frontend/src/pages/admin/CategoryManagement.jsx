@@ -15,6 +15,7 @@ import "../../styles/category/CategoryManagement.css";
 function CategoryManagement() {
     const [categories, setCategories] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
     useEffect(() => {
         fetchCategories();
@@ -34,16 +35,23 @@ function CategoryManagement() {
     };
 
     const handleOpenModal = () => {
+        setSelectedCategory(null);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
+        setSelectedCategory(null);
         setIsModalOpen(false);
     };
 
     const handleCategoryCreated = async () => {
         await fetchCategories();
         handleCloseModal();
+    };
+
+    const handleEditCategory = (category) => {
+        setSelectedCategory(category);
+        setIsModalOpen(true);
     };
 
     return (
@@ -69,12 +77,14 @@ function CategoryManagement() {
 
                 <CategoryTable
                     categories={categories}
+                    onEdit={handleEditCategory}
                 />
 
                 <CategoryFormModal
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
                     onCategoryCreated={handleCategoryCreated}
+                    selectedCategory={selectedCategory}
                 />
 
             </div>

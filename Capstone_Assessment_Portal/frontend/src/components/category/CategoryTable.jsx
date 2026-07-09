@@ -11,6 +11,7 @@ import {
 
 function CategoryTable({
     categories,
+    onEdit,
 }) {
     return (
         <div className="category-table-container">
@@ -33,7 +34,8 @@ function CategoryTable({
                                         </td>
                                         <td className="category-actions">
                                             <button
-                                                className="edit-btn"
+                                                className="edit-btn" 
+                                                onClick={() => onEdit(category)}
                                             >
                                                 <FaEdit />
                                                 Edit

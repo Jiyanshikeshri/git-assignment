@@ -3,8 +3,8 @@
  * Used for creating and updating categories
  */
 
-import { useState } from "react";
-import { createCategory } from "../../services/categoryService";
+import { useState, useEffect } from "react";
+import { createCategory, updateCategory } from "../../services/categoryService";
 
 import "../../styles/category/CategoryFormModal.css";
 
@@ -13,6 +13,7 @@ function CategoryFormModal({
     isOpen,
     onClose,
     onCategoryCreated,
+    selectedCategory,
 
 }) {
 
@@ -60,19 +61,28 @@ function CategoryFormModal({
         try {
             setIsSubmitting(true);
             setServerError("");
-            await createCategory({
-                name: categoryName.trim(),
-            });
+            if (selectedCategory) {
+                await updateCategory(
+                    selectedCategory.id,
+                    {
+                        name: categoryName.trim(),
+                    },
+                );
+            }
+            else {
+                await createCategory({
+                    name: categoryName.trim(),
+                });
+            }
             setCategoryName("");
             setErrors({});
             onCategoryCreated();
-
         }
 
         catch (error) {
             setServerError(
                 error.response?.data?.detail ||
-                "Unable to create category."
+                "Unable to save category."
             );
         }
         finally {
@@ -86,6 +96,19 @@ function CategoryFormModal({
         onClose();
     };
 
+    useEffect(() => {
+        if (selectedCategory) {
+            setCategoryName(
+                selectedCategory.name
+            ); 
+        }
+        else {
+            setCategoryName("");
+        }
+        setErrors({});
+        setServerError("");
+    }, [selectedCategory, isOpen]);
+
     if (!isOpen) {
         return null;
     }
@@ -95,7 +118,11 @@ function CategoryFormModal({
         <div className="modal-overlay">
             <div className="category-modal">
                 <h2>
-                    Add Category
+                    {
+                        selectedCategory
+                            ? "Edit Category"
+                            : "Add Category"
+                    }
                 </h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -147,7 +174,9 @@ function CategoryFormModal({
                             {
                                 isSubmitting
                                     ? "Saving..."
-                                    : "Save"
+                                    : selectedCategory
+                                        ? "Update"
+                                        : "Save"
                             }
                         </button>
                     </div>
