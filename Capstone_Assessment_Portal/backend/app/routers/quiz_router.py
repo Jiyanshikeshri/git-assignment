@@ -7,6 +7,7 @@ from app.schemas.quiz_schema import (
 from app.services.quiz_service import (
     create_new_quiz,
     fetch_all_quizzes,
+    fetch_quizzes_by_category_id,
     fetch_quiz_by_id,
     update_existing_quiz,
     delete_existing_quiz,
@@ -51,6 +52,25 @@ def get_all_quizzes(
     """
 
     response = fetch_all_quizzes()
+    return response
+
+
+@router.get(
+    "/category/{category_id}",
+    status_code=status.HTTP_200_OK,
+)
+def get_quizzes_by_category(
+    category_id: str,
+    user=Depends(get_current_user),
+):
+    """
+    Retrieve all quizzes belonging to a category
+    """
+
+    response = fetch_quizzes_by_category_id(
+        category_id
+    )
+
     return response
 
 

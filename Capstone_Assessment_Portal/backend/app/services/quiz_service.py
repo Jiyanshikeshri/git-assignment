@@ -21,6 +21,7 @@ from app.repositories.quiz_repository import (
     update_quiz,
     get_quiz_by_title_except_id,
     delete_quiz,
+    get_quizzes_by_category_id,
 )
 
 from app.repositories.category_repository import (
@@ -136,6 +137,54 @@ def fetch_all_quizzes():
     logger.info(
         "Retrieved %d quizzes.",
         len(quizzes),
+    )
+
+    return quizzes
+
+
+def fetch_quizzes_by_category_id(
+    category_id: str,
+):
+    """
+    Retrieve all quizzes belonging to a category
+    """
+
+    logger.info(
+        "Fetching quizzes for category ID: %s",
+        category_id,
+    )
+
+    category = get_category_by_id(
+        category_id
+    )
+
+    if not category:
+        logger.warning(
+            "Category not found. ID: %s",
+            category_id,
+        )
+
+        raise NotFoundException(
+            CATEGORY_NOT_FOUND
+        )
+
+    quizzes = [
+        QuizResponse(
+            id=str(quiz["_id"]),
+            title=quiz["title"],
+            description=quiz["description"],
+            category_id=quiz["category_id"],
+            duration=quiz["duration"],
+        )
+        for quiz in get_quizzes_by_category_id(
+            category_id
+        )
+    ]
+
+    logger.info(
+        "Retrieved %d quizzes for category ID: %s",
+        len(quizzes),
+        category_id,
     )
 
     return quizzes

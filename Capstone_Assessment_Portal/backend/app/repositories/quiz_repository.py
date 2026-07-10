@@ -125,6 +125,9 @@ def get_quizzes_by_category_id(
         {
             "category_id": category_id
         }
+    ).sort(
+        "title",
+        1,
     )
 
     return quizzes
