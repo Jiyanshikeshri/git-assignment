@@ -60,3 +60,13 @@ export const deleteQuiz = async (quizId) => {
     );
     return response.data;
 };
+
+/**
+ * Fetch all quizzes
+ */
+export const getAllQuizzes = async () => {
+    const response = await api.get(
+        "/quizzes/",
+    );
+    return response.data;
+};

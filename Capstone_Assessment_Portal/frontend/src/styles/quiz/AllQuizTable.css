@@ -1,0 +1,38 @@
+/**
+ * Read-only Quiz Table Styles
+ */
+
+.quiz-table-container {
+    margin-top: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.quiz-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.quiz-table thead {
+    background: #2563eb;
+    color: white;
+}
+
+.quiz-table th,
+.quiz-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.quiz-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.no-data {
+    text-align: center;
+    color: #64748b;
+    padding: 20px;
+}
