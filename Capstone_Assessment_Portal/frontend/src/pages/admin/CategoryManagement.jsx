@@ -4,6 +4,8 @@
  */
 
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import DashboardLayout from "../../layouts/DashboardLayout";
 import CategoryTable from "../../components/category/CategoryTable";
 import CategoryFormModal from "../../components/category/CategoryFormModal";
@@ -19,6 +21,8 @@ function CategoryManagement() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchCategories();
@@ -84,6 +88,12 @@ function CategoryManagement() {
         setSelectedCategory(null);
     };
 
+    const handleViewQuizzes = (category) => {
+        navigate(
+            `/admin/categories/${category.id}/quizzes`
+        );
+    };
+
     return (
         <DashboardLayout>
 
@@ -109,6 +119,7 @@ function CategoryManagement() {
                     categories={categories}
                     onEdit={handleEditCategory}
                     onDelete={handleDeleteCategory}
+                    onViewQuizzes={handleViewQuizzes}
                 />
 
                 <CategoryFormModal

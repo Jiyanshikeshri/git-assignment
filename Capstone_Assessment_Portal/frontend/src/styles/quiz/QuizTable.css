@@ -1,8 +1,8 @@
 /**
- * Category Table Styles
+ * Quiz Table Styles
  */
 
-.category-table-container {
+.quiz-table-container {
     margin-top: 30px;
     background: #ffffff;
     border-radius: 12px;
@@ -10,44 +10,39 @@
     box-shadow: 0 4px 16px rgba(0,0,0,0.08);
 }
 
-.category-table {
+.quiz-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.category-table thead {
+.quiz-table thead {
     background: #2563eb;
     color: white;
 }
 
-.category-table th,
-.category-table td {
+.quiz-table th,
+.quiz-table td {
     padding: 16px;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
 }
 
-.category-table th:last-child,
-.category-table td:last-child {
+.quiz-table th:last-child,
+.quiz-table td:last-child {
     text-align: center;
 }
 
-.category-table tbody tr:hover {
+.quiz-table tbody tr:hover {
     background: #f8fafc;
 }
 
-/**
- * Action Buttons
- */
-
-.category-actions {
+.quiz-actions {
     display: flex;
-    align-items: center;
     justify-content: center;
     gap: 12px;
 }
 
-.category-actions button {
+.quiz-actions button {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -55,9 +50,7 @@
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 14px;
     font-weight: 600;
-    transition: all 0.2s ease;
 }
 
 .edit-btn {
@@ -81,19 +74,4 @@
 .no-data {
     text-align: center;
     color: #64748b;
-}
-
-.category-link {
-    background: transparent;
-    border: none;
-    color: #1e3a8a;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    transition: color 0.2s ease;
-}
-
-.category-link:hover {
-    color: #2563eb;
-    text-decoration: underline;
 }

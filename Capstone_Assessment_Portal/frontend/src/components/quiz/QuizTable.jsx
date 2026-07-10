@@ -1,48 +1,52 @@
 /**
- * Reusable Category Table
- * Displays all available categories.
+ * Reusable Quiz Table
+ * Displays all quizzes for the selected category
  */
 
-import "../../styles/category/CategoryTable.css";
 import {
     FaEdit,
     FaTrash,
 } from "react-icons/fa";
 
-function CategoryTable({
-    categories,
+import "../../styles/quiz/QuizTable.css";
+
+function QuizTable({
+    quizzes,
     onEdit,
     onDelete,
-    onViewQuizzes,
+
 }) {
+
     return (
-        <div className="category-table-container">
-            <table className="category-table">
+        <div className="quiz-table-container">
+            <table className="quiz-table">
                 <thead>
                     <tr>
-                        <th>Name</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Duration (mins)</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
-
                 <tbody>
                     {
-                        categories.length > 0
+                        quizzes.length > 0
                             ? (
-                                categories.map((category) => (
-                                    <tr key={category.id || category._id}>
+                                quizzes.map((quiz) => (
+                                    <tr key={quiz.id}>
                                         <td>
-                                            <button
-                                                className="category-link"
-                                                onClick={() => onViewQuizzes(category)}
-                                            >
-                                                {category.name}
-                                            </button>
+                                            {quiz.title}
                                         </td>
-                                        <td className="category-actions">
+                                        <td>
+                                            {quiz.description}
+                                        </td>
+                                        <td>
+                                            {quiz.duration}
+                                        </td>
+                                        <td className="quiz-actions">
                                             <button
-                                                className="edit-btn" 
-                                                onClick={() => onEdit(category)}
+                                                className="edit-btn"
+                                                onClick={() => onEdit(quiz)}
                                             >
                                                 <FaEdit />
                                                 Edit
@@ -50,7 +54,7 @@ function CategoryTable({
 
                                             <button
                                                 className="delete-btn"
-                                                onClick={() => onDelete(category)}
+                                                onClick={() => onDelete(quiz)}
                                             >
                                                 <FaTrash />
                                                 Delete
@@ -62,19 +66,18 @@ function CategoryTable({
                             : (
                                 <tr>
                                     <td
-                                        colSpan="3"
+                                        colSpan="4"
                                         className="no-data"
                                     >
-                                        No categories found.
+                                        No quizzes found.
                                     </td>
                                 </tr>
                             )
                     }
-
                 </tbody>
             </table>
         </div>
     );
 }
 
-export default CategoryTable;
+export default QuizTable;
