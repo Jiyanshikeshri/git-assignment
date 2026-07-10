@@ -4,8 +4,10 @@ import { useParams } from "react-router-dom";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import QuizTable from "../../components/quiz/QuizTable";
 import QuizFormModal from "../../components/quiz/QuizFormModal";
+import DeleteQuizModal from "../../components/quiz/DeleteQuizModal";
 
 import { getQuizzesByCategory } from "../../services/quizService";
+import { deleteQuiz } from "../../services/quizService";
 
 import "../../styles/quiz/QuizManagement.css";
 
@@ -14,6 +16,7 @@ function QuizManagement() {
     const [quizzes, setQuizzes] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedQuiz, setSelectedQuiz] = useState(null);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
     const fetchQuizzes = async () => {
         try {
@@ -54,6 +57,33 @@ function QuizManagement() {
         setIsModalOpen(true);
     };
 
+    const handleDeleteQuiz = (quiz) => {
+        setSelectedQuiz(quiz);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        try {
+            await deleteQuiz(
+                selectedQuiz.id,
+            );
+            setIsDeleteModalOpen(false);
+            setSelectedQuiz(null);
+            await fetchQuizzes();
+        }
+        catch (error) {
+            console.error(
+                "Failed to delete quiz:",
+                error,
+            );
+        }   
+    };
+
+    const handleCloseDeleteModal = () => {
+        setIsDeleteModalOpen(false);
+        setSelectedQuiz(null);
+    };
+
     return (
         <DashboardLayout>
             <div className="quiz-page">
@@ -76,7 +106,7 @@ function QuizManagement() {
                 <QuizTable
                     quizzes={quizzes}
                     onEdit={handleEditQuiz}
-                    onDelete={() => {}}
+                    onDelete={handleDeleteQuiz}
                 />
                 <QuizFormModal
                     isOpen={isModalOpen}
@@ -84,6 +114,11 @@ function QuizManagement() {
                     onQuizCreated={handleQuizCreated}
                     categoryId={categoryId}
                     selectedQuiz={selectedQuiz}
+                />
+                <DeleteQuizModal
+                    isOpen={isDeleteModalOpen}
+                    onClose={handleCloseDeleteModal}
+                    onConfirm={handleConfirmDelete}
                 />
             </div>
         </DashboardLayout>

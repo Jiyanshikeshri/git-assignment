@@ -49,3 +49,14 @@ export const updateQuiz = async (
     return response.data;
 
 };
+
+/**
+ * Delete quiz
+ */
+export const deleteQuiz = async (quizId) => {
+
+    const response = await api.delete(
+        `/quizzes/${quizId}`,
+    );
+    return response.data;
+};
