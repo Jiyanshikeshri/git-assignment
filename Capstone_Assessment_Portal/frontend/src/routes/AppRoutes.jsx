@@ -16,6 +16,7 @@ import CategoryManagement from "../pages/admin/CategoryManagement";
 import StudentCategories from "../pages/student/StudentCategories";
 import QuizManagement from "../pages/admin/QuizManagement";
 import AllQuizzes from "../pages/admin/AllQuizzes";
+import StudentQuizList from "../pages/student/StudentQuizList";
 
 function AppRoutes() {
     return (
@@ -94,13 +95,7 @@ function AppRoutes() {
                         path="/student/categories/:categoryId/quizzes"
                         element={
                             <ProtectedRoute allowedRole="STUDENT">
-                                <h2
-                                    style={{
-                                        padding: "40px",
-                                    }}
-                                >
-                                    Quiz Listing Coming Soon...
-                                </h2>
+                                <StudentQuizList />
                             </ProtectedRoute>
                         }
                     />
