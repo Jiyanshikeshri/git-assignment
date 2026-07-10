@@ -3,16 +3,17 @@
  * Used for creating and updating quizzes
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../styles/quiz/QuizFormModal.css";
 
-import { createQuiz } from "../../services/quizService";
+import { createQuiz, updateQuiz } from "../../services/quizService";
 
 function QuizFormModal({
     isOpen,
     onClose,
     onQuizCreated,
     categoryId,
+    selectedQuiz,
 }){
 
     const [formData, setFormData] = useState({
@@ -79,14 +80,20 @@ function QuizFormModal({
                 category_id: categoryId,
             };
 
-            await createQuiz(payload);
-
+            if (selectedQuiz) {
+                await updateQuiz(
+                    selectedQuiz.id,
+                    payload,
+                );
+            }
+            else {
+                await createQuiz(payload);
+            }
             setFormData({
                 title: "",
                 description: "",
                 duration: "",
             });
-
             setErrors({});
             onQuizCreated();
         }
@@ -100,6 +107,25 @@ function QuizFormModal({
             setIsSubmitting(false);
         }
     };
+
+    useEffect(() => {
+        if (selectedQuiz) {
+            setFormData({
+                title: selectedQuiz.title,
+                description: selectedQuiz.description,
+                duration: selectedQuiz.duration,
+            });
+        }
+        else {
+            setFormData({
+                title: "",
+                description: "",
+                duration: "",
+            });
+        }
+        setErrors({});
+        setServerError("");
+    }, [selectedQuiz, isOpen]);
 
     if (!isOpen) {
         return null;
@@ -115,7 +141,13 @@ function QuizFormModal({
                 onClick={(e) => e.stopPropagation()}
             >
                 <div className="quiz-modal-header">
-                    <h2>Add Quiz</h2>
+                    <h2>
+                        {
+                            selectedQuiz
+                                ? "Edit Quiz"
+                                : "Add Quiz"
+                        }
+                    </h2>
                     <button
                         className="close-btn"
                         onClick={onClose}
@@ -221,7 +253,9 @@ function QuizFormModal({
                             {
                                 isSubmitting
                                     ? "Saving..."
-                                    : "Save Quiz"
+                                    : selectedQuiz
+                                        ? "Update Quiz"
+                                        : "Save Quiz"
                             }
                         </button>
                     </div>

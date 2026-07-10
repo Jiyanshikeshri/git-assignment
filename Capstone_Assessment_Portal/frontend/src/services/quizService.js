@@ -32,3 +32,20 @@ export const createQuiz = async (quizData) => {
     return response.data;
 
 };
+
+/**
+ * Update quiz
+ */
+export const updateQuiz = async (
+    quizId,
+    quizData,
+) => {
+
+    const response = await api.put(
+        `/quizzes/${quizId}`,
+        quizData,
+    );
+
+    return response.data;
+
+};

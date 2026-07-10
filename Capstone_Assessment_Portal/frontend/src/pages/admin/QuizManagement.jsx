@@ -13,6 +13,7 @@ function QuizManagement() {
     const { categoryId } = useParams();
     const [quizzes, setQuizzes] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedQuiz, setSelectedQuiz] = useState(null);
 
     const fetchQuizzes = async () => {
         try {
@@ -34,16 +35,23 @@ function QuizManagement() {
     }, [categoryId]);
 
     const handleOpenModal = () => {
+        setSelectedQuiz(null);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
+        setSelectedQuiz(null);
         setIsModalOpen(false);
     };
 
     const handleQuizCreated = async () => {
         await fetchQuizzes();
         handleCloseModal();
+    };
+
+    const handleEditQuiz = (quiz) => {
+        setSelectedQuiz(quiz);
+        setIsModalOpen(true);
     };
 
     return (
@@ -67,7 +75,7 @@ function QuizManagement() {
                 </div>
                 <QuizTable
                     quizzes={quizzes}
-                    onEdit={() => {}}
+                    onEdit={handleEditQuiz}
                     onDelete={() => {}}
                 />
                 <QuizFormModal
@@ -75,6 +83,7 @@ function QuizManagement() {
                     onClose={handleCloseModal}
                     onQuizCreated={handleQuizCreated}
                     categoryId={categoryId}
+                    selectedQuiz={selectedQuiz}
                 />
             </div>
         </DashboardLayout>
