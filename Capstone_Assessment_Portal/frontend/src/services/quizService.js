@@ -18,3 +18,17 @@ export const getQuizzesByCategory = async (
 
     return response.data;
 };
+
+/**
+ * Create a new quiz
+ */
+export const createQuiz = async (quizData) => {
+
+    const response = await api.post(
+        "/quizzes/",
+        quizData,
+    );
+
+    return response.data;
+
+};
