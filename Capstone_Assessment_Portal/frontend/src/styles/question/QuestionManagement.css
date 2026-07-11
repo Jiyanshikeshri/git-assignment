@@ -1,0 +1,48 @@
+/**
+ * Question Management Page Styles
+ */
+
+.question-page {
+    padding: 30px;
+}
+
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.question-header h1 {
+    margin: 0;
+    font-size: 30px;
+    color: #111827;
+}
+
+.question-description {
+    margin-top: 8px;
+    color: #6b7280;
+    font-size: 15px;
+}
+
+.add-question-btn {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 10px;
+    background: #2563eb;
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.add-question-btn:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+}
+
+.add-question-btn:active {
+    transform: translateY(0);
+}

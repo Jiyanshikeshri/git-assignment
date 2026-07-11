@@ -1,48 +1,48 @@
 /**
- * Quiz Table Styles
+ * Question Table Styles
  */
 
-.quiz-table-container {
+.question-table-container {
     margin-top: 30px;
     background: #ffffff;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.quiz-table {
+.question-table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.quiz-table thead {
+.question-table thead {
     background: #2563eb;
-    color: white;
+    color: #ffffff;
 }
 
-.quiz-table th,
-.quiz-table td {
+.question-table th,
+.question-table td {
     padding: 16px;
     text-align: left;
     border-bottom: 1px solid #e5e7eb;
 }
 
-.quiz-table th:last-child,
-.quiz-table td:last-child {
+.question-table th:last-child,
+.question-table td:last-child {
     text-align: center;
 }
 
-.quiz-table tbody tr:hover {
+.question-table tbody tr:hover {
     background: #f8fafc;
 }
 
-.quiz-actions {
+.question-actions {
     display: flex;
     justify-content: center;
     gap: 12px;
 }
 
-.quiz-actions button {
+.question-actions button {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -51,15 +51,6 @@
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
-}
-
-.question-btn {
-    background: #eef2ff;
-    color: #4338ca;
-}
-
-.question-btn:hover {
-    background: #dbe4ff;
 }
 
 .edit-btn {
@@ -81,6 +72,8 @@
 }
 
 .no-data {
+    padding: 30px;
     text-align: center;
     color: #64748b;
+    font-size: 15px;
 }

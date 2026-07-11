@@ -6,7 +6,13 @@
 import {
     FaEdit,
     FaTrash,
+    FaList,
 } from "react-icons/fa";
+
+import {
+    useNavigate,
+    useParams,
+} from "react-router-dom";
 
 import "../../styles/quiz/QuizTable.css";
 
@@ -16,6 +22,9 @@ function QuizTable({
     onDelete,
 
 }) {
+
+    const navigate = useNavigate();
+    const { categoryId } = useParams();
 
     return (
         <div className="quiz-table-container">
@@ -45,6 +54,18 @@ function QuizTable({
                                         </td>
                                         <td className="quiz-actions">
                                             <button
+                                                className="question-btn"
+                                                onClick={() =>
+                                                    navigate(
+                                                        `/admin/categories/${categoryId}/quizzes/${quiz.id}/questions`,
+                                                    )
+                                                }
+                                            >
+                                                <FaList />
+                                                Questions
+                                            </button>
+
+                                            <button
                                                 className="edit-btn"
                                                 onClick={() => onEdit(quiz)}
                                             >
@@ -59,6 +80,7 @@ function QuizTable({
                                                 <FaTrash />
                                                 Delete
                                             </button>
+
                                         </td>
                                     </tr>
                                 ))
