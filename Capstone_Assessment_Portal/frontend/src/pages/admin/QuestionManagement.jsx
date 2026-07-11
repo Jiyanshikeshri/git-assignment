@@ -8,6 +8,7 @@ import { useParams } from "react-router-dom";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 import QuestionTable from "../../components/question/QuestionTable";
+import QuestionFormModal from "../../components/question/QuestionFormModal";
 
 import { getQuestionsByQuiz } from "../../services/questionService";
 
@@ -16,8 +17,8 @@ import "../../styles/question/QuestionManagement.css";
 function QuestionManagement() {
 
     const { quizId } = useParams();
-
     const [questions, setQuestions] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const fetchQuestions = async () => {
 
@@ -42,10 +43,21 @@ function QuestionManagement() {
 
     };
 
-    useEffect(() => {
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
 
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
+
+    const handleQuestionCreated = () => {
         fetchQuestions();
+        handleCloseModal();
+    };
 
+    useEffect(() => {
+        fetchQuestions();
     }, [quizId]);
 
     return (
@@ -68,7 +80,9 @@ function QuestionManagement() {
 
                     </div>
 
-                    <button className="add-question-btn">
+                    <button 
+                        className="add-question-btn"
+                        onClick={handleOpenModal}>
                         + Add Question
                     </button>
 
@@ -80,6 +94,12 @@ function QuestionManagement() {
                     onDelete={() => {}}
                 />
 
+                <QuestionFormModal
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    onQuestionCreated={handleQuestionCreated}
+                    quizId={quizId}
+                />
             </div>
 
         </DashboardLayout>
