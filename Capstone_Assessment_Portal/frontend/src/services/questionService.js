@@ -67,3 +67,16 @@ export const deleteQuestion = async (
     return response.data;
 
 };
+
+/**
+ * Fetch all questions
+ */
+export const getAllQuestions = async () => {
+
+    const response = await api.get(
+        "/questions",
+    );
+
+    return response.data;
+
+};

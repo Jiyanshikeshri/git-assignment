@@ -18,6 +18,7 @@ import QuizManagement from "../pages/admin/QuizManagement";
 import AllQuizzes from "../pages/admin/AllQuizzes";
 import StudentQuizList from "../pages/student/StudentQuizList";
 import QuestionManagement from "../pages/admin/QuestionManagement";
+import QuestionList from "../pages/admin/QuestionList";
 
 function AppRoutes() {
     return (
@@ -82,6 +83,11 @@ function AppRoutes() {
                                 <QuestionManagement />
                             </ProtectedRoute>
                         }
+                    />
+
+                    <Route
+                        path="/admin/questions"
+                        element={<QuestionList />}
                     />
 
                     {/* Protected Student Route */}
