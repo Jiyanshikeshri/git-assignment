@@ -3,9 +3,9 @@
  * Used for creating and updating questions
  */
 
-import { useState } from "react";
+import { useEffect,useState } from "react";
 
-import { createQuestion } from "../../services/questionService";
+import { createQuestion, updateQuestion } from "../../services/questionService";
 
 import "../../styles/question/QuestionFormModal.css";
 
@@ -15,6 +15,7 @@ function QuestionFormModal({
     onClose,
     quizId,
     onQuestionCreated,
+    selectedQuestion,
 
 }) {
 
@@ -56,6 +57,41 @@ function QuestionFormModal({
         setServerError("");
 
     };
+
+    useEffect(() => {
+        if (!isOpen) {
+            return;
+        }
+        if (selectedQuestion) {
+            setFormData({
+
+                question_text:
+                    selectedQuestion.question_text,
+                question_type:
+                    selectedQuestion.question_type,
+                options:
+                    selectedQuestion.question_type ===
+                    "MCQ"
+                        ? selectedQuestion.options
+                        : [
+                            "True",
+                            "False",
+                        ],
+                correct_answer:
+                    selectedQuestion.correct_answer,
+                difficulty:
+                    selectedQuestion.difficulty,
+                tags:
+                    selectedQuestion.tags.join(", "),
+            });
+        }
+        else {
+            resetForm();
+        }
+    }, [
+        selectedQuestion,
+        isOpen,
+    ]);
 
     /**
      * Validate question form
@@ -139,7 +175,17 @@ function QuestionFormModal({
 
             };
 
-            await createQuestion(payload);
+            if (selectedQuestion) {
+                await updateQuestion(
+                    selectedQuestion.id,
+                    payload,
+                );
+            }
+            else {
+                await createQuestion(
+                    payload,
+                );
+            }
             resetForm();
             onQuestionCreated();
         }
@@ -177,7 +223,11 @@ function QuestionFormModal({
             >
                 <div className="question-modal-header">
                     <h2>
-                        Add Question
+                        {
+                            selectedQuestion
+                                ? "Edit Question"
+                                : "Add Question"
+                        }
                     </h2>
                 </div>
                 <form
@@ -472,7 +522,9 @@ function QuestionFormModal({
                             {
                                 loading
                                     ? "Saving..."
-                                    : "Save Question"
+                                    : selectedQuestion
+                                        ? "Update Question"
+                                        : "Save Question"
                             }
                         </button>
                     </div>

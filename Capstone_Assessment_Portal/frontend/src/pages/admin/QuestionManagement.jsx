@@ -19,6 +19,7 @@ function QuestionManagement() {
     const { quizId } = useParams();
     const [questions, setQuestions] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedQuestion, setSelectedQuestion] = useState(null);
 
     const fetchQuestions = async () => {
 
@@ -44,11 +45,17 @@ function QuestionManagement() {
     };
 
     const handleOpenModal = () => {
+        setSelectedQuestion(null);
         setIsModalOpen(true);
     };
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
+    };
+
+    const handleEditQuestion = (question) => {
+        setSelectedQuestion(question);
+        setIsModalOpen(true);
     };
 
     const handleQuestionCreated = () => {
@@ -90,7 +97,7 @@ function QuestionManagement() {
 
                 <QuestionTable
                     questions={questions}
-                    onEdit={() => {}}
+                    onEdit={handleEditQuestion}
                     onDelete={() => {}}
                 />
 
@@ -99,6 +106,7 @@ function QuestionManagement() {
                     onClose={handleCloseModal}
                     onQuestionCreated={handleQuestionCreated}
                     quizId={quizId}
+                    selectedQuestion={selectedQuestion}
                 />
             </div>
 
