@@ -46,6 +46,15 @@ def get_questions_by_quiz_id(quiz_id: str):
 
     return questions
 
+def get_all_questions():
+    """
+    Retrieve all questions
+    """
+
+    questions = db.questions.find()
+
+    return questions
+
 
 def get_question_by_id(question_id: str):
     """

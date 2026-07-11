@@ -10,6 +10,7 @@ from app.services.question_service import (
     fetch_questions_by_quiz,
     update_existing_question,
     delete_existing_question,
+    fetch_all_questions,
 )
 
 from app.middleware.auth_middleware import (
@@ -38,6 +39,21 @@ def create_question(
     response = create_new_question(
         question
     )
+
+    return response
+
+@router.get(
+    "/",
+    status_code=status.HTTP_200_OK,
+)
+def get_all_questions_details(
+    user=Depends(require_admin),
+):
+    """
+    Retrieve all questions
+    """
+
+    response = fetch_all_questions()
 
     return response
 
