@@ -46,3 +46,62 @@
 .add-question-btn:active {
     transform: translateY(0);
 }
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.delete-modal {
+    background: white;
+    width: 400px;
+    padding: 25px;
+    border-radius: 18px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.delete-modal h2 {
+    margin-bottom: 18px;
+    font-size: 36px;
+}
+
+.delete-modal p {
+    color: #64748b;
+    font-size: 22px;
+    margin-bottom: 35px;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+}
+
+.modal-actions .cancel-btn {
+    border: none;
+    background: transparent;
+    color: #374151;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.modal-actions .delete-btn {
+    border: none;
+    background: #fee2e2;
+    color: #dc2626;
+    padding: 16px 42px;
+    border-radius: 12px;
+    font-size: 20px;
+    font-weight: 600;
+    cursor: pointer;
+}

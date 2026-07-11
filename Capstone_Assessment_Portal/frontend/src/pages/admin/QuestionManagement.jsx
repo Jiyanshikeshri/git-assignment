@@ -10,7 +10,7 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import QuestionTable from "../../components/question/QuestionTable";
 import QuestionFormModal from "../../components/question/QuestionFormModal";
 
-import { getQuestionsByQuiz } from "../../services/questionService";
+import { getQuestionsByQuiz, deleteQuestion } from "../../services/questionService";
 
 import "../../styles/question/QuestionManagement.css";
 
@@ -20,6 +20,8 @@ function QuestionManagement() {
     const [questions, setQuestions] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedQuestion, setSelectedQuestion] = useState(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [questionToDelete, setQuestionToDelete] = useState(null);
 
     const fetchQuestions = async () => {
 
@@ -56,6 +58,38 @@ function QuestionManagement() {
     const handleEditQuestion = (question) => {
         setSelectedQuestion(question);
         setIsModalOpen(true);
+    };
+
+    const handleDeleteQuestion = (question) => {
+        setQuestionToDelete(question);
+        setDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!questionToDelete) {
+            return;
+        }
+        try {
+            await deleteQuestion(
+                questionToDelete.id,
+            );
+            fetchQuestions();
+        }
+        catch (error) {
+            console.error(
+                "Failed to delete question:",
+                error,
+            );
+        }
+        finally {
+            setDeleteModalOpen(false);
+            setQuestionToDelete(null);
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setDeleteModalOpen(false);
+        setQuestionToDelete(null);
     };
 
     const handleQuestionCreated = () => {
@@ -98,7 +132,7 @@ function QuestionManagement() {
                 <QuestionTable
                     questions={questions}
                     onEdit={handleEditQuestion}
-                    onDelete={() => {}}
+                    onDelete={handleDeleteQuestion}
                 />
 
                 <QuestionFormModal
@@ -109,6 +143,36 @@ function QuestionManagement() {
                     selectedQuestion={selectedQuestion}
                 />
             </div>
+
+            {
+                deleteModalOpen &&
+                questionToDelete && (
+                    <div className="modal-overlay">
+                        <div className="modal-content delete-modal">
+                            <h2>
+                                Delete Question
+                            </h2>
+                            <p>
+                                Are you sure you want to delete this question?
+                            </p>
+                            <div className="modal-actions">
+                                <button
+                                    className="cancel-btn"
+                                    onClick={handleCancelDelete}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="delete-btn"
+                                    onClick={handleConfirmDelete}
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
 
         </DashboardLayout>
 
