@@ -24,24 +24,42 @@ function AttemptsTable({ attempts }) {
                 </thead>
 
                 <tbody>
-
                     {
-                        attempts.map((attempt) => (
-                            <tr
-                                key={`${attempt.student}-${attempt.quiz}`}
-                            >
-                                <td>{attempt.student}</td>
-                                <td>{attempt.quiz}</td>
-                                <td>{attempt.score}</td>
-                                <td>{attempt.date}</td>
-                            </tr>
-                        ))
-                    }
-
+                    attempts.map((attempt) => (
+                        <tr
+                            key={`${attempt.student_name}-${attempt.quiz_title}-${attempt.submitted_at}`}
+                        >
+                            <td>
+                                {attempt.student_name}
+                            </td>
+                            <td>
+                                {attempt.quiz_title}
+                            </td>
+                            <td>
+                                {attempt.score}
+                            </td>
+                            <td>
+                                {
+                                    new Date(
+                                        attempt.submitted_at + "Z",
+                                    ).toLocaleString(
+                                        "en-IN",
+                                        {
+                                            day: "2-digit",
+                                            month: "2-digit",
+                                            year: "numeric",
+                                            hour: "numeric",
+                                            minute: "2-digit",
+                                            hour12: true,
+                                        },
+                                    )
+                                }
+                            </td>
+                        </tr>
+                    ))
+                }
                 </tbody>
-
             </table>
-
         </div>
     );
 }
