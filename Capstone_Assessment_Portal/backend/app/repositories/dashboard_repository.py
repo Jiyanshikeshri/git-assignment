@@ -62,3 +62,68 @@ def get_recent_attempts(
         -1,
     ).limit(limit)
     return recent_attempt
+
+
+def get_student_attempt_count(student_id: str):
+    """
+    Return total quizzes attempted by a student
+    """
+
+    student_attempt = db.results.count_documents(
+        {
+            "student_id": student_id,
+        }
+    )
+    return student_attempt
+
+
+def get_student_average_score(student_id: str):
+    """
+    Calculate average percentage scored by a student
+    """
+
+    pipeline = [
+        {
+            "$match": {
+                "student_id": student_id,
+            }
+        },
+        {
+            "$group": {
+                "_id": None,
+                "average_score": {
+                    "$avg": "$percentage",
+                },
+            }
+        },
+    ]
+
+    result = list(
+        db.results.aggregate(
+            pipeline,
+        )
+    )
+
+    if not result:
+        return 0.0
+
+    return round(
+        result[0]["average_score"],
+        2,
+    )
+
+
+def get_student_recent_results(student_id: str):
+    """
+    Return latest quiz results of a student
+    """
+
+    result = db.results.find(
+        {
+            "student_id": student_id,
+        }
+    ).sort(
+        "submitted_at",
+        -1,
+    ).limit(5)
+    return result

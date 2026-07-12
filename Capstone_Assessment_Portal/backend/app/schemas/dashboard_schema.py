@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from pydantic import BaseModel
-
+from app.schemas.result_schema import ResultStatus
 
 class RecentAttemptResponse(
     BaseModel,
@@ -29,3 +29,26 @@ class AdminDashboardResponse(
     total_students: int
     total_attempts: int
     recent_attempts: list[RecentAttemptResponse]
+
+
+class StudentRecentResultResponse(BaseModel):
+    """
+    Response schema for recent student quiz results
+    """
+
+    quiz_title: str
+    category_name: str
+    percentage: float
+    result_status: ResultStatus
+
+
+class StudentDashboardResponse(BaseModel):
+    """
+    Response schema for student dashboard statistics
+    """
+
+    total_categories: int
+    available_quizzes: int
+    quizzes_attempted: int
+    average_score: float
+    recent_results: list[StudentRecentResultResponse]
