@@ -24,6 +24,8 @@ class QuestionResultResponse(
     """
 
     question_id: str
+    question_text: str
+    options: list[str]
     selected_answer: str | None
     correct_answer: str
     is_correct: bool
@@ -59,6 +61,7 @@ class ResultHistoryResponse(
 
     id: str
     quiz_id: str
+    quiz_title: str
     score: int
     percentage: float
     result_status: ResultStatus

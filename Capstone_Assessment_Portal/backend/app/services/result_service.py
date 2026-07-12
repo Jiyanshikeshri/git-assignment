@@ -1,4 +1,6 @@
 from app.config.logger import logger
+from bson import ObjectId
+from app.config.database import db
 
 from app.constants.constants import (
     PASSING_PERCENTAGE,
@@ -12,6 +14,10 @@ from app.repositories.result_repository import (
     get_student_results,
     get_all_results,
     get_result_by_id,
+)
+
+from app.repositories.quiz_repository import(
+    get_quiz_by_id,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -95,6 +101,8 @@ def build_question_result(
                 "question_id": question[
                     "question_id"
                 ],
+                "question_text": question["question_text"],
+                "options": question["options"],
                 "selected_answer": selected_answer,
                 "correct_answer": question[
                     "correct_answer"
@@ -205,6 +213,12 @@ def get_latest_student_result(
                 question_id=question[
                     "question_id"
                 ],
+                question_text=question[
+                    "question_text"
+                ],
+                options=question[
+                    "options"
+                ],
                 selected_answer=question[
                     "selected_answer"
                 ],
@@ -271,6 +285,7 @@ def get_student_result_history(
     history = []
 
     for result in results:
+        quiz = get_quiz_by_id(result["quiz_id"])
 
         history.append(
             ResultHistoryResponse(
@@ -279,6 +294,9 @@ def get_student_result_history(
                 ),
                 quiz_id=result[
                     "quiz_id"
+                ],
+                quiz_title=quiz[
+                    "title" if quiz else "Deleted Quiz"
                 ],
                 score=result[
                     "score"
@@ -418,6 +436,8 @@ def get_result_breakdown(
         questions.append(
             QuestionResultResponse(
                 question_id=question["question_id"],
+                question_text=question["question_text"],
+            options=question["options"],
                 selected_answer=question["selected_answer"],
                 correct_answer=question["correct_answer"],
                 is_correct=question["is_correct"],

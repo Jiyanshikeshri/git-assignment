@@ -20,6 +20,8 @@ import StudentQuizList from "../pages/student/StudentQuizList";
 import QuestionManagement from "../pages/admin/QuestionManagement";
 import QuestionList from "../pages/admin/QuestionList";
 import StudentQuizAttempt from "../pages/student/StudentQuizAttempt";
+import StudentResults from "../pages/student/StudentResults";
+import StudentResultBreakdown from "../pages/student/StudentResultBreakdown";
 
 function AppRoutes() {
     return (
@@ -121,6 +123,24 @@ function AppRoutes() {
                         element={
                             <ProtectedRoute allowedRole="STUDENT">
                                 <StudentQuizAttempt />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/student/results"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <StudentResults />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/student/results/:resultId"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <StudentResultBreakdown />
                             </ProtectedRoute>
                         }
                     />
