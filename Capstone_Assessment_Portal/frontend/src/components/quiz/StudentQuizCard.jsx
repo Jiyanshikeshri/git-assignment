@@ -15,7 +15,13 @@ function StudentQuizCard({
     const navigate = useNavigate();
     const handleStartQuiz = () => {
         navigate(
-            `/student/quizzes/${quiz.id}`,
+            `/student/quiz/${quiz.id}`,
+            {
+                state: {
+                    duration: quiz.duration,
+                    title: quiz.title,
+                },
+            },
         );
     };
 

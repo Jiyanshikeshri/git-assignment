@@ -19,6 +19,7 @@ import AllQuizzes from "../pages/admin/AllQuizzes";
 import StudentQuizList from "../pages/student/StudentQuizList";
 import QuestionManagement from "../pages/admin/QuestionManagement";
 import QuestionList from "../pages/admin/QuestionList";
+import StudentQuizAttempt from "../pages/student/StudentQuizAttempt";
 
 function AppRoutes() {
     return (
@@ -112,6 +113,14 @@ function AppRoutes() {
                         element={
                             <ProtectedRoute allowedRole="STUDENT">
                                 <StudentQuizList />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/student/quiz/:quizId"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <StudentQuizAttempt />
                             </ProtectedRoute>
                         }
                     />
