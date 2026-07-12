@@ -45,10 +45,6 @@ function Sidebar() {
             path: "/student/categories",
         },
         {
-            label: "My Attempts",
-            path: "/student/attempts",
-        },
-        {
             label: "Results",
             path: "/student/results",
         },
