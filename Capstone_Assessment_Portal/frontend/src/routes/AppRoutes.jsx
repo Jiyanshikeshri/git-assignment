@@ -22,6 +22,7 @@ import QuestionList from "../pages/admin/QuestionList";
 import StudentQuizAttempt from "../pages/student/StudentQuizAttempt";
 import StudentResults from "../pages/student/StudentResults";
 import StudentResultBreakdown from "../pages/student/StudentResultBreakdown";
+import AdminResults from "../pages/admin/AdminResults";
 
 function AppRoutes() {
     return (
@@ -91,6 +92,24 @@ function AppRoutes() {
                     <Route
                         path="/admin/questions"
                         element={<QuestionList />}
+                    />
+
+                    <Route
+                        path="/admin/results"
+                        element={
+                            <ProtectedRoute allowedRole="ADMIN">
+                                <AdminResults />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/results/:resultId"
+                        element={
+                            <ProtectedRoute allowedRole="ADMIN">
+                                <StudentResultBreakdown />
+                            </ProtectedRoute>
+                        }
                     />
 
                     {/* Protected Student Route */}

@@ -23,3 +23,11 @@ export const getResultBreakdown = async (resultId) => {
     const response = await api.get(`/results/${resultId}`);
     return response.data;
 };
+
+/**
+ * Admin Results
+ */
+export const getAllResults = async () => {
+    const response = await api.get("/results");
+    return response.data;
+};
