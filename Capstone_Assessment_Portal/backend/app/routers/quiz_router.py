@@ -68,7 +68,8 @@ def get_quizzes_by_category(
     """
 
     response = fetch_quizzes_by_category_id(
-        category_id
+        category_id=category_id,
+        student_id=user["user_id"],
     )
 
     return response

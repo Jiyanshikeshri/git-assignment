@@ -14,6 +14,10 @@ function StudentQuizCard({
 
     const navigate = useNavigate();
     const handleStartQuiz = () => {
+        if (!quiz.can_attempt) {
+            return;
+        }
+
         navigate(
             `/student/quiz/${quiz.id}`,
             {
@@ -39,9 +43,17 @@ function StudentQuizCard({
                     {quiz.duration} Minutes
                 </span>
             </div>
+            <div className="attempts-info">
+                Attempts Left:
+                {" "}
+                <strong>
+                    {quiz.attempts_left}
+                </strong>
+            </div>
             <button
                 className="start-quiz-btn"
                 onClick={handleStartQuiz}
+                disabled={!quiz.can_attempt}
             >
 
                 Start Quiz
