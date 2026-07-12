@@ -16,8 +16,16 @@ from app.repositories.result_repository import (
     get_result_by_id,
 )
 
+from app.repositories.user_repository import (
+    get_user_by_id,
+)
+
 from app.repositories.quiz_repository import(
     get_quiz_by_id,
+)
+
+from app.repositories.category_repository import (
+    get_category_by_id,
 )
 
 from app.exceptions.custom_exceptions import (
@@ -349,6 +357,21 @@ def get_admin_results():
 
     for result in results:
 
+        student = get_user_by_id(
+            result["student_id"]
+        )
+
+        quiz = get_quiz_by_id(
+            result["quiz_id"]
+        )
+
+        category = None
+
+        if quiz:
+            category = get_category_by_id(
+                quiz["category_id"]
+            )
+
         dashboard_results.append(
             AdminResultResponse(
                 id=str(
@@ -360,9 +383,35 @@ def get_admin_results():
                 student_id=result[
                     "student_id"
                 ],
+                student_name=(
+                    student["name"]
+                    if student
+                    else "Deleted Student"
+                ),
+                student_email=(
+                    student["email"]
+                    if student
+                    else "-"
+                ),
                 quiz_id=result[
                     "quiz_id"
                 ],
+                quiz_title=(
+                    quiz["title"]
+                    if quiz
+                    else "Deleted Quiz"
+                ),
+                category_id=(
+                    quiz["category_id"]
+                    if quiz
+                    else ""
+                ),
+
+                category_name=(
+                    category["name"]
+                    if category
+                    else "Deleted Category"
+                ),
                 score=result[
                     "score"
                 ],
