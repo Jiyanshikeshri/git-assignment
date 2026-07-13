@@ -9,7 +9,7 @@ import {
     useLocation,
 } from "react-router-dom";
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 
 import {
     startAttempt,

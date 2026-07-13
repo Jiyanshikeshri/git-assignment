@@ -4,6 +4,7 @@
  */
 
 import api from "./api";
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 /**
  * Fetch quizzes by category
@@ -13,7 +14,7 @@ export const getQuizzesByCategory = async (
 ) => {
 
     const response = await api.get(
-        `/quizzes/category/${categoryId}`,
+        `${API_ENDPOINTS.QUIZZES.CATEGORY}/${categoryId}`,
     );
 
     return response.data;
@@ -25,7 +26,7 @@ export const getQuizzesByCategory = async (
 export const createQuiz = async (quizData) => {
 
     const response = await api.post(
-        "/quizzes/",
+        `${API_ENDPOINTS.QUIZZES.BASE}/`,
         quizData,
     );
 
@@ -42,7 +43,7 @@ export const updateQuiz = async (
 ) => {
 
     const response = await api.put(
-        `/quizzes/${quizId}`,
+        `${API_ENDPOINTS.QUIZZES.BASE}/${quizId}`,
         quizData,
     );
 
@@ -56,7 +57,7 @@ export const updateQuiz = async (
 export const deleteQuiz = async (quizId) => {
 
     const response = await api.delete(
-        `/quizzes/${quizId}`,
+        `${API_ENDPOINTS.QUIZZES.BASE}/${quizId}`,
     );
     return response.data;
 };
@@ -66,7 +67,7 @@ export const deleteQuiz = async (quizId) => {
  */
 export const getAllQuizzes = async () => {
     const response = await api.get(
-        "/quizzes/",
+        `${API_ENDPOINTS.QUIZZES.BASE}/`,
     );
     return response.data;
 };

@@ -1,10 +1,11 @@
 import api from "./api";
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 /**
  * Admin Dashboard
  */
 export const getAdminDashboard = async () => {
-    const response = await api.get("/dashboard/admin");
+    const response = await api.get(API_ENDPOINTS.DASHBOARD.ADMIN);
     return response.data;
 };
 
@@ -12,6 +13,6 @@ export const getAdminDashboard = async () => {
  * Student Dashboard
  */
 export const getStudentDashboard = async () => {
-    const response = await api.get("/dashboard/student");
+    const response = await api.get(API_ENDPOINTS.DASHBOARD.STUDENT);
     return response.data;
 };

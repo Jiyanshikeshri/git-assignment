@@ -6,7 +6,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import Pagination from "../../components/common/Pagination";
 
 import { getAllResults } from "../../services/resultService";

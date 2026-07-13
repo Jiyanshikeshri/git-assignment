@@ -6,54 +6,20 @@
 import { NavLink} from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
+import {
+    ADMIN_MENU,
+    STUDENT_MENU,
+} from "../../constants/sidebarMenu";
 
 import "../../styles/dashboard/Sidebar.css";
 
 function Sidebar() {
     const { user } = useAuth();
 
-    const adminMenu = [
-        {
-            label: "Dashboard",
-            path: "/admin/dashboard",
-        },
-        {
-            label: "Categories",
-            path: "/admin/categories",
-        },
-        {
-            label: "Quizzes",
-            path: "/admin/quizzes",
-        },
-        {
-            label: "Questions",
-            path: "/admin/questions",
-        },
-        {
-            label: "Results",
-            path: "/admin/results",
-        },
-    ];
-
-    const studentMenu = [
-        {
-            label: "Dashboard",
-            path: "/student/dashboard",
-        },
-        {
-            label: "Explore Categories",
-            path: "/student/categories",
-        },
-        {
-            label: "Results",
-            path: "/student/results",
-        },
-    ];
-
     const menuItems =
         user?.role === "ADMIN"
-            ? adminMenu
-            : studentMenu;
+            ? ADMIN_MENU
+            : STUDENT_MENU;
 
     return (
         <aside className="sidebar">

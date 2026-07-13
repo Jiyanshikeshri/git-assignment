@@ -3,10 +3,10 @@
  * Used by both Admin and Student dashboards
  */
 
-import Sidebar from "../components/dashboard/Sidebar";
-import Navbar from "../components/dashboard/Navbar";
+import Sidebar from "../../components/dashboard/Sidebar";
+import Navbar from "../../components/dashboard/Navbar";
 
-import "../styles/dashboard/DashboardLayout.css";
+import "../../styles/dashboard/DashboardLayout.css";
 
 function DashboardLayout({ children }) {
 

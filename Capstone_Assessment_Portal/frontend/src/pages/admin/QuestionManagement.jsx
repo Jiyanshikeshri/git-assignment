@@ -6,7 +6,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import QuestionTable from "../../components/question/QuestionTable";
 import QuestionFormModal from "../../components/question/QuestionFormModal";
 import Pagination from "../../components/common/Pagination";

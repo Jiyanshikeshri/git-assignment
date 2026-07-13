@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import QuizTable from "../../components/quiz/QuizTable";
 import QuizFormModal from "../../components/quiz/QuizFormModal";
 import DeleteQuizModal from "../../components/quiz/DeleteQuizModal";

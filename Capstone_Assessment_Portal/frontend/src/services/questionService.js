@@ -4,6 +4,7 @@
  */
 
 import api from "./api";
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 /**
  * Fetch all questions of a quiz
@@ -13,7 +14,7 @@ export const getQuestionsByQuiz = async (
 ) => {
 
     const response = await api.get(
-        `/questions/quiz/${quizId}`,
+        `${API_ENDPOINTS.QUESTIONS.QUIZ}/${quizId}`,
     );
 
     return response.data;
@@ -28,7 +29,7 @@ export const createQuestion = async (
 ) => {
 
     const response = await api.post(
-        "/questions/",
+        `${API_ENDPOINTS.QUESTIONS.BASE}/`,
         questionData,
     );
 
@@ -45,7 +46,7 @@ export const updateQuestion = async (
 ) => {
 
     const response = await api.put(
-        `/questions/${questionId}`,
+        `${API_ENDPOINTS.QUESTIONS.BASE}/${questionId}`,
         questionData,
     );
 
@@ -61,7 +62,7 @@ export const deleteQuestion = async (
 ) => {
 
     const response = await api.delete(
-        `/questions/${questionId}`,
+        `${API_ENDPOINTS.QUESTIONS.BASE}/${questionId}`,
     );
 
     return response.data;
@@ -74,7 +75,7 @@ export const deleteQuestion = async (
 export const getAllQuestions = async () => {
 
     const response = await api.get(
-        "/questions",
+        API_ENDPOINTS.QUESTIONS.BASE,
     );
 
     return response.data;

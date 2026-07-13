@@ -1,4 +1,5 @@
 import api from "./api";
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 /**
  * Start Quiz Attempt
@@ -6,7 +7,7 @@ import api from "./api";
 export const startAttempt = async (quizId) => {
 
     const response = await api.post(
-        "/attempts/start",
+        API_ENDPOINTS.ATTEMPTS.START,
         {
             quiz_id: quizId,
         },
@@ -21,7 +22,7 @@ export const startAttempt = async (quizId) => {
 export const getAttempt = async (attemptId) => {
 
     const response = await api.get(
-        `/attempts/${attemptId}`,
+        `${API_ENDPOINTS.ATTEMPTS.BASE}/${attemptId}`,
     );
 
     return response.data;
@@ -37,7 +38,7 @@ export const saveAnswer = async (
 ) => {
 
     const response = await api.patch(
-        `/attempts/${attemptId}/answer`,
+        `${API_ENDPOINTS.ATTEMPTS.BASE}/${attemptId}/answer`,
         {
             question_id: questionId,
             selected_answer: answer,
@@ -55,7 +56,7 @@ export const submitAttempt = async (
 ) => {
 
     const response = await api.patch(
-        `/attempts/${attemptId}/submit`,
+        `${API_ENDPOINTS.ATTEMPTS.BASE}/${attemptId}/submit`,
     );
 
     return response.data;

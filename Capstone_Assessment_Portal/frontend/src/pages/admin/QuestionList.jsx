@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from "react";
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import AllQuestionTable from "../../components/question/AllQuestionTable";
 import Pagination from "../../components/common/Pagination";
 

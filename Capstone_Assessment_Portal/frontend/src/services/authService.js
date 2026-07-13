@@ -8,6 +8,7 @@ import api from "./api";
 
 import { getPublicKey } from "./publicKeyService";
 import { encryptPassword } from "../utils/encryption";
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 /**
  * Register a new student
@@ -22,7 +23,7 @@ export const registerUser = async (userData) => {
     );
 
     const response = await api.post(
-        "/auth/register",
+        API_ENDPOINTS.AUTH.REGISTER,
         {
             ...userData,
             password: encryptedPassword,
@@ -45,7 +46,7 @@ export const loginUser = async (credentials) => {
     );
 
     const response = await api.post(
-        "/auth/login",
+        API_ENDPOINTS.AUTH.LOGIN,
         {
             ...credentials,
             password: encryptedPassword,
@@ -61,7 +62,7 @@ export const loginUser = async (credentials) => {
 export const refreshAccessToken = async (refreshToken) => {
 
     const response = await api.post(
-        "/auth/refresh",
+        API_ENDPOINTS.AUTH.REFRESH,
         {
             refresh_token: refreshToken,
         }

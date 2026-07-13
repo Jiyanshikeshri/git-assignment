@@ -5,8 +5,7 @@
 
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import CategoryTable from "../../components/category/CategoryTable";
 import CategoryFormModal from "../../components/category/CategoryFormModal";
 import DeleteCategoryModal from "../../components/category/DeleteCategoryModal";

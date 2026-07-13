@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import AllQuizTable from "../../components/quiz/AllQuizTable";
 import Pagination from "../../components/common/Pagination";
 
