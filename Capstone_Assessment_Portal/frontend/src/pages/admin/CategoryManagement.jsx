@@ -10,6 +10,7 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import CategoryTable from "../../components/category/CategoryTable";
 import CategoryFormModal from "../../components/category/CategoryFormModal";
 import DeleteCategoryModal from "../../components/category/DeleteCategoryModal";
+import Pagination from "../../components/common/Pagination";
 
 import { getCategories } from "../../services/categoryService";
 import { deleteCategory } from "../../services/categoryService";
@@ -21,6 +22,9 @@ function CategoryManagement() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+
+    const itemsPerPage = 5;
 
     const navigate = useNavigate();
 
@@ -32,6 +36,7 @@ function CategoryManagement() {
         try {
             const data = await getCategories();
             setCategories(data);
+            setCurrentPage(1);
         }
         catch (error) {
             console.error(
@@ -94,6 +99,18 @@ function CategoryManagement() {
         );
     };
 
+    const indexOfLastItem =
+        currentPage * itemsPerPage;
+
+    const indexOfFirstItem =
+        indexOfLastItem - itemsPerPage;
+
+    const currentCategories =
+        categories.slice(
+            indexOfFirstItem,
+            indexOfLastItem,
+        );
+
     return (
         <DashboardLayout>
 
@@ -116,10 +133,17 @@ function CategoryManagement() {
                 </p>
 
                 <CategoryTable
-                    categories={categories}
+                    categories={currentCategories}
                     onEdit={handleEditCategory}
                     onDelete={handleDeleteCategory}
                     onViewQuizzes={handleViewQuizzes}
+                />
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalItems={categories.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
                 />
 
                 <CategoryFormModal

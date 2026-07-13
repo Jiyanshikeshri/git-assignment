@@ -5,6 +5,7 @@ import DashboardLayout from "../../layouts/DashboardLayout";
 import QuizTable from "../../components/quiz/QuizTable";
 import QuizFormModal from "../../components/quiz/QuizFormModal";
 import DeleteQuizModal from "../../components/quiz/DeleteQuizModal";
+import Pagination from "../../components/common/Pagination";
 
 import { getQuizzesByCategory } from "../../services/quizService";
 import { deleteQuiz } from "../../services/quizService";
@@ -17,6 +18,8 @@ function QuizManagement() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedQuiz, setSelectedQuiz] = useState(null);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     const fetchQuizzes = async () => {
         try {
@@ -24,6 +27,7 @@ function QuizManagement() {
                 categoryId,
             );
             setQuizzes(data);
+            setCurrentPage(1);
         }
         catch (error) {
             console.error(
@@ -84,6 +88,18 @@ function QuizManagement() {
         setSelectedQuiz(null);
     };
 
+    const indexOfLastItem =
+        currentPage * itemsPerPage;
+
+    const indexOfFirstItem =
+        indexOfLastItem - itemsPerPage;
+
+    const currentQuizzes =
+        quizzes.slice(
+            indexOfFirstItem,
+            indexOfLastItem,
+        );
+
     return (
         <DashboardLayout>
             <div className="quiz-page">
@@ -104,9 +120,15 @@ function QuizManagement() {
                     </button>
                 </div>
                 <QuizTable
-                    quizzes={quizzes}
+                    quizzes={currentQuizzes}
                     onEdit={handleEditQuiz}
                     onDelete={handleDeleteQuiz}
+                />
+                <Pagination
+                    currentPage={currentPage}
+                    totalItems={quizzes.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
                 />
                 <QuizFormModal
                     isOpen={isModalOpen}

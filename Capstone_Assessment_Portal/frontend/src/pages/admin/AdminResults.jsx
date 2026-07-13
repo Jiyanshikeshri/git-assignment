@@ -7,6 +7,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
+import Pagination from "../../components/common/Pagination";
 
 import { getAllResults } from "../../services/resultService";
 
@@ -19,6 +20,8 @@ function AdminResults() {
 
     const [selectedCategory, setSelectedCategory] = useState("All");
     const [selectedQuiz, setSelectedQuiz] = useState("All");
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -29,6 +32,7 @@ function AdminResults() {
         try {
             const data = await getAllResults();
             setResults(data);
+            setCurrentPage(1);
         }
         catch (error) {
             console.error(
@@ -76,6 +80,18 @@ function AdminResults() {
         );
     });
 
+    const indexOfLastItem =
+        currentPage * itemsPerPage;
+
+    const indexOfFirstItem =
+        indexOfLastItem - itemsPerPage;
+
+    const currentResults =
+        filteredResults.slice(
+            indexOfFirstItem,
+            indexOfLastItem,
+        );
+
     if (loading) {
         return (
             <DashboardLayout>
@@ -95,11 +111,12 @@ function AdminResults() {
                 <div className="result-filters">
                     <select
                         value={selectedCategory}
-                        onChange={(e) =>
+                        onChange={(e) => {
                             setSelectedCategory(
                                 e.target.value,
-                            )
-                        }
+                            );
+                            setCurrentPage(1);
+                        }}
                     >
                         <option value="All">
                             Filter by Category
@@ -120,11 +137,12 @@ function AdminResults() {
                     </select>
                     <select
                         value={selectedQuiz}
-                        onChange={(e) =>
+                        onChange={(e) => {
                             setSelectedQuiz(
                                 e.target.value,
-                            )
-                        }
+                            );
+                            setCurrentPage(1);
+                        }}
                     >
                         <option value="All">
                             Filter by Quiz
@@ -161,7 +179,7 @@ function AdminResults() {
                     </thead>
                     <tbody>
                         {
-                            filteredResults.map((result) => (
+                            currentResults.map((result) => (
                                 <tr key={result.id}>
                                     <td>
                                         {result.student_name}
@@ -226,6 +244,12 @@ function AdminResults() {
                         }
                     </tbody>
                 </table>
+                <Pagination
+                    currentPage={currentPage}
+                    totalItems={filteredResults.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
+                />
             </div>
         </DashboardLayout>
     );

@@ -2,16 +2,20 @@ import { useEffect, useState } from "react";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 import AllQuizTable from "../../components/quiz/AllQuizTable";
+import Pagination from "../../components/common/Pagination";
 
 import { getAllQuizzes } from "../../services/quizService";
 
 function AllQuizzes() {
     const [quizzes, setQuizzes] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
     const fetchQuizzes = async () => {
 
         try {
             const data = await getAllQuizzes();
             setQuizzes(data);
+            setCurrentPage(1);
         }
         catch (error) {
             console.error(
@@ -26,6 +30,18 @@ function AllQuizzes() {
         fetchQuizzes();
     }, []);
 
+    const indexOfLastItem =
+        currentPage * itemsPerPage;
+
+    const indexOfFirstItem =
+        indexOfLastItem - itemsPerPage;
+
+    const currentQuizzes =
+        quizzes.slice(
+            indexOfFirstItem,
+            indexOfLastItem,
+        );
+
     return (
 
         <DashboardLayout>
@@ -37,7 +53,13 @@ function AllQuizzes() {
                     Browse all quizzes available in the assessment portal.
                 </p>
                 <AllQuizTable
-                    quizzes={quizzes}
+                    quizzes={currentQuizzes}
+                />
+                <Pagination
+                    currentPage={currentPage}
+                    totalItems={quizzes.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
                 />
             </div>
         </DashboardLayout>

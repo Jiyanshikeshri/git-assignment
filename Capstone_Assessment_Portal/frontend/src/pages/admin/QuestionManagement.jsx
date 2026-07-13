@@ -9,6 +9,7 @@ import { useParams } from "react-router-dom";
 import DashboardLayout from "../../layouts/DashboardLayout";
 import QuestionTable from "../../components/question/QuestionTable";
 import QuestionFormModal from "../../components/question/QuestionFormModal";
+import Pagination from "../../components/common/Pagination";
 
 import { getQuestionsByQuiz, deleteQuestion } from "../../services/questionService";
 
@@ -22,6 +23,8 @@ function QuestionManagement() {
     const [selectedQuestion, setSelectedQuestion] = useState(null);
     const [deleteModalOpen, setDeleteModalOpen] = useState(false);
     const [questionToDelete, setQuestionToDelete] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     const fetchQuestions = async () => {
 
@@ -32,6 +35,7 @@ function QuestionManagement() {
             );
 
             setQuestions(data);
+            setCurrentPage(1);
 
         }
 
@@ -97,6 +101,18 @@ function QuestionManagement() {
         handleCloseModal();
     };
 
+    const indexOfLastItem =
+        currentPage * itemsPerPage;
+
+    const indexOfFirstItem =
+        indexOfLastItem - itemsPerPage;
+
+    const currentQuestions =
+        questions.slice(
+            indexOfFirstItem,
+            indexOfLastItem,
+        );
+
     useEffect(() => {
         fetchQuestions();
     }, [quizId]);
@@ -130,9 +146,16 @@ function QuestionManagement() {
                 </div>
 
                 <QuestionTable
-                    questions={questions}
+                    questions={currentQuestions}
                     onEdit={handleEditQuestion}
                     onDelete={handleDeleteQuestion}
+                />
+
+                <Pagination
+                    currentPage={currentPage}
+                    totalItems={questions.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
                 />
 
                 <QuestionFormModal

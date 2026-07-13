@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 import DashboardLayout from "../../layouts/DashboardLayout";
 import AllQuestionTable from "../../components/question/AllQuestionTable";
+import Pagination from "../../components/common/Pagination";
 
 import { getAllQuestions } from "../../services/questionService";
 
@@ -15,6 +16,8 @@ import "../../styles/question/QuestionManagement.css";
 function QuestionList() {
 
     const [questions, setQuestions] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     const fetchQuestions = async () => {
 
@@ -23,6 +26,7 @@ function QuestionList() {
             const data = await getAllQuestions();
 
             setQuestions(data);
+            setCurrentPage(1);
 
         }
 
@@ -42,6 +46,18 @@ function QuestionList() {
         fetchQuestions();
 
     }, []);
+
+    const indexOfLastItem =
+        currentPage * itemsPerPage;
+
+    const indexOfFirstItem =
+        indexOfLastItem - itemsPerPage;
+
+    const currentQuestions =
+        questions.slice(
+            indexOfFirstItem,
+            indexOfLastItem,
+        );
 
     return (
 
@@ -66,7 +82,13 @@ function QuestionList() {
                 </div>
 
                 <AllQuestionTable
-                    questions={questions}
+                    questions={currentQuestions}
+                />
+                <Pagination
+                    currentPage={currentPage}
+                    totalItems={questions.length}
+                    itemsPerPage={itemsPerPage}
+                    onPageChange={setCurrentPage}
                 />
             </div>
         </DashboardLayout>
