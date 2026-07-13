@@ -3,6 +3,7 @@
  */
 
 import api from "./api";
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 /**
  * Fetch RSA public key
@@ -10,7 +11,7 @@ import api from "./api";
 export const getPublicKey = async () => {
 
     const response = await api.get(
-        "/auth/public-key"
+        API_ENDPOINTS.AUTH.PUBLIC_KEY
     );
 
     return response.data.public_key;

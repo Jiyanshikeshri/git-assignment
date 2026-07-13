@@ -107,7 +107,7 @@ function CategoryFormModal({
         }
         setErrors({});
         setServerError("");
-    }, [selectedCategory, isOpen]);
+    }, [selectedCategory]);
 
     if (!isOpen) {
         return null;

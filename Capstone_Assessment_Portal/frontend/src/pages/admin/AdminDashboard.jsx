@@ -2,7 +2,7 @@
  * Admin Dashboard
  */
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import DashboardCard from "../../components/dashboard/DashboardCard";
 import AttemptsTable from "../../components/dashboard/AttemptsTable";
 import {

@@ -4,7 +4,7 @@
  */
 
 import { useEffect, useState } from "react";
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import CategoryTable from "../../components/category/CategoryTable";
 import CategoryFormModal from "../../components/category/CategoryFormModal";
 import DeleteCategoryModal from "../../components/category/DeleteCategoryModal";

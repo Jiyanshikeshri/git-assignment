@@ -2,7 +2,7 @@
  * Student Dashboard
  */
 
-import DashboardLayout from "../../layouts/DashboardLayout";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
 import DashboardCard from "../../components/dashboard/DashboardCard";
 import ResultsTable from "../../components/dashboard/ResultsTable";
 import {

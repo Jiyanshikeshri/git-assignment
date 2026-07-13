@@ -4,12 +4,13 @@
  */
 
 import api from "./api";
+import { API_ENDPOINTS } from "../constants/apiEndpoints";
 
 /**
  * Fetch all categories
  */
 export const getCategories = async () => {
-    const response = await api.get("/categories/");
+    const response = await api.get(`${API_ENDPOINTS.CATEGORIES}/`);
     return response.data;
 };
 
@@ -18,7 +19,7 @@ export const getCategories = async () => {
  */
 export const createCategory = async (categoryData) => {
     const response = await api.post(
-        "/categories/",
+        `${API_ENDPOINTS.CATEGORIES}/`,
         categoryData,
     );
 
@@ -33,7 +34,7 @@ export const updateCategory = async (
     categoryData,
 ) => {
     const response = await api.put(
-        `/categories/${categoryId}`,
+        `${API_ENDPOINTS.CATEGORIES}/${categoryId}`,
         categoryData,
     );
 
@@ -45,7 +46,7 @@ export const updateCategory = async (
  */
 export const deleteCategory = async (categoryId) => {
     const response = await api.delete(
-        `/categories/${categoryId}`,
+        `${API_ENDPOINTS.CATEGORIES}/${categoryId}`,
     );
 
     return response.data;
