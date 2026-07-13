@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 
 from app.main import app
 
+from tests.utils.encryption import encrypt_password
 
 @pytest.fixture
 def client():
@@ -22,7 +23,7 @@ def admin_token(client):
         "/auth/login",
         json={
             "email": "admin@gmail.com",
-            "password": "Admin@123"
+            "password": encrypt_password("Admin@123")
         }
     )
 
@@ -41,7 +42,7 @@ def student_token(client):
         "/auth/login",
         json={
             "email": "test2@gmail.com",
-            "password": "12345678",
+            "password": encrypt_password("12345678"),
         },
     )
 

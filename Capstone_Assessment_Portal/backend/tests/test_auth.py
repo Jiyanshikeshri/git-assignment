@@ -2,6 +2,7 @@ import time
 from datetime import datetime, timedelta, timezone
 
 from jose import jwt
+from tests.utils.encryption import encrypt_password
 
 from app.config.security import (
     SECRET_KEY, 
@@ -25,7 +26,7 @@ def test_register_student(client):
         "username": f"testuser_{unique_id}",
         "name": "Test Student",
         "email": f"test_{unique_id}@example.com",
-        "password": "Password123"
+        "password": encrypt_password("Password123")
     }
 
     response = client.post("/auth/register", json=payload)
@@ -42,7 +43,7 @@ def test_login_admin(client):
 
     login_payload = {
         "email": "admin@gmail.com",
-        "password": "Admin@123"
+        "password": encrypt_password("Admin@123")
     }
 
     response = client.post("/auth/login", json=login_payload)
@@ -70,7 +71,7 @@ def test_login_student(client):
             "username": username,
             "name": "Student Test",
             "email": email,
-            "password": "Password123"
+            "password": encrypt_password("Password123")
         }
     )
 
@@ -81,7 +82,7 @@ def test_login_student(client):
         "/auth/login",
         json={
             "email": email,
-            "password": "Password123"
+            "password": encrypt_password("Password123")
         }
     )
 
@@ -108,7 +109,7 @@ def test_login_with_invalid_password(client):
             "username": f"user_{unique}",
             "name": "Invalid Password Test",
             "email": email,
-            "password": "Password123"
+            "password": encrypt_password("Password123")
         }
     )
 
@@ -117,7 +118,7 @@ def test_login_with_invalid_password(client):
         "/auth/login",
         json={
             "email": email,
-            "password": "WrongPassword123"
+            "password": encrypt_password("WrongPassword123")
         }
     )
 
@@ -134,7 +135,7 @@ def test_login_with_invalid_email(client):
         "/auth/login",
         json={
             "email": "doesnotexist@example.com",
-            "password": "Password123"
+            "password": encrypt_password("Password123")
         }
     )
 
