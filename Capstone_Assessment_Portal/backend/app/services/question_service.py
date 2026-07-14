@@ -17,6 +17,7 @@ from app.repositories.question_repository import (
     get_question_by_text_and_quiz,
     create_question,
     get_questions_by_quiz_id,
+    get_all_questions,
     get_question_by_id,
     update_question,
     get_question_by_text_except_id,
@@ -288,3 +289,39 @@ def delete_existing_question(question_id: str):
     )
 
     return response
+
+
+def fetch_all_questions():
+    """
+    Retrieve all questions
+    """
+
+    logger.info(
+        "Fetching all questions."
+    )
+
+    questions = [
+
+        QuestionResponseAdmin(
+
+            id=str(question["_id"]),
+            quiz_id=question["quiz_id"],
+            question_text=question["question_text"],
+            question_type=question["question_type"],
+            options=question["options"],
+            correct_answer=question["correct_answer"],
+            difficulty=question["difficulty"],
+            tags=question["tags"],
+
+        )
+
+        for question in get_all_questions()
+
+    ]
+
+    logger.info(
+        "Retrieved %d questions.",
+        len(questions),
+    )
+
+    return questions

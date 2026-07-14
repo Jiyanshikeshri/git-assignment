@@ -1,0 +1,15 @@
+.question-review-card{
+    background:white;
+    border:1px solid #ddd;
+    border-radius:10px;
+    padding:20px;
+    margin-top:20px;
+}
+
+.question-review-card h3{
+    margin-bottom:10px;
+}
+
+.question-review-card p{
+    margin:8px 0;
+}

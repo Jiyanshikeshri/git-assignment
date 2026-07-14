@@ -1,0 +1,83 @@
+.admin-results-page {
+    padding: 30px;
+}
+
+.admin-results-page h1 {
+    margin-bottom: 24px;
+    color: #1f2937;
+}
+
+.result-filters {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.result-filters select {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
+    min-width: 220px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.admin-results-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+
+.admin-results-table thead {
+    background: #2563eb;
+    color: white;
+}
+
+.admin-results-table th,
+.admin-results-table td {
+    padding: 14px 16px;
+    text-align: left;
+}
+
+.admin-results-table tbody tr:nth-child(even) {
+    background: #f8fafc;
+}
+
+.admin-results-table tbody tr:hover {
+    background: #eef4ff;
+}
+
+.pass-badge,
+.fail-badge {
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.pass-badge {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.fail-badge {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+@media (max-width: 1024px) {
+
+    .admin-results-page {
+        overflow-x: auto;
+    }
+
+    .admin-results-table {
+        min-width: 950px;
+    }
+
+}

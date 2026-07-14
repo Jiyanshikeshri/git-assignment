@@ -58,6 +58,8 @@ class QuizResponse(BaseModel):
     description: str
     category_id: str
     duration: int
+    attempts_left: int | None = None
+    can_attempt: bool | None = None
 
 
 class QuizUpdate(BaseModel):

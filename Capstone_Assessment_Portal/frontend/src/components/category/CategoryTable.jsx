@@ -13,6 +13,7 @@ function CategoryTable({
     categories,
     onEdit,
     onDelete,
+    onViewQuizzes,
 }) {
     return (
         <div className="category-table-container">
@@ -31,7 +32,12 @@ function CategoryTable({
                                 categories.map((category) => (
                                     <tr key={category.id || category._id}>
                                         <td>
-                                            {category.name}
+                                            <button
+                                                className="category-link"
+                                                onClick={() => onViewQuizzes(category)}
+                                            >
+                                                {category.name}
+                                            </button>
                                         </td>
                                         <td className="category-actions">
                                             <button

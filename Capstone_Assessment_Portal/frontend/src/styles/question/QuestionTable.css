@@ -1,0 +1,79 @@
+/**
+ * Question Table Styles
+ */
+
+.question-table-container {
+    margin-top: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.question-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.question-table thead {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.question-table th,
+.question-table td {
+    padding: 16px;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.question-table th:last-child,
+.question-table td:last-child {
+    text-align: center;
+}
+
+.question-table tbody tr:hover {
+    background: #f8fafc;
+}
+
+.question-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.question-actions button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.edit-btn {
+    background: #e0ecff;
+    color: #2563eb;
+}
+
+.edit-btn:hover {
+    background: #c7dcff;
+}
+
+.delete-btn {
+    background: #fde8e8;
+    color: #dc2626;
+}
+
+.delete-btn:hover {
+    background: #f9caca;
+}
+
+.no-data {
+    padding: 30px;
+    text-align: center;
+    color: #64748b;
+    font-size: 15px;
+}

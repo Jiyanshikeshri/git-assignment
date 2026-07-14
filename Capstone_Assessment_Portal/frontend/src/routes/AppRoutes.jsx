@@ -14,6 +14,15 @@ import AdminDashboard from "../pages/admin/AdminDashboard";
 import StudentDashboard from "../pages/student/StudentDashboard";
 import CategoryManagement from "../pages/admin/CategoryManagement";
 import StudentCategories from "../pages/student/StudentCategories";
+import QuizManagement from "../pages/admin/QuizManagement";
+import AllQuizzes from "../pages/admin/AllQuizzes";
+import StudentQuizList from "../pages/student/StudentQuizList";
+import QuestionManagement from "../pages/admin/QuestionManagement";
+import QuestionList from "../pages/admin/QuestionList";
+import StudentQuizAttempt from "../pages/student/StudentQuizAttempt";
+import StudentResults from "../pages/student/StudentResults";
+import StudentResultBreakdown from "../pages/student/StudentResultBreakdown";
+import AdminResults from "../pages/admin/AdminResults";
 
 function AppRoutes() {
     return (
@@ -57,6 +66,52 @@ function AppRoutes() {
                         }
                     />
 
+                    <Route
+                        path="/admin/categories/:categoryId/quizzes"
+                        element={
+                            <ProtectedRoute allowedRole="ADMIN">
+                                <QuizManagement />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/quizzes"
+                        element={<AllQuizzes />}
+                    />
+
+                    <Route
+                        path="/admin/categories/:categoryId/quizzes/:quizId/questions"
+                        element={
+                            <ProtectedRoute allowedRole="ADMIN">
+                                <QuestionManagement />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/questions"
+                        element={<QuestionList />}
+                    />
+
+                    <Route
+                        path="/admin/results"
+                        element={
+                            <ProtectedRoute allowedRole="ADMIN">
+                                <AdminResults />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin/results/:resultId"
+                        element={
+                            <ProtectedRoute allowedRole="ADMIN">
+                                <StudentResultBreakdown />
+                            </ProtectedRoute>
+                        }
+                    />
+
                     {/* Protected Student Route */}
                     <Route
                         path="/student/dashboard"
@@ -78,13 +133,33 @@ function AppRoutes() {
                         path="/student/categories/:categoryId/quizzes"
                         element={
                             <ProtectedRoute allowedRole="STUDENT">
-                                <h2
-                                    style={{
-                                        padding: "40px",
-                                    }}
-                                >
-                                    Quiz Listing Coming Soon...
-                                </h2>
+                                <StudentQuizList />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/student/quiz/:quizId"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <StudentQuizAttempt />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/student/results"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <StudentResults />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/student/results/:resultId"
+                        element={
+                            <ProtectedRoute allowedRole="STUDENT">
+                                <StudentResultBreakdown />
                             </ProtectedRoute>
                         }
                     />

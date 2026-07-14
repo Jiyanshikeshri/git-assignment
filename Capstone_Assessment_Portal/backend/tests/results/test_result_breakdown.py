@@ -1,4 +1,5 @@
 from fastapi import status
+from tests.utils.encryption import encrypt_password
 
 
 def test_get_result_breakdown_success(
@@ -69,7 +70,7 @@ def test_student_cannot_view_another_student_result(
         "/auth/login",
         json={
             "email": "newstudent@gmail.com",
-            "password": "Student@123",
+            "password": encrypt_password("Student@123"),
         },
     )
 

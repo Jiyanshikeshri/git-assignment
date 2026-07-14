@@ -51,47 +51,49 @@
     display: flex;
     align-items: center;
     gap: 8px;
-
     padding: 8px 16px;
-
     border: none;
     border-radius: 8px;
-
     cursor: pointer;
-
     font-size: 14px;
     font-weight: 600;
-
     transition: all 0.2s ease;
 }
 
 .edit-btn {
-
     background: #e0ecff;
     color: #2563eb;
-
 }
 
 .edit-btn:hover {
-
     background: #c7dcff;
-
 }
 
 .delete-btn {
-
     background: #fde8e8;
     color: #dc2626;
-
 }
 
 .delete-btn:hover {
-
     background: #f9caca;
-
 }
 
 .no-data {
     text-align: center;
     color: #64748b;
+}
+
+.category-link {
+    background: transparent;
+    border: none;
+    color: #1e3a8a;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.category-link:hover {
+    color: #2563eb;
+    text-decoration: underline;
 }

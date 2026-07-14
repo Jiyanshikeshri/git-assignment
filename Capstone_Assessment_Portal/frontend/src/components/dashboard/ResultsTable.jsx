@@ -26,18 +26,28 @@ function ResultsTable({ results }) {
                     {
                         results.map((result, index) => (
                             <tr key={index}>
-                                <td>{result.quiz}</td>
-                                <td>{result.category}</td>
-                                <td>{result.score}</td>
+                                <td>
+                                    {result.quiz_title}
+                                </td>
+                                <td>
+                                    {result.category_name}
+                                </td>
+                                <td>
+                                    {result.percentage}%
+                                </td>
                                 <td>
                                     <span
                                         className={
-                                            result.status === "Passed"
+                                            result.result_status === "PASS"
                                                 ? "status-passed"
                                                 : "status-failed"
                                         }
                                     >
-                                        {result.status}
+                                        {
+                                            result.result_status === "PASS"
+                                                ? "Passed"
+                                                : "Failed"
+                                        }
                                     </span>
                                 </td>
                             </tr>

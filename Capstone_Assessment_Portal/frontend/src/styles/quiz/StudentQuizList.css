@@ -1,0 +1,22 @@
+/**
+ * Student Quiz List Page Styles
+ */
+
+.student-quiz-page {
+    padding: 30px;
+}
+
+.student-quiz-page h1 {
+    margin-bottom: 8px;
+}
+
+.student-quiz-description {
+    color: #64748b;
+    margin-bottom: 30px;
+}
+
+.student-quiz-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+}
