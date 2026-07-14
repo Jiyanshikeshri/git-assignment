@@ -2,54 +2,46 @@
  * Admin Dashboard
  */
 
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
+import DashboardCard from "../../components/dashboard/DashboardCard";
+import AttemptsTable from "../../components/dashboard/AttemptsTable";
+import {
+    dashboardStats,
+    recentAttempts,
+} from "../../data/dashboard/adminDashboardData";
+import "../../styles/dashboard/AdminDashboard.css";
 
 function AdminDashboard() {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
-
-    /**
-     * Handles user logout
-     */
-    const handleLogout = () => {
-        logout();
-        navigate("/login");
-    };
-
     return (
-        <div
-            style={{
-                padding: "40px",
-            }}
-        >
-            <h1>
-                Admin Dashboard
+        <DashboardLayout>
+            <h1 className="dashboard-heading">
+                Welcome Back, Admin!
             </h1>
-            <hr />
-            <p>
-                <strong>Email :</strong>
-                {" "}
-                {user?.email}
+
+            <p className="dashboard-subheading">
+                Here's an overview of your assessment portal.
             </p>
 
-            <p>
-                <strong>Role :</strong>
-                {" "}
-                {user?.role}
-            </p>
-            <button
-                onClick={handleLogout}
-                style={{
-                    marginTop: "20px",
-                    padding: "10px 18px",
-                    cursor: "pointer",
-                }}
-            >
-                Logout
-            </button>
-        </div>
+            <div className="dashboard-grid">
+
+                {
+                    dashboardStats.map((card) => (
+                        <DashboardCard
+                            key={card.title}
+                            title={card.title}
+                            value={card.value}
+                            icon={card.icon}
+                        />
+                    ))
+                }
+
+            </div>
+            <AttemptsTable
+                attempts={recentAttempts}
+            />
+        </DashboardLayout>
     );
+
 }
 
 export default AdminDashboard;

@@ -1,0 +1,30 @@
+/**
+ * Student Categories Page Styles
+ */
+
+.student-categories-page {
+    padding: 32px;
+}
+
+.student-categories-header {
+    margin-bottom: 32px;
+}
+
+.student-categories-header h1 {
+    font-size: 38px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.student-categories-header p {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 18px;
+
+}
+
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px;
+}

@@ -2,54 +2,42 @@
  * Student Dashboard
  */
 
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import DashboardLayout from "../../pages/layouts/DashboardLayout";
+import DashboardCard from "../../components/dashboard/DashboardCard";
+import ResultsTable from "../../components/dashboard/ResultsTable";
+import {
+    dashboardStats,
+    recentResults,
+} from "../../data/dashboard/studentDashboardData";
+import "../../styles/dashboard/StudentDashboard.css";
 
 function StudentDashboard() {
-    const { user, logout } = useAuth();
-    const navigate = useNavigate();
-
-    /**
-     * Handles user logout
-     */
-    const handleLogout = () => {
-        logout();
-        navigate("/login");
-    };
-
     return (
-        <div
-            style={{
-                padding: "40px",
-            }}
-        >
-            <h1>
-                Student Dashboard
+        <DashboardLayout>
+            <h1 className="dashboard-heading">
+                Welcome Back, Student!
             </h1>
-            <hr />
-            <p>
-                <strong>Email :</strong>
-                {" "}
-                {user?.email}
+
+            <p className="dashboard-subheading">
+                Continue your learning journey and track your progress.
             </p>
 
-            <p>
-                <strong>Role :</strong>
-                {" "}
-                {user?.role}
-            </p>
+            <div className="dashboard-grid">
 
-            <button
-                onClick={handleLogout}
-                style={{
-                    marginTop: "20px",
-                    padding: "10px 18px",
-                    cursor: "pointer",
-                }}
-            >
-                Logout
-            </button>
-        </div>
+                {
+                    dashboardStats.map((card) => (
+                        <DashboardCard
+                            key={card.title}
+                            title={card.title}
+                            value={card.value}
+                            icon={card.icon}
+                        />
+                    ))
+                }
+
+            </div>
+            <ResultsTable results={recentResults} />
+        </DashboardLayout>
     );
 }
 
