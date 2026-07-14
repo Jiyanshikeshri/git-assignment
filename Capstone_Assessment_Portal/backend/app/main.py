@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.config.database import db
 from app.routers.auth_router import router as auth_router
 from app.routers.category_router import router as category_router
@@ -14,6 +15,18 @@ from app.config.logger import logger
 app = FastAPI(
     title="Assessment Portal API",
     version="1.0.0"
+)
+
+# CORS Configuration
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 register_exception_handlers(app)

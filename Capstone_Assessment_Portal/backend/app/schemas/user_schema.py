@@ -25,7 +25,7 @@ class UserRegister(BaseModel):
     password: str = Field(
         ...,
         min_length=8,
-        max_length=128,
+        max_length=1024,
         description="Account password"
     )
 

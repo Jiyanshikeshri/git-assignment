@@ -27,6 +27,12 @@ from app.constants.constants import (
     STUDENT_REGISTERED_SUCCESSFULLY,
     INVALID_EMAIL_OR_PASSWORD,
 )
+
+from cryptography.hazmat.primitives import serialization
+from app.config.rsa import PUBLIC_KEY
+
+from app.utils.encryption import decrypt_password
+
 from app.config.logger import logger
 
 
@@ -62,12 +68,22 @@ def register_student(user: UserRegister):
         raise BadRequestException(
             EMAIL_ALREADY_EXISTS
         )
+    
+
+    try:
+        decrypted_password = decrypt_password(
+            user.password
+        )
+    except ValueError:
+        raise BadRequestException(
+            "Invalid encrypted password."
+        )
 
     user_data = {
         "username": user.username,
         "name": user.name,
         "email": user.email,
-        "password": hash_password(user.password),
+        "password": hash_password(decrypted_password),
         "role": ROLE_STUDENT
     }
 
@@ -104,7 +120,24 @@ def login_user(user: UserLogin):
             INVALID_EMAIL_OR_PASSWORD
         )
 
-    if not verify_password(user.password, existing_user["password"]):
+
+    try:
+        decrypted_password = decrypt_password(
+            user.password
+        )
+        logger.info(
+            "Decrypted password: %s",
+            decrypted_password
+        )
+    except ValueError as error:
+
+        logger.exception(error)
+
+        raise UnauthorizedException(
+            INVALID_EMAIL_OR_PASSWORD
+        )
+
+    if not verify_password(decrypted_password, existing_user["password"]):
         logger.warning(
             "Login failed. Invalid password for email: %s",
             user.email,
@@ -178,3 +211,22 @@ def refresh_access_token(refresh_token: str):
         raise UnauthorizedException(
             INVALID_OR_EXPIRED_REFRESH_TOKEN
         )
+    
+
+def get_public_key():
+    """
+    Return the RSA public key used for client-side password encryption
+    """
+
+    public_key = PUBLIC_KEY.public_bytes(
+        encoding=serialization.Encoding.PEM,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo,
+    ).decode("utf-8")
+
+    logger.info(
+        "Public key requested."
+    )
+
+    return {
+        "public_key": public_key
+    }

@@ -1,0 +1,25 @@
+/* Reusable Success Message */
+
+.success-message {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 20px;
+    padding: 12px 16px;
+
+    border-radius: 8px;
+
+    background-color: #ecfdf5;
+    border: 1px solid #10b981;
+
+    color: #065f46;
+
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.success-icon {
+    font-size: 18px;
+    font-weight: bold;
+}
